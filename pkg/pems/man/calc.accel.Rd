@@ -3,10 +3,11 @@
 \alias{calc.accel}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-calc.accel
+Calculate Acceleration
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+Generic function for the calculation of vehicle acceleration. The function can be used with both pems 
+objects and standard data frames, but only considers data series units when used with pems objects. 
 }
 \usage{
 calc.accel(pems, speed = velocity, time = local.time, fun.method = "standard.accel", fun.args = NULL, vis.fun = TRUE, fun.output = "pems")
@@ -14,148 +15,55 @@ calc.accel(pems, speed = velocity, time = local.time, fun.method = "standard.acc
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{pems}{
-%%     ~~Describe \code{pems} here~~
+Object containing data to be used in calculation. If this is a pems object it uses pems$units to check units 
+and reports acceleration in m/s/s. Otherwise, the object is handled as a standard data frame and inputs should 
+be top level(e.g. data.frame$speed and data.frame$time).   
 }
   \item{speed}{
-%%     ~~Describe \code{speed} here~~
+Name of data series containing vehicle speed profile. Default 'velocity'.
 }
   \item{time}{
-%%     ~~Describe \code{time} here~~
+Name of time data series. Default 'local.time'.
 }
   \item{fun.method}{
-%%     ~~Describe \code{fun.method} here~~
+Method to be used to calculate acceleration. Currently, the function only has the default method 'standard.accel' 
+enabled.
 }
   \item{fun.args}{
-%%     ~~Describe \code{fun.args} here~~
+List of parameters to be used to calculate acceleration. Currently, the only recognised option is dt, which fixes the 
+acceleration time interval. If set, dt supercedes time. Not employed in default calculation. 
 }
   \item{vis.fun}{
-%%     ~~Describe \code{vis.fun} here~~
+Option to visualise function outputs (TRUE/FALSE). Default, TRUE. 
 }
   \item{fun.output}{
-%%     ~~Describe \code{fun.output} here~~
+Calculation output mode. Default 'pems' returns the orginal pems object with acceleration calculations added as 'accel'. 
+Otherwise, it returns a single column data frame 'accel' containing the acceleration calculations. See value below.
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+Method 'standard.accel' calculates acceleration using d(speed)/d(time) (or d(speed)/dt if dt set in fun.args. 
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+If fun.output set to 'pems', the original pems object is returned with acceleration calculations added as 'accel'. If that 
+object is of pems class, it also updates pems$units and logs the operation to pems$history.  
 }
 \references{
-%% ~put references to the literature/web site here ~
+N/A - conventional method.
 }
 \author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
+Karl.
 }
 
+%%\note{...}
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+%%\seealso{
+%% ~~objects to See Also as \code{\link{help}}, ~~~}
+
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
+##-- To be written
+##-- To be written
+##-- To be written
 
-## The function is currently defined as
-function(pems,
-		speed = velocity, time = local.time,
-		fun.method = "standard.accel",
-		fun.args = NULL,
-		vis.fun = TRUE,
-		fun.output = "pems"
-		){
-
-###############
-#calculate accel 
-#version 0.0.1
-#source
-#karl (15/03/2009)
-
-
-###############
-#TO DO
-###########
-#currently makes no use of fun.method, fun.args
-#assumes time is a count in seconds
-#
-
-require(lattice)
-
-
-#for non-pems use
-if(is(pems)[1]=="pems") {
-	if(is.na(match(deparse(substitute(speed)), names(pems$data)))) {
-		stop(paste("\t calc.accel: '", as.character(substitute(speed)), "' not found in pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	data <- pems$data
-  } else {
-	if(is.na(match(deparse(substitute(speed)), names(pems)))) {
-		stop(paste("\t calc.accel: '", as.character(substitute(speed)), "' not found in (non-)pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	data <- pems
-  }
-
-this.time <- data[, deparse(substitute(time))]
-this.speed <- data[, deparse(substitute(speed))]
-this.speed.name <- as.character(substitute(speed))
-
-#####################################################
-#main routines
-
-#reset units
-# if it is a pems
-this.accel.units <- "unknown"
-if(is(pems)[1]=="pems") {
-	this.unit <- as.character(pems$units[, this.speed.name])	
-	this.correction <- "not found"
-	if(this.unit=="km/h") { this.correction = 0.27777777778 }
-	if(this.unit=="m/s") { this.correction = 1 }
-	if(this.correction=="not found") {
-		stop(paste("\t ca: ", this.speed.name, " units not recognised", sep=""), call. = FALSE, domain = NA)
-	}
-	this.accel.units <- "m/s/s"
-	this.speed <- this.speed * this.correction
-  }
-
-this.time <- c(NA, diff(this.time))
-	#this.time <- c(this.time[1], this.time)
-this.accel <- c(0, diff(this.speed)) / this.time
-this.accel <- data.frame(this.accel)
-names(this.accel) <- "accel"
-data <- cbind(data, this.accel)
-        
-#setup pems info
-if(is(pems)[1]=="pems") {
-	pems$history <- c(pems$history, paste("calc.accel: accel generated using '", this.speed.name, "'", sep = ""))
-	pems$units[length(pems$units) + 1] <- this.accel.units
-	names(pems$units)[length(pems$units)] <- "accel"
-  }
-        
-#plot if required
-if(vis.fun){
-	plot(this.speed,type="l")
-	lines(this.accel,col="blue")
-  }
-
-if(is(pems)[1]=="pems") {
-        pems$data <- data
-        pems
-  } else {
-        pems <- data
-  }
-
-if(fun.output=="pems") { pems } else { this.accel }
-  }
-}
-% Add one or more standard keywords, see file 'KEYWORDS' in the
-% R documentation directory.
 \keyword{ methods }
