@@ -14,51 +14,47 @@ function (pems, short.hand = TRUE) {
 
 message(paste("pems object: ", deparse(substitute(pems)), sep = ""))
 
-if(short.hand==TRUE) { 
-	
-	#shorthand summary
-	message("index:")
-	print(names(pems))
-	message(paste("data: ", ncol(pems$data), " by ", nrow(pems$data), " (", ncol(pems$data)*nrow(pems$data),") entries", sep="")) 
-	print(names(pems$data))
-	message(paste("units: ", length(pems$units), " entries", sep=""))
-	if(identical(names(pems$data),names(pems$units))) {
-		message("   data/names checksum GOOD")
-	} else {
-		message("   data/names checksum BAD")
-	}
-	message(paste("pems: ", pems$pems, sep = ""))
-	message(paste("vehicle: ", pems$vehicle, sep = ""))
-	message(paste("fuel: ", pems$fuel, sep = ""))
-	message(paste("constants: ", ncol(pems$constants), " entries", sep = ""))
-	tidy <- paste("history: ", length(pems$history), " logged action", sep = "")
-		if(!length(pems$history)==1) { tidy <- paste(tidy, "s", sep = "") } 
-	message(tidy)
-
+if(short.hand==TRUE) { 	
+  #shorthand summary
+  message("index:")
+  print(names(pems))
+  message(paste("data: ", ncol(pems$data), " by ", nrow(pems$data), " (", ncol(pems$data)*nrow(pems$data),") entries", sep="")) 
+  print(names(pems$data))
+  message(paste("units: ", length(pems$units), " entries", sep=""))
+  if(identical(names(pems$data),names(pems$units))) {
+    message("   data/units checksum GOOD")
+  } else {
+    message("   data/units checksum BAD")
+  }
+  message(paste("pems: ", pems$pems, sep = ""))
+  message(paste("vehicle: ", pems$vehicle, sep = ""))
+  message(paste("fuel: ", pems$fuel, sep = ""))
+  message(paste("constants: ", ncol(pems$constants), " entries", sep = ""))
+  tidy <- paste("history: ", length(pems$history), " logged action", sep = "")
+    if(!length(pems$history)==1) { tidy <- paste(tidy, "s", sep = "") } 
+  message(tidy)
 } else {
-
-	#comprehensive summary
-	message("index:")
-	print(names(pems))
-	message(paste("data: ", ncol(pems$data), " by ", nrow(pems$data), " (", ncol(pems$data)*nrow(pems$data),") entries", sep="")) 
-	print(summary(pems$data))
-	message(paste("units: ", length(pems$units), " entries", sep=""))
-	if(identical(names(pems$data),names(pems$units))) {
-		message("   data/names checksum GOOD")
-	} else {
-		message("   data/names checksum BAD")
-	}
-	print(pems$units)
-	message(paste("pems: ", pems$pems, sep = ""))
-	message(paste("vehicle: ", pems$vehicle, sep = ""))
-	message(paste("fuel: ", pems$fuel, sep = ""))
-	message(paste("constants: ", ncol(pems$constants), " entries", sep = ""))
-	print(pems$constants)
-	tidy <- paste("history: ", length(pems$history), " logged action", sep = "")
-		if(!length(pems$history)==1) { tidy <- paste(tidy, "s", sep = "") } 
-	message(tidy)
-	print(pems$history)
-
+  #comprehensive summary
+  message("index:")
+  print(names(pems))
+  message(paste("data: ", ncol(pems$data), " by ", nrow(pems$data), " (", ncol(pems$data)*nrow(pems$data),") entries", sep="")) 
+  print(summary(pems$data))
+  message(paste("units: ", length(pems$units), " entries", sep=""))
+  if(identical(names(pems$data),names(pems$units))) {
+    message("   data/units checksum GOOD")
+  } else {
+    message("   data/units checksum BAD")
+  }
+  print(pems$units)
+  message(paste("pems: ", pems$pems, sep = ""))
+  message(paste("vehicle: ", pems$vehicle, sep = ""))
+  message(paste("fuel: ", pems$fuel, sep = ""))
+  message(paste("constants: ", ncol(pems$constants), " entries", sep = ""))
+  print(pems$constants)
+  tidy <- paste("history: ", length(pems$history), " logged action", sep = "")
+  if(!length(pems$history)==1) { tidy <- paste(tidy, "s", sep = "") } 
+  message(tidy)
+  print(pems$history)
 }
 }
 

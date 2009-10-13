@@ -24,7 +24,7 @@ function(pems,
 ###############
 #TO DO
 ###########
-#rationalise vis.fun using lattice
+#rationalise vis.fun using lattice/plot.pems
 
 require(lattice)
 
@@ -76,7 +76,7 @@ names(data) <- make.unique(names(data))
 
 #setup pems info
 if(is(pems)[1]=="pems") {
-  this.history <- paste("calc.accel: ", names(data)[length(data)], " generated using '", this.speed.name, "'", sep = "")
+  this.history <- paste("calc.accel: '", names(data)[length(data)], "' generated using '", this.speed.name, "'", sep = "")
   if(!is.null(fun.args$dt)) { 
     this.history <- paste(this.history, " and fun.args$dt = ", fun.args$dt, sep = "") 
   } else {
