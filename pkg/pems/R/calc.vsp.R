@@ -1,144 +1,93 @@
-calc.vsp <-
-function(pems,
-		speed = velocity, 
-		accel = accel,
-		fun.method = "jimenez.palacios",
-		fun.args = list(a = 1.1, b = 0.132, c = 0.001208, g = 9.81),
-		vis.fun = TRUE,
-		fun.output = "pems"
-		){
+calc.vsp <- 
+function (pems = NULL, speed = velocity, accel = accel, grade = NULL,
+  fun.method = "jimenez.palacios", 
+  fun.args = list(a = 1.1, b = 0.132, c = 0.001208, g = 9.81), 
+  vis.fun = TRUE, 
+  fun.output = "pems") 
+{
 
-###############
-#calculate vehicle specific power 
-#version 0.0.1
-#source
-#karl (16/03/2009)
-#
-#currently uses
-#jimenez.palacios as default
-#VSP (kW/metric Ton) = v(m/s) * (1.1*a(m/s/s) + 9.81*grade(%) + 0.132) + 0.001208*v^3
-#
-#assumes
-#wind speed and grade are negligible
+##############################
+#calculate vsp
+##############################
+#version 0.0.2 karl 17/10/2009
+##############################
+#notes
+#currently only has methods: 
+# "jimenez.palacios"
+##############################
+#to do
+##############################
+#need
+#jim method to default missing args
+#jim method history to include null
 
-###############
-#TO DO
-###########
-#complete this current calc.accel
-#add accel option to calc accel if not found
-#
-
-
-#VSP = v * (a*(1+?) + g*grade + g*CR) + 2?*CD*A*v3/m
-#where:
-#v: is vehicle speed (assuming no headwind) in m/s
-#a: is vehicle acceleration in m/s2
-#?: is mass factor accounting for the rotational masses (~0.1)
-#g: is acceleration due to gravity
-#grade: is road grade
-#CR: is rolling resistance (~0.0135)
-#Younglove/Scora/Barth 5
-#?: is air density (1.2)
-#CD: is aerodynamic drag coefficient
-#A: is the frontal area
-#m: is vehicle mass in metric tonnes.
-#Using typical values of coefficients, in SI units the equation becomes (CDA/m ~ 0.0005):
-#VSP (kW/metric Ton) = v * (1.1*a + 9.81*grade(%) + 0.132) + 0.001208*v^3
-#If we examine the same example vehicle activity sets described above, we can plot histograms of VSP values as shown in Figure 2. Again, the FTP is seen to be fairly mild and the MEC01 cycle is very aggressive with a maximum value near 400 kW/metric ton. Vehicle #14 actually had higher VSP values than the MEC01, extending beyond 400.
-
-#Jimenez-Palacios, J. (1999) Understanding and Quantifying Motor Vehicle Emissions and Vehicle Specific Power with TILDAS Remote Sensing, MIT Doctoral Thesis.
-
+#set up
 require(lattice)
 
-#for non-pems use
-if(is(pems)[1]=="pems") {
-	if(is.na(match(deparse(substitute(speed)), names(pems$data)))) {
-		stop(paste("\t calc.vsp: '", as.character(substitute(speed)), "' not found in pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	if(is.na(match(deparse(substitute(accel)), names(pems$data)))) {
-		stop(paste("\t calc.vsp: '", as.character(substitute(accel)), "' not found in pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	data <- pems$data
-} else {
-	if(is.na(match(deparse(substitute(speed)), names(pems)))) {
-		stop(paste("\t calc.vsp: '", as.character(substitute(speed)), "' not found in (non-)pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	if(is.na(match(deparse(substitute(accel)), names(pems)))) {
-		stop(paste("\t calc.vsp: '", as.character(substitute(accel)), "' not found in (non-)pems", sep = ""), call. = FALSE, domain = NA)
-	} 	
-	data <- pems
-}
+if(is.null(pems)) { stop("\t calc.vsp: no pems", call. = FALSE, domain = NA) }
+if(is(pems)[1]=="pems") { data <- pems$data } else { data <- pems }
 
-this.speed <- data[, deparse(substitute(speed))]
-this.speed.name <- as.character(substitute(speed))
+this.speed <- check.input(deparse(substitute(speed)), "speed", "calc.vsp", 
+              source = data, pems = pems) 
+this.accel <- check.input(deparse(substitute(accel)), "accel", "calc.vsp",
+              if.missing=list("stop", comment = "[suggest running calc.accel]"),
+              source = data, pems = pems) 
+this.grade <- check.input(deparse(substitute(grade)), "grade", "calc.vsp",
+              if.null = list("return.alt", alt=0, alt.check="numeric"), 
+              source = data, pems = pems) 
 
-this.accel <- data[, deparse(substitute(accel))]
-this.accel.name <- as.character(substitute(accel))
+this.speed <- check.units(this.speed, deparse(substitute(speed)), "speed", "calc.vsp",
+              source = data, pems = pems) 
+this.accel <- check.units(this.accel, deparse(substitute(accel)), "accel", "calc.vsp",
+              source = data, pems = pems) 
 
-#####################################################
-#main routines
-
-#reset/check units units
-# if it is a pems
-this.vsp.units <- "unknown"
-if(is(pems)[1]=="pems") {
-	this.unit <- as.character(pems$units[, this.speed.name])	
-	this.correction <- "not found"
-	if(this.unit=="km/h") { this.correction = 0.27777777778 }
-	if(this.unit=="m/s") { this.correction = 1 }
-	if(this.correction=="not found") {
-		stop(paste("\t calc.vsp: ", this.speed.name, " units not recognised", sep=""), call. = FALSE, domain = NA)
-	}
-	this.speed <- this.speed * this.correction
-	
-	this.unit <- as.character(pems$units[, this.accel.name])
-	if(!this.unit=="m/s/s") { 
-		stop(paste("\t calc.vsp: ", this.speed.accel, " units not recognised", sep=""), call. = FALSE, domain = NA)
- 	}
-}
-
-#################################
-#vsp calculates
+fun.method <- check.method(fun.method, c("jimenez.palacios"),
+              "calc.vsp")
 
 this.method <- "unknown"
 
 if(fun.method=="jimenez.palacios"){
-	#VSP (kW/metric Ton) = v(m/s) * (1.1*a(m/s/s) + 9.81*grade(%) + 0.132) + 0.001208*v^3
-	this.grade <- 0
-	this.vsp <- this.speed * (fun.args$a * this.accel + (fun.args$g * this.grade) + fun.args$b) + (fun.args$c * this.speed^3)
-	this.method <- "jimenez.palacios"
-	this.vsp.units <- "kW/metric Ton"
+
+  fun.args <- check.method.args(fun.method, fun.args,
+              c("a", "b", "c", "g"),
+              "calc.vsp")
+
+  this.vsp <- this.speed * (fun.args$a * this.accel + (fun.args$g * 
+              this.grade) + fun.args$b) + (fun.args$c * this.speed^3)
+  this.method <- "jimenez.palacios"
+  this.vsp.units <- "kW/metric Ton"
+
 }
 
-##################################
-#reject if no vsp
-if(this.method=="unknown"){
-	stop(paste("\t calc.vsp: ", fun.method, " not recognised", sep=""), call. = FALSE, domain = NA)
+#this should never happen
+if (this.method == "unknown") {
+  stop(paste("\t calc.vsp: ", fun.method, " not recognised", 
+       sep = ""), call. = FALSE, domain = NA)
 }
 
-####################################
-#package data
-data <- cbind(data, vsp = this.vsp)
-#setup pems info
-if(is(pems)[1]=="pems") {
-	pems$history <- c(pems$history, paste("calc.vsp: vsp generated using '", this.speed.name, "', '", this.accel.name, "' and '", this.method, "' method", sep = ""))
-	pems$units[length(pems$units) + 1] <- this.vsp.units
-	names(pems$units)[length(pems$units)] <- "vsp"
-}
-        
-#plot if required
-if(vis.fun){
-	plot(this.speed,type="l")
-	lines(this.vsp,col="blue")
+if (vis.fun) {
+  plot(this.speed, type = "l")
+  lines(this.vsp, col = "blue")
 }
 
-if(is(pems)[1]=="pems") {
-        pems$data <- data
-        pems
+if (fun.output == "pems") {
+  data <- cbind(data, vsp = this.vsp)
+  names(data) <- make.unique(names(data))
+  vsp.name <- names(data)[ncol(data)]
+  if (is(pems)[1] == "pems") {
+    pems$history <- c(pems$history, paste("calc.vsp: '", vsp.name, "' generated using '", 
+    deparse(substitute(speed)), "', '", deparse(substitute(accel)), "' and '", 
+    this.method, "' method", sep = ""))
+    pems$units[length(pems$units) + 1] <- this.vsp.units
+    names(pems$units)[length(pems$units)] <- vsp.name
+    pems$data <- data
+    pems
+  } else {
+    comment(data)[length(data)] <- paste("units:", this.vsp.units, sep="")
+    pems <- data
+  }
 } else {
-        pems <- data
+  comment(this.vsp) <- c(paste("units:", this.vsp.units, sep=""))
+  this.vsp
 }
-
-if(fun.output=="pems") { pems } else { this.vsp }
 }
-

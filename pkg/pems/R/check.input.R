@@ -1,4 +1,4 @@
-check.input <-
+check.input <- 
 function (input, input.class, fun.name,
   if.null = "stop", 
   if.missing = "stop",
@@ -8,13 +8,15 @@ function (input, input.class, fun.name,
 {
 
 #check pems input
-##############################
-#version 0.0.2 karl 17/10/2009
-##############################
+#################
+#version 0.0.2
+#karl 17/10/2009
+
 #notes
-##############################
+#################
+
 #to do
-##############################
+#################
 
 #test tree
 if(try(eval(input), silent=TRUE)[1]=="NULL"){
