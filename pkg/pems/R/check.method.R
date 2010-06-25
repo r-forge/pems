@@ -1,19 +1,7 @@
-check.method <-
-function (method, method.options, fun.name, method.matching = "partial", 
+check.method <- function (method, method.options, fun.name, method.matching = "partial", 
     if.null = "stop", if.missing = "stop", if.valid = "return.valid", 
     source = NULL, pems = NULL) 
 {
-
-#check pems method
-#################
-#version 0.0.2
-#karl 03/02/2010
-#################
-#notes
-#################
-#to do
-#################
-
     rep.1 <- paste(" ", fun.name, " methods conflict", sep = "")
     if (!is.null(method)) {
         if (method.matching == "partial") {
