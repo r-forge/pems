@@ -1,6 +1,6 @@
 checkPems <- function (
-  pems=NULL, 
-  fun.name=NULL,
+  pems = NULL, 
+  fun.name = "checkPems",
   output = c("data", "pems", "test.result"),
   ... 
 ) 
@@ -19,7 +19,7 @@ checkPems <- function (
 
 
 #requested test?
-if(!is.character(fun.name)) fun.name <- "checkPems"
+if(!is.character(fun.name)) fun.name <- eval(formals(checkPems)$fun.name)[1]
 
 #only first cases considered for
 fun.name <- fun.name[1]

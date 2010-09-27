@@ -10,7 +10,7 @@ pems objects check function for the pems package.
 }
 
 \usage{
-checkPems(pems = NULL, fun.name = NULL, 
+checkPems(pems = NULL, fun.name = "checkPems", 
     output = c("data", "pems", "test.result"), 
     ...)
 }

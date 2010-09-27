@@ -2,7 +2,7 @@
 \alias{checkOption}
 
 \title{
-checkOptions 
+checkOption 
 }
 
 \description{
@@ -11,8 +11,8 @@ Option selection/selection checking for pems functions.
 
 \usage{
 checkOption(option = NULL, allowed.options = NULL, 
-    option.name = NULL, allowed.options.name = NULL, 
-    partial.match = TRUE, fun.name = NULL, 
+    option.name = "option", allowed.options.name = "allowed.options", 
+    partial.match = TRUE, fun.name = "checkOption", 
     output = c("option", "test.result"),
     ...)
 }
@@ -35,12 +35,12 @@ checkOption(option = NULL, allowed.options = NULL,
   otherwise, applies exact matching (via\link{\code{match}}).  
 }
   \item{fun.name}{
-  (Optional character vector) If \code{checkOptions} is used as a workhorse routine within another function, 
+  (Optional character vector) If \code{checkOption} is used as a workhorse routine within another function, 
   \code{fun.name} to assign any associated error messaging to the parent function rather 
   than the workhorse. 
 }
   \item{output}{
-  (Character vector) Output mode for \code{checkOptions} results. Current options: \code{"option"} (default), 
+  (Character vector) Output mode for \code{checkOption} results. Current options: \code{"option"} (default), 
   and \code{"test.result"}. If the supplied \code{option} object is valid, \code{"option"} 
   returns the full option term as defined in \code{allowed.options}, and 
   \code{"test.result"} returns TRUE/FALSE if \code{option} can/can not be matched against 
