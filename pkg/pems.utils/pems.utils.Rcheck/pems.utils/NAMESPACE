@@ -1,0 +1,88 @@
+#NEED to work out how to compile
+#with imports
+
+#imports
+
+#currently library loaded
+#so user/examples accessible
+
+##import(grid)
+##import(lattice)
+##import(RColorBrewer)
+
+#front.of.house
+
+#make.import.pems
+export(isPEMS) 
+export(makePEMS)
+export(import2PEMS) 
+export(importTAB2PEMS) 
+export(importCSV2PEMS) 
+export(importOBS2PEMS) 
+export(importRoyalTek2PEMS) 
+
+#structure
+export(getElement)
+export(getData)
+
+
+#merge.pems
+export(bindPEMS)
+export(findLinearOffset)
+export(cAlign)
+
+#export
+export(exportData)
+
+
+#generic.pems.handlers
+S3method(print, pems)
+S3method(plot, pems)
+S3method(names, pems)
+S3method(summary, pems)
+
+#plots
+export(latticePlot)
+export(panel.PEMSXYPlot)
+export(XYZPlot)
+
+
+#calcs
+export(calcDistance)
+export(calcSpeed)
+export(calcAccel)
+export(calcAcceleration)
+export(calcJerk)
+export(calcVSP)
+export(calcVSPJimenezPalaciosCMEM)
+
+#cutBy
+export(cutBy)
+export(cutByRow)
+
+
+#calc handlers
+export(calcChecks)
+export(calcPack)
+
+
+#unit.handlers
+
+export(getUnits) 
+export(setUnits) 
+export(convertUnits)
+export(addUnitConversion)
+export(addUnitAlias)
+export(listUnitConversions)
+
+#summaryReports
+export(summaryReport) 
+
+#check...functions
+
+export(checkInput) 
+export(checkOption) 
+export(checkPEMS) 
+export(checkUnits) 
+export(checkOutput)
+export(checkIfMissing)

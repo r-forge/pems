@@ -1,0 +1,10 @@
+
+re: pems.object
+
+pick sensible example
+needs gps 
+needs to be from save source
+
+tidy documentation
+
+ 

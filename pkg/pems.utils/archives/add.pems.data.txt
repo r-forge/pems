@@ -1,0 +1,11 @@
+#sources
+
+#set directory to the source/data directory
+
+##set names
+
+#save(pems, file="pems.rda")
+
+#update source/man
+
+

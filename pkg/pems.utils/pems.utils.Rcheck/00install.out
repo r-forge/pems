@@ -1,0 +1,12 @@
+* installing *source* package 'pems.utils' ...
+** R
+** data
+**  moving datasets to lazyload DB
+** preparing package for lazy loading
+Loading required package: RColorBrewer
+** help
+*** installing help indices
+** building package indices ...
+** testing if installed package can be loaded
+
+* DONE (pems.utils)
