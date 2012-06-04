@@ -1,10 +1,12 @@
-Package: pems
+Package: pems.utils
 Type: Package
 Title: tools for the analysis and visualisation of pems data
-Version: 0.2
-Date: 2009-07-23
+Version: 0.2.1
+Date: 2012-03-21
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
-Description: More about what it does (maybe more than one line)
+Depends: R (>= 2.13.0), lattice, latticeExtra
+Description: tools for the analysis and visualization of pems data
 License: GPL
 LazyLoad: yes
+LazyData: yes

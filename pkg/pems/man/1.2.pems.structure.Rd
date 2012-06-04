@@ -1,0 +1,121 @@
+\name{1.2.pems.structure}
+\alias{1.2.pems.structure}
+\alias{pems.structure}
+\alias{getElement}
+\alias{getData}
+
+
+
+\title{
+  'pems' object structure
+}
+
+\description{
+  This pages provides a brief outview description of the 'pems' object structure. It also 
+  lists some associated functions
+}
+
+\usage{
+
+getElement(input, pems=NULL, ..., 
+          fun.name = "getElement", if.missing = "stop",
+          input.name = deparse(substitute(input)))
+
+getData(pems=NULL, ..., 
+          fun.name = "getData", if.missing = "stop",
+          pems.name = deparse(substitute(pems)))
+
+}
+
+
+
+\arguments{
+
+  \item{input}{
+  (A required pems element) For \code{getElement}, the required data element (data series 
+  in data).
+}
+
+  \item{pems}{
+  (pems object) If supplied, the \code{pems} object to search for \code{element} before 
+  checking the parent environments and R workspace.
+}
+
+  \item{\dots}{
+  (Optional) Other Arguments, currently ignored.
+}
+
+  \item{fun.name, if.missing, input.name, pems.name}{
+  (Various) Other options using for \code{pems.utils} house-keeping. See \code{\link{check...}} for 
+  definitions, although generally these can be ignored by users. See Note below.  
+} 
+    
+}
+
+
+\details{
+
+  The \code{pems} object is a managed \code{data.frame}. It has five main components: \code{data}, 
+  \code{units}, \code{constants}, \code{history} and \code{tags}. \code{data} is the main 
+  \code{data.frame}. Each element (named \code{data.frame} column) is a data-series of the original 
+  PEMS data. \code{units} are the associated unit definitions. \code{constants} is a list of associated 
+  constants that are to be used with the \code{pems} object. (The preference order is defaults set by 
+  \code{pems.utils} < \code{constants} declared for the \code{pems} object < constants given in a 
+  call.) \code{history} is a log of \code{pems} object modifications. \code{tags} are basically any other 
+  components that the user wishes to add to a \code{pems} object as identifiers.
+
+  \code{getElement} gets a requested data element. 
+
+  \code{getData} gets the data component of a supplied \code{pems} object.
+
+}
+
+
+\value{
+
+  \code{getElement} returns the requested element as a vector, if available. (If missing, error 
+  handling is managed by \code{if.missing}. See \code{\link{check...}} for more details.) 
+
+  \code{getData} returns the data component of a supplied \code{pems} object as a \code{data.frame}. 
+
+
+}
+
+\references{
+  References in preparation.
+}
+\author{
+  Karl Ropkins
+}
+\note{
+
+  \code{get...} functions are in development \code{pems} object handlers. They are intended for 
+  convenient 'front of house' use. As part of this role, their structure will evolve over time, 
+  so arguments and operations may change based on user feedback. Those wishing to develop 
+  future-proof third party functions should also consider \code{check...} functions when developing 
+  their code. See \code{\link{common.calculations}} for some Examples.      
+ 
+}
+
+\section{Warning }{
+  \code{get...} arguments and operations may change with \code{pems.utils} version. Also see Note.
+}
+
+\seealso{
+  See \code{\link{check...}}. 
+}
+\examples{
+
+###########
+##example 1 
+###########
+
+#basic usage
+
+getElement(velocity, pems.1)
+
+#check... equivalent
+#checkInput(veolcity, pems.1)
+
+}
+\keyword{ methods }
