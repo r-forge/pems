@@ -1,4 +1,4 @@
-Package: pems.utils
+Package: pems
 Type: Package
 Title: tools for the analysis and visualisation of pems data
 Version: 0.2.1
