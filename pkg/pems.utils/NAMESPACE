@@ -36,6 +36,11 @@ export(exportData)
 
 
 #generic.pems.handlers
+
+#imports for non-base
+##importFrom(utils,head)
+##importFrom(utils,tail)
+
 S3method(print, pems)
 S3method(plot, pems)
 S3method(names, pems)
@@ -79,7 +84,6 @@ export(listUnitConversions)
 export(summaryReport) 
 
 #check...functions
-
 export(checkInput) 
 export(checkOption) 
 export(checkPEMS) 

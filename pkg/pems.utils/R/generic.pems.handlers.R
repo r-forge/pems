@@ -12,6 +12,7 @@
 #print.pems
 #names.pems
 #summary.pems
+#
 
 #to do
 ##########################
@@ -109,51 +110,63 @@ plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
 ##########################
 ##########################
 
-#kr 07/12/2011 v 0.2.0
+#kr 06/06/2013 v 0.3.0
 
 #what it does
 ##########################
-#handles appears of pems 
-#on return to console, direct evaluation, etc
+#handles pems console appearance 
+#etc
 #
 
 #to do
 ##########################
+#confirm happy with this
 
 #comments
 ##########################
-#to tidy
+#
 
 
-##' @S3method print pems
-print.pems <- function(x, verbose = FALSE, ...){
+print.pems <- function (x, verbose = TRUE, ...) {
 
     temp <- x
     class(temp) <- "not.pems"
 
+    #show data frame
+
+    if(verbose){
+        print.data.frame(temp$data)
+    }
+
+    #pems report line 1
+
     reply <- names(temp$data)
-    if(is.null(reply))
-        message("\npems object: no named data [suspect]") else 
-        message("\npems object: ", ncol(x$data), " data series (each ", nrow(x$data), " cases)")
+    if (is.null(reply)) 
+        message("\npems object: no named data [suspect]")
+    else message("\npems object: ", ncol(temp$data), " data series (each ", 
+        nrow(temp$data), " cases)")
 
-    reply <- names(temp)[names(temp) %in% c("units", "constants", "history")]
-    if(length(reply) < 1)
-        message("\twith no supporting structure [suspect]") else 
-        message("\twith supporting structures: ", paste(reply, collapse=", ", sep="")) 
+    #pems report line 2 structure
 
-#remember hidden 
-#refine
+    reply <- names(temp)[names(temp) %in% c("units", "constants", 
+        "history")]
+    if (length(reply) < 1) 
+        message("\twith no supporting structure [suspect]")
+    else message("\twith supporting structures: ", paste(reply, 
+        collapse = ", ", sep = ""))
 
-    reply <- names(temp)[!names(temp) %in% c("data", "units", "constants", "history", "dem")]
-    if(length(reply) > 0)
-        message("\t[and unique tags: ", paste(reply, collapse=", ", sep=""), "]\n")
+    #pems report line 3 extra tags
 
+    reply <- names(temp)[!names(temp) %in% c("data", "units", 
+        "constants", "history", "dem")]
+    if (length(reply) > 0) 
+        message("\t[and unique tags: ", paste(reply, collapse = ", ", 
+            sep = ""), "]\n")
+
+    #output
     invisible(x)
+
 }
-
-
-
-
 
 
 

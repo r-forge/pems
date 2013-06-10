@@ -1,8 +1,8 @@
 Package: pems.utils
 Type: Package
 Title: pems.utils 
-Version: 0.2.1
-Date: 2012-06-10
+Version: 0.2.2
+Date: 2013-06-06
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Depends: R (>= 2.10.0), grid, lattice, latticeExtra, RColorBrewer 
