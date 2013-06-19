@@ -6,7 +6,7 @@
 
 #in place
 #################
-#getData
+#pemsData
 #
 
 
@@ -42,7 +42,7 @@ exportData <- function(data, file="tempfile.txt", ..., sep="\t", file.writer = w
                        row.names = FALSE){
 
     if(isPEMS(data))
-        data <- getData(data)
+        data <- pemsData(data)
     
     file.writer(data, file = file, sep="\t", row.names = row.names)
 

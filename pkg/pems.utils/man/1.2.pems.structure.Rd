@@ -1,8 +1,8 @@
 \name{1.2.pems.structure}
 \alias{1.2.pems.structure}
 \alias{pems.structure}
-\alias{getElement}
-\alias{getData}
+\alias{pemsElement}
+\alias{pemsData}
 
 
 
@@ -17,12 +17,12 @@
 
 \usage{
 
-getElement(input, pems=NULL, ..., 
-          fun.name = "getElement", if.missing = "stop",
+pemsElement(input, pems=NULL, ..., 
+          fun.name = "pemsElement", if.missing = "stop",
           input.name = deparse(substitute(input)))
 
-getData(pems=NULL, ..., 
-          fun.name = "getData", if.missing = "stop",
+pemsData(pems=NULL, ..., 
+          fun.name = "pemsData", if.missing = "stop",
           pems.name = deparse(substitute(pems)))
 
 }
@@ -66,7 +66,7 @@ getData(pems=NULL, ...,
 
   \code{getElement} gets a requested data element. 
 
-  \code{getData} gets the data component of a supplied \code{pems} object.
+  \code{pemsData} gets the data component of a supplied \code{pems} object.
 
 }
 
@@ -76,7 +76,7 @@ getData(pems=NULL, ...,
   \code{getElement} returns the requested element as a vector, if available. (If missing, error 
   handling is managed by \code{if.missing}. See \code{\link{check...}} for more details.) 
 
-  \code{getData} returns the data component of a supplied \code{pems} object as a \code{data.frame}. 
+  \code{pemsData} returns the data component of a supplied \code{pems} object as a \code{data.frame}. 
 
 
 }
@@ -112,7 +112,7 @@ getData(pems=NULL, ...,
 
 #basic usage
 
-getElement(velocity, pems.1)
+pemsElement(velocity, pems.1)
 
 #check... equivalent
 #checkInput(veolcity, pems.1)

@@ -10,6 +10,7 @@
 #(functions/code below) 
 ##########################
 #print.pems
+#plot.pems
 #names.pems
 #summary.pems
 #
@@ -24,79 +25,6 @@
 #comments
 ##########################
 #
-
-
-
-
-
-
-
-
-
-
-
-
-##########################
-##########################
-##plot.pems
-##########################
-##########################
-
-#kr 07/12/2011 v 0.2.0
-
-#what it does
-##########################
-#generates simple plot
-#
-
-#to do
-##########################
-#make simple plot
-#
-
-
-#comments
-##########################
-#to tidy
-#are id and n good/standard terms
-#
-
-
-##' @S3method plot pems
-plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
-
-   temp <- x
-   class(temp) <- "no.class"
-
-   reply <- temp$data
-
-   if(is.null(reply)){
-      message("\npems object [suspect]")
-      return(invisible(NULL))
-   }
-
-   if(is.null(id)){
-       id <- 1:ncol(reply)
-       if(length(ignore)>0)
-           id <- id[!names(reply) %in% ignore]
-       if(n>0 && length(id)>n)
-           id <- id[1:n]
-   }
-
-   reply <- reply[id]      
-
-   plot(reply, ...)
-
-}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -120,14 +48,10 @@ plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
 
 #to do
 ##########################
-#confirm happy with this
-
-#comments
-##########################
-#
+#remove temp?
 
 
-print.pems <- function (x, verbose = TRUE, ...) {
+print.pems <- function (x, verbose = FALSE, ...) {
 
     temp <- x
     class(temp) <- "not.pems"
@@ -170,6 +94,52 @@ print.pems <- function (x, verbose = TRUE, ...) {
 
 
 
+##########################
+##########################
+##plot.pems
+##########################
+##########################
+
+#kr 07/12/2011 v 0.2.0
+
+#what it does
+##########################
+#generates simple plot
+#does not keep units
+#
+
+#to do
+##############################
+#remove temp
+
+
+##' @S3method plot pems
+plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
+
+   temp <- x
+   class(temp) <- "no.class"
+
+   reply <- temp$data
+
+   if(is.null(reply)){
+      message("\npems object [suspect]")
+      return(invisible(NULL))
+   }
+
+   if(is.null(id)){
+       id <- 1:ncol(reply)
+       if(length(ignore)>0)
+           id <- id[!names(reply) %in% ignore]
+       if(n>0 && length(id)>n)
+           id <- id[1:n]
+   }
+
+   reply <- reply[id]      
+
+   plot(reply, ...)
+
+}
+
 
 
 ##########################
@@ -183,26 +153,27 @@ print.pems <- function (x, verbose = TRUE, ...) {
 #what it does
 ##########################
 #returns data series names from pems
-#
 
 #to do
 ##########################
 #names<- handling
 #
 
-#comments
-##########################
-#to tidy
 
 
 ##' @S3method print pems
-names.pems <- function(x, ...) names(x$data)
+names.pems <- function(x, ...) {
 
+    class(x) <- "no.class"
+    x <- x$data
 
+    if(is.null(x)){
+       message("\npems object [suspect]")
+       return(invisible(NULL))
+    }
 
-
-
-
+    names(x)
+}
 
 
 ##########################
@@ -233,19 +204,53 @@ names.pems <- function(x, ...) names(x$data)
 ##' @S3method print pems
 summary.pems <- function(object, ...) {
 
-   temp <- object
-   class(temp) <- "no.class"
+   class(object) <- "no.class"
 
-   reply <- temp$data
+   object <- object$data
 
-   if(is.null(reply)){
+   if(is.null(object)){
       message("\npems object [suspect]")
       return(invisible(NULL))
    }
 
-   return(summary(reply))
+   return(summary(object))
                        
 }
+
+
+
+
+
+
+
+
+
+############################################################
+############################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

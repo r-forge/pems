@@ -6,8 +6,8 @@
 
 #in place
 #################
-#getElement
-#getData
+#pemsElement
+#pemsData
 #
 
 
@@ -31,15 +31,15 @@
 
 ########################
 ########################
-##getElement
+##pemsElement
 ########################
 ########################
 
 #version 0.2.0
 #karl 17/09/2010
 
-getElement <- function(input, pems=NULL, ..., 
-         fun.name = "getElement", if.missing = "stop",
+pemsElement <- function(input, pems=NULL, ..., 
+         fun.name = "pemsElement", if.missing = "stop",
          input.name = deparse(substitute(input))){
 
    #reorder this later
@@ -80,6 +80,7 @@ getElement <- function(input, pems=NULL, ...,
         attr(ans, "name") <- input.name
     if(!is.null(ans) && !is.null(units))
         if(is.null(attributes(ans)$units)) attr(ans, "units") <- units
+    class(ans) <- "pems.element"
 
     return(ans)
 
@@ -92,13 +93,13 @@ getElement <- function(input, pems=NULL, ...,
 
 ##############################
 ##############################
-##getData
+##pemsData
 ##############################
 ##############################
 
 
-getData <- function(pems=NULL, ..., 
-         fun.name = "getData", if.missing = "stop",
+pemsData <- function(pems=NULL, ..., 
+         fun.name = "pemsData", if.missing = "stop",
          pems.name = deparse(substitute(pems))){
 
     if(is.null(pems)){

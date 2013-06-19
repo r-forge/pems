@@ -137,7 +137,7 @@ latticePlot <- function(x = NULL, data = NULL, plot = xyplot, panel = NULL, ...,
     }
 
     #set up data
-    if(isPEMS(data)) data <- getData(data)
+    if(isPEMS(data)) data <- pemsData(data)
 
     #set up inputs
     temp <- list(x = x, data = data)
@@ -213,7 +213,7 @@ XYZPlot <- function(x = NULL, ..., data = NULL, statistic = NULL,
     extra.args <- list(...)
     settings <- calcChecks(fun.name, ..., data = data)
 
-    if(isPEMS(data)) data <- getData(data)
+    if(isPEMS(data)) data <- pemsData(data)
     
 #    if(is.null(subset))
 #        subset <- TRUE

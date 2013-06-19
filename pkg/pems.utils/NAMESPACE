@@ -22,8 +22,8 @@ export(importOBS2PEMS)
 export(importRoyalTek2PEMS) 
 
 #structure
-export(getElement)
-export(getData)
+export(pemsElement)
+export(pemsData)
 
 
 #merge.pems
@@ -45,6 +45,9 @@ S3method(print, pems)
 S3method(plot, pems)
 S3method(names, pems)
 S3method(summary, pems)
+
+S3method(print, pems.element)
+S3method(plot, pems.element)
 
 #plots
 export(latticePlot)
