@@ -41,11 +41,15 @@ export(exportData)
 ##importFrom(utils,head)
 ##importFrom(utils,tail)
 
+S3method("$", pems)
+S3method("[", pems)
 S3method(print, pems)
 S3method(plot, pems)
 S3method(names, pems)
 S3method(summary, pems)
+S3method(units, pems)
 
+S3method(as.data.frame, pems.element)
 S3method(print, pems.element)
 S3method(plot, pems.element)
 

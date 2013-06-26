@@ -9,10 +9,13 @@
 #includes 
 #(functions/code below) 
 ##########################
+#[.pems
+#$.pems
 #print.pems
 #plot.pems
 #names.pems
 #summary.pems
+#units.pems
 #
 
 #to do
@@ -25,6 +28,212 @@
 #comments
 ##########################
 #
+
+
+
+##########################
+##########################
+##[.pems
+##########################
+##########################
+
+#kr 06/06/2013 v 0.3.0
+
+#what it does
+##########################
+#handles pems[] calls 
+#etc
+#
+
+#to do
+##########################
+#tidy
+#think about force, simplify
+
+`[.pems` <- function(x, i, j, ..., force = FALSE, simplify = TRUE){
+
+    #pems handling
+    #x[1] element 1 as 1 col data.frame
+    #x[1,] row 1
+    #x[,1] element 1 
+    #x[1,1] row, element 1,1 
+    
+    #output 
+    #(simplify=TRUE) as pems.element if possible else pems
+    #(simplify=FALSE) as pems 
+
+
+######################
+#to do
+######################
+#rationalise a lot of this
+######################
+
+
+    check.i <- if(missing(i)) FALSE else TRUE
+    check.j <- if(missing(j)) FALSE else TRUE
+
+    ###############################
+    #x[]
+    #x[,]
+    #as is - no changes
+    #        no history update
+    ###############################
+    if(!check.i & !check.j) return(x)
+
+    call1 <- sys.call()
+    call2 <- match.call()
+    old.class <- unique(c(is(x), class(x)))
+    class(x) <- "not.pems"
+
+    ###############################
+    #x[1]
+    #x[1,force=T]
+    #by col as pems 
+    ###############################
+    if(check.i && !check.j && length(as.character(call1))==length(as.character(call2))){
+         if(force){
+             i <- if(is.character(i)) 
+                       i[i %in% names(x$data)] else i[i %in% 1:ncol(x$data)]
+         }
+         d1 <- try(x$data[i], silent = TRUE)
+         if(is(d1)[1] == "try-error") 
+             stop("In pems[i] 'i' unknown/unfound", 
+                  call. = FALSE)
+         x$data <- d1
+         if("units" %in% names(x)){
+             d1 <- try(x$units[i], silent = TRUE)
+             if(is(d1)[1] == "try-error") 
+                 stop("In pems[j] units('j') unknown/unfound", 
+                      call. = FALSE)
+             x$units <- d1
+         }
+    }
+
+    ###############################
+    #x[1,]
+    #x[1,,force=T]
+    #by col as pems 
+    ###############################
+    if(check.i && !check.j && length(as.character(call1))!=length(as.character(call2))){
+         if(force){
+             i <- if(is.character(i)) 
+                       i[i %in% row.names(x$data)] else i[i %in% 1:nrow(x$data)]
+         }
+         d1 <- try(x$data[i,], silent = TRUE)
+         if(is(d1)[1] == "try-error") 
+             stop("In pems[i,] 'i' unknown/unfound", 
+                  call. = FALSE)
+         x$data <- d1
+    }
+
+    ###############################
+    #x[,1]
+    #x[,1,force=T]
+    #by col as pems 
+    ###############################
+    if(!check.i && check.j){
+         if(force){
+             j <- if(is.character(j)) 
+                       j[j %in% names(x$data)] else j[j %in% 1:ncol(x$data)]
+         }
+         d1 <- try(x$data[j], silent = TRUE)
+         if(is(d1)[1] == "try-error") 
+             stop("In pems[,j] 'j' unknown/unfound", 
+                  call. = FALSE)
+         x$data <- d1
+         if("units" %in% names(x)){
+             d1 <- try(x$units[j], silent = TRUE)
+             if(is(d1)[1] == "try-error") 
+                 stop("In pems[,j] units('j') unknown/unfound", 
+                      call. = FALSE)
+             x$units <- d1
+         }
+    }
+
+    ###############################
+    #x[1,1]
+    #x[1,1,force=T]
+    #by col as pems 
+    ###############################
+    if(check.i && check.j){
+         if(force){
+             i <- if(is.character(i)) 
+                       i[i %in% row.names(x$data)] else i[i %in% 1:nrow(x$data)]
+             j <- if(is.character(j)) 
+                       j[j %in% names(x$data)] else j[j %in% 1:ncol(x$data)]
+         }
+         d1 <- try(x$data[i,], silent = TRUE)
+         if(is(d1)[1] == "try-error") 
+             stop("In x[i,j] 'i' unknown/unfound/mismatched", 
+                  call. = FALSE)
+         d1 <- try(d1[j], silent = TRUE)
+         if(is(d1)[1] == "try-error") 
+             stop("In pems[i,j] 'j' unknown/unfound/mismatched", 
+                  call. = FALSE)
+         x$data <- d1
+         if("units" %in% names(x)){
+             d1 <- try(x$units[j], silent = TRUE)
+             if(is(d1)[1] == "try-error") 
+                 stop("In pems[i,j] units('j') unknown/unfound", 
+                      call. = FALSE)
+             x$units <- d1
+         }
+    }
+
+    ########################
+    #simplify
+    ########################
+    if(simplify && ncol(x$data)==1){
+        d1 <- as.vector(t(x$data))
+        attr(d1, "row.names") <- NULL
+        attr(d1, "name") <- names(x$data[1])
+        attr(d1, "units") <- as.character(x$units[1,1])
+        class(d1) <- "pems.element"
+        return(d1)
+    }
+
+    ########################
+    #history
+    ########################
+    if("history" %in% names(x$data))
+         x$history <- c(x$history, call2)
+    class(x)<- old.class
+    return(x)    
+}
+
+
+
+
+##########################
+#########################
+##$.pems
+#########################
+#########################
+
+`$.pems` <- function(x, i, ...){
+
+    class(x) <- "not.pems"
+
+    ans <- try(x$data[, i], silent = TRUE)
+    if(class(ans)[1] == "try-error"){
+        warning("Element '", i, "' not found in pems", call. = FALSE)
+        return(NULL)
+    }
+
+    if (!is.null(ans)) 
+        attr(ans, "name") <- i
+    if (!is.null(ans) && !is.null(units)) 
+        if (is.null(attributes(ans)$units)) 
+            attr(ans, "units") <- x$units[1,i]
+        class(ans) <- "pems.element"
+
+    ans
+
+}
+
+
+
 
 
 
@@ -218,6 +427,49 @@ summary.pems <- function(object, ...) {
 }
 
 
+
+
+
+##########################
+##########################
+##units.pems
+##########################
+##########################
+
+#kr 07/12/2011 v 0.2.0
+
+#what it does
+##########################
+#extracts units from pems 
+#
+
+#to do
+##########################
+#make dedicated summary 
+#and option for as current as alternative
+#
+
+
+#comments
+##########################
+#to tidy
+
+
+
+##' @S3method print pems
+units.pems <- function(x) {
+
+    class(x) <- "no.class"
+    x <- x$units
+
+    if(is.null(x)){
+       message("\npems object unitless [suspect]")
+       return(invisible(NULL))
+    }
+
+    return(x)
+
+}
 
 
 

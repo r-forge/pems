@@ -95,8 +95,13 @@ calcPack <- function(output = NULL, data = NULL, settings = NULL,
     output <- checkOutput(input = output, data = data, if.missing = settings$if.missing, 
                           fun.name = fun.name, output = settings$output, 
                           overwrite = settings$overwrite)
-    if(isPEMS(output))
-        output$history[[length(output$history)+1]] <- this.call 
+    if(isPEMS(output)){
+        old.class <- class(output)
+        class(output) <- "not.pems"
+        output$history[[length(output$history)+1]] <- this.call
+        class(output) <- old.class 
+    }
+
 
     output
     

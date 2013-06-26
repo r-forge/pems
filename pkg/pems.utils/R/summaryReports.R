@@ -78,6 +78,7 @@
 
 summaryReport <- function(speed = NULL, time = NULL, accel = NULL,  
                     distance = NULL, data = NULL, ..., 
+                    lod.speed = 0.1, lod.accel = 0.1,
                     fun.name = "summaryReport", hijack= FALSE){
   
     #setup
@@ -92,7 +93,6 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
     if(!hijack){   
         speed <- checkInput(speed, data=data, if.missing = "return")  
         accel <- checkInput(accel, data=data, if.missing = "return")
-        slope <- checkInput(slope, data=data, if.missing = "return")
         time <- checkInput(time, data=data, if.missing = "return")
         distance <- checkInput(distance, data=data, if.missing = "return")
     }
@@ -167,28 +167,31 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
 
     #calculations
 
+    if(length(lod.accel)==1) 
+        lod.accel <- c(-lod.accel, lod.accel)
+
     distance.travelled.km <- sum(distance, na.rm = TRUE)
     time.total.s <- sum(d.time, na.rm = TRUE)
 
     avg.speed.km.h <- mean(speed, na.rm=TRUE)
-    temp <- subset(speed, speed > 0.1)
+    temp <- subset(speed, speed > lod.speed)
     avg.running.speed.km.h <- mean(temp, na.rm=TRUE)
 
-    temp <- subset(d.time, speed < 0.1)    
+    temp <- subset(d.time, speed < lod.speed)    
     time.idle.s <- sum(temp, na.rm = TRUE)    
     time.idle.pc <- (time.idle.s / time.total.s) * 100 
 
-    temp <- subset(accel, accel > 0.1)    
+    temp <- subset(accel, accel > max(lod.accel))    
     avg.accel.m.s.s <- mean(temp, na.rm = TRUE)
 
-    temp <- subset(d.time, accel > 0.1)    
+    temp <- subset(d.time, accel > max(lod.accel))    
     time.accel.s <- sum(temp, na.rm = TRUE)    
     time.accel.pc <- (time.accel.s / time.total.s) * 100 
             
-    temp <- subset(accel, accel < -0.1)    
+    temp <- subset(accel, accel < min(lod.accel))    
     avg.decel.m.s.s <- mean(temp, na.rm = TRUE)
 
-    temp <- subset(d.time, accel < -0.1)    
+    temp <- subset(d.time, accel < min(lod.accel))    
     time.decel.s <- sum(temp, na.rm = TRUE)    
     time.decel.pc <- (time.decel.s / time.total.s) * 100 
 

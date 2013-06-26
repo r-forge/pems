@@ -49,6 +49,10 @@
 #version 0.2.0
 #karl 17/09/2010
 
+#this can be simplified once 
+#pems and pems.element full set up
+
+
 checkInput <- function(input = NULL, data = NULL, 
                        input.name = NULL, fun.name = NULL, 
                        if.missing = c("stop", "warning", "return"),
@@ -58,6 +62,7 @@ checkInput <- function(input = NULL, data = NULL,
 #######################
 #check defaults present/sensible
 #######################
+
 
     input.name <- if(!is.character(input.name)) "input" else input.name[1]
 
@@ -105,7 +110,7 @@ checkInput <- function(input = NULL, data = NULL,
     #also want name handled in same way as below?
 
     units <- if(isPEMS(pems))
-                 as.character(pems$units[1, ..x.ans]) else NULL
+                 as.character(units(pems)[1, ..x.ans]) else NULL
     if(length(units)<1) units <- NULL
 
     
@@ -114,7 +119,7 @@ checkInput <- function(input = NULL, data = NULL,
     ##########################
     #not strictly need if used conventionally
     #but makes error tracking easier 
-    if(is(try(eval(pems$data), silent=TRUE))[1]=="try-error")
+    if(is(try(eval(pems), silent=TRUE))[1]=="try-error")
         if(output=="test.result") return(FALSE) else
             stop(paste("\t In ", fun.name,"(...) pems/data source not found", sep=""), 
                 call. = FALSE, domain = NA)
@@ -125,15 +130,15 @@ checkInput <- function(input = NULL, data = NULL,
     #first for local case
     #
 
-    temp <- if(length(temp)>1)
-                try(eval(parse(text = temp)), silent=TRUE) else
-                try(eval(parse(text = paste("with(pems$data, ", ..x.ans, 
-                                            ")", sep = "")))
-                    , silent = TRUE)
-
-    if(is.function(temp)){
-        temp <- "temp"
-        class(temp) <- "try-error" #catch functions as well!
+    if(length(temp)>1 || is.null(data)) {
+         text <- temp 
+         temp <- try(eval(parse(text = text)), silent=TRUE)
+    } else { 
+         text <- paste("pems$", ..x.ans, sep="") 
+         text <- try(eval(parse(text = text)), silent=TRUE)
+         temp <- if(class(text)[1]=="try-error" || is.null(text))
+                     try(eval(parse(text = temp)), silent=TRUE) else 
+                     text
     }
 
 ##########################
@@ -143,6 +148,26 @@ checkInput <- function(input = NULL, data = NULL,
 #source and units there add them
 #make object pems2
 ##########################
+
+
+#print(temp)
+
+#print(is(data))
+
+#return(try(eval(parse(text = temp)), silent=TRUE))
+
+#    temp <- if(length(temp)>1)
+#                try(eval(parse(text = temp)), silent=TRUE) else
+#                try(eval(parse(text = paste("pems$, ", ..x.ans, 
+#                                            sep = "")))
+#                    , silent = TRUE)
+
+    if(is.function(temp)){
+        temp <- "temp"
+        class(temp) <- "try-error" #catch functions as well!
+    }
+
+
 
     if(output=="test.result"){
         temp <- if(is(temp)[1]=="try-error") FALSE else TRUE
@@ -165,6 +190,7 @@ checkInput <- function(input = NULL, data = NULL,
             attr(temp, "name") <- ..x.ans
             if(!is.null(units))
                 attr(temp, "units") <- units
+            class(temp) <- "pems.element"
             return(temp) } 
     }
 
@@ -172,6 +198,7 @@ checkInput <- function(input = NULL, data = NULL,
         "\n\t [please contact pems admin]", call. = FALSE, domain = NA)  
 
 }
+
 
 
 
@@ -582,8 +609,8 @@ ans <- input
 #     10/02/2012
 
 
-#this could be tidied based on the 
-#ans output
+#this could be tidied based 
+#once pems and pems.element fully structured
 
 
 checkOutput <- function (input = NULL, data = NULL,
@@ -676,7 +703,7 @@ ans <- input
                         call. = FALSE, domain = NA)
              }
         }
-        if(output == "data.frame") return(temp.pems$data)
+        if(output == "data.frame") return(pemsData(temp.pems))
         if(output == "pems") return(temp.pems)
     }
 
@@ -687,22 +714,41 @@ ans <- input
 
 #replace with input.name
 
+
+#temp
+old.class <- class(temp.pems)
+class(temp.pems) <- "not.pems"
+
         if(!is.null(attributes(ans)$name))
             names(temp.pems$data) <- attributes(ans)$name
         if(!is.null(attributes(ans)$units)){
             temp.pems$units <- data.frame(temp = attributes(ans)$units)
             names(temp.pems$units) = names(temp.pems$data)
         }
+
+#temp
+class(temp.pems) <- old.class
+
         if(output == "data.frame") return(temp.pems$data)
         if(output == "pems") return(temp.pems)
     } else {
 
         #match pems and ans
+
+#temp
+old.class <- class(pems)
+class(pems) <- "not.pems"
+
         if(length(ans) != nrow(pems$data)){
             if(length(ans) < nrow(pems$data))
                 ans <- c(ans, rep(NA, nrow(pems$data)-length(ans))) else
                 pems$data[(nrow(pems$data)+1):length(ans),]<-NA
+
         } 
+
+
+#temp
+class(pems) <- old.class
 
 
 #################
@@ -710,6 +756,9 @@ ans <- input
 #silent if return?
 #################
 
+#temp
+old.class <- class(pems)
+class(pems) <- "not.pems"
 
         if(overwrite){
             pems$data[input.name] <- ans
@@ -727,7 +776,11 @@ ans <- input
             pems$units <- cbind(pems$units, temp)
             names(pems$units) <- make.unique(names(pems$units))
         }
-        if(output == "data.frame") return(pems$data)
+
+#temp
+class(pems) <- old.class
+
+        if(output == "data.frame") return(pemsData(pems))
         if(output == "pems") return(pems)
     }
 

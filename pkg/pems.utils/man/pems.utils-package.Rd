@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.1\cr
-Date: \tab 2012-03-21\cr
+Version: \tab 0.2.3\cr
+Date: \tab 2013-06-20\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -29,7 +29,7 @@ follows:
 1.1. Functions for making and importing datasets for use with \code{pems.utils}: \code{\link{makePEMS}}, 
 \code{\link{import2PEMS}}, etc.
 
-1.2. The pems object structure: \code{\link{pems.structure}}, \code{\link{getElement}}, etc. 
+1.2. The pems object structure: \code{\link{pems.structure}}, \code{\link{pemsElement}}, etc. 
 
 1.3. Merging pems objects: \code{\link{merge.pems}}, \code{\link{bindPEMS}}, etc. 
 

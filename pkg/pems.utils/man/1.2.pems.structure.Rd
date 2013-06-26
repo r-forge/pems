@@ -17,9 +17,9 @@
 
 \usage{
 
-pemsElement(input, pems=NULL, ..., 
+pemsElement(element, pems=NULL, ..., 
           fun.name = "pemsElement", if.missing = "stop",
-          input.name = deparse(substitute(input)))
+          element.name = deparse(substitute(element)))
 
 pemsData(pems=NULL, ..., 
           fun.name = "pemsData", if.missing = "stop",
@@ -31,8 +31,8 @@ pemsData(pems=NULL, ...,
 
 \arguments{
 
-  \item{input}{
-  (A required pems element) For \code{getElement}, the required data element (data series 
+  \item{element}{
+  (A required pems element) For \code{pemsElement}, the required data element (data series 
   in data).
 }
 
@@ -45,7 +45,7 @@ pemsData(pems=NULL, ...,
   (Optional) Other Arguments, currently ignored.
 }
 
-  \item{fun.name, if.missing, input.name, pems.name}{
+  \item{fun.name, if.missing, element.name, pems.name}{
   (Various) Other options using for \code{pems.utils} house-keeping. See \code{\link{check...}} for 
   definitions, although generally these can be ignored by users. See Note below.  
 } 
@@ -64,7 +64,7 @@ pemsData(pems=NULL, ...,
   call.) \code{history} is a log of \code{pems} object modifications. \code{tags} are basically any other 
   components that the user wishes to add to a \code{pems} object as identifiers.
 
-  \code{getElement} gets a requested data element. 
+  \code{pemsElement} gets a requested data element. 
 
   \code{pemsData} gets the data component of a supplied \code{pems} object.
 
@@ -73,8 +73,9 @@ pemsData(pems=NULL, ...,
 
 \value{
 
-  \code{getElement} returns the requested element as a vector, if available. (If missing, error 
-  handling is managed by \code{if.missing}. See \code{\link{check...}} for more details.) 
+  \code{pemsElement} returns the requested element of a supplied \code{pems} object as a managed vector or 
+  \code{pems.element}, if available. (If missing, error handling is managed by \code{if.missing}. See 
+  \code{\link{check...}} for more details.) 
 
   \code{pemsData} returns the data component of a supplied \code{pems} object as a \code{data.frame}. 
 
@@ -87,9 +88,10 @@ pemsData(pems=NULL, ...,
 \author{
   Karl Ropkins
 }
+
 \note{
 
-  \code{get...} functions are in development \code{pems} object handlers. They are intended for 
+  \code{pems...} functions are in development \code{pems} object handlers. They are intended for 
   convenient 'front of house' use. As part of this role, their structure will evolve over time, 
   so arguments and operations may change based on user feedback. Those wishing to develop 
   future-proof third party functions should also consider \code{check...} functions when developing 
@@ -97,9 +99,6 @@ pemsData(pems=NULL, ...,
  
 }
 
-\section{Warning }{
-  \code{get...} arguments and operations may change with \code{pems.utils} version. Also see Note.
-}
 
 \seealso{
   See \code{\link{check...}}. 
@@ -115,7 +114,7 @@ pemsData(pems=NULL, ...,
 pemsElement(velocity, pems.1)
 
 #check... equivalent
-#checkInput(veolcity, pems.1)
+#checkInput(velocity, pems.1)
 
 }
 \keyword{ methods }

@@ -16,6 +16,7 @@
 
 summaryReport(speed = NULL, time = NULL, accel = NULL, 
           distance = NULL, data = NULL, ..., 
+          lod.speed = 0.1, lod.accel = 0.1,
           fun.name = "summaryReport", hijack= FALSE)
 
 }
@@ -40,6 +41,11 @@ summaryReport(speed = NULL, time = NULL, accel = NULL,
   (Optional) Other arguments, currently passed on to \code{\link{calcChecks}} which in turn provides 
   access to \code{pems.utils} management arguments such as \code{if.missing} and unit handlers such 
   as \code{unit.conversions}.
+}
+
+  \item{lod.speed, lod.accel}{
+  (numerics) The limits of detection for speed and accel measurements, respectively. [Note: if only one 
+  value is given for accel, the accel limits are assumed to be c(-lod.accel, + lod.accel)].
 }
 
   \item{fun.name}{

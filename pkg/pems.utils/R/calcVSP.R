@@ -37,6 +37,13 @@
 ##########################
 #calculates VSP
 
+#urgent
+##########################
+#need to tify the this.call
+#handling give current
+#not parent call!!!
+#
+
 
 #to do
 ##########################
@@ -45,6 +52,7 @@
 #comments
 ##########################
 #
+
 
 
 calcVSP <- function(speed = NULL, accel = NULL, slope = NULL, 
@@ -158,6 +166,12 @@ calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
 
     #make data always pems
     if(!isPEMS(data)) data <- makePEMS(data)
+
+###################
+#temp fix
+###################
+    old.class <- class(data)
+    class(data) <- "not.pems"
        
     if(is.null(m)){        
         m <- if(is.null(data$constants$vsp.m))
@@ -202,6 +216,12 @@ calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
     #my units
     attr(vsp, "name") <- "vsp"
     attr(vsp, "units") <- "kW/metric ton"
+    class(vsp) <- "pems.element"
+
+########################
+#temp fix
+########################
+    class(data) <- old.class
 
     #make output
     calcPack(output = vsp, data = data, settings = settings, 

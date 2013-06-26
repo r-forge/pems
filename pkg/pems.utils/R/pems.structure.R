@@ -38,36 +38,38 @@
 #version 0.2.0
 #karl 17/09/2010
 
-pemsElement <- function(input, pems=NULL, ..., 
+pemsElement <- function(element, pems=NULL, ..., 
          fun.name = "pemsElement", if.missing = "stop",
-         input.name = deparse(substitute(input))){
+         element.name = deparse(substitute(element))){
 
    #reorder this later
 
     if(is.null(pems)) {
-       ans <- try(input, silent = TRUE)
+       ans <- try(element, silent = TRUE)
        if(is(ans)[1] == "try-error" || is.function(ans)){ 
            checkIfMissing(if.missing = if.missing,
-                          reply = paste("element '", input.name[1], "' not found", sep=""),
+                          reply = paste("element '", element.name[1], "' not found", sep=""),
                           suggest = "checking call arguments", 
                           if.warning = NULL, 
                           fun.name = fun.name)
            ans <- NULL
        }
        if(!is.null(ans))
-           if(is.null(attributes(ans)$name)) attr(ans, "name") <- input.name
+           if(is.null(attributes(ans)$name)) attr(ans, "name") <- element.name
        return(ans)   
     }
 
     pems <- checkPEMS(pems)
-    ans <- try(pems$data[,input.name], silent = TRUE)
-    units <- try(pems$units[1,input.name], silent = TRUE)
+    class(pems) <- "not.pems"
+
+    ans <- try(pems$data[,element.name], silent = TRUE)
+    units <- try(pems$units[1,element.name], silent = TRUE)
 
     if(is(ans)[1] == "try-error" || is.function(ans)){ 
-        ans <- try(input, silent = TRUE)
+        ans <- try(element, silent = TRUE)
         if(is(ans)[1] == "try-error" || is.function(ans)){ 
              checkIfMissing(if.missing = if.missing,
-                          reply = paste("element '", input.name[1], "' not found", sep=""),
+                          reply = paste("element '", element.name[1], "' not found", sep=""),
                           suggest = "checking call arguments", 
                           if.warning = NULL, 
                           fun.name = fun.name)
@@ -77,7 +79,7 @@ pemsElement <- function(input, pems=NULL, ...,
     }
 
     if(!is.null(ans))
-        attr(ans, "name") <- input.name
+        attr(ans, "name") <- element.name
     if(!is.null(ans) && !is.null(units))
         if(is.null(attributes(ans)$units)) attr(ans, "units") <- units
     class(ans) <- "pems.element"
@@ -109,7 +111,7 @@ pemsData <- function(pems=NULL, ...,
                if.warning = NULL, 
                fun.name = fun.name)
     }
-
+    class(pems) <- "not.pems"
     pems$data
 
 }
