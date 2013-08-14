@@ -19,7 +19,7 @@
 
 calcEm(conc = NULL, time = NULL, calc.method = calcEmHoribaPitot, 
           analyte = NULL, ..., data = NULL, fun.name = "calcEm", 
-          force = FALSE, thi.call = NULL, hijack= FALSE)
+          force = FALSE, this.call = NULL, hijack= FALSE)
 
 calcEmHoribaPitot(conc = NULL, time = local.time, exflow = exh.flow.rate, 
           extemp = exh.temp, express = exh.press, analyte = NULL, 
