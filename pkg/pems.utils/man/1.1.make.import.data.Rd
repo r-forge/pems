@@ -75,7 +75,7 @@ importRoyalTek2PEMS(file.name = file.choose(),
   (Optional) Other arguments, handling varies. For \code{isPEMS} these are ignored. For 
   \code{makePEMS} these are added to the pems object unmodified. For \code{import...} 
   functions, these are passed on and added to the \code{constants} component of the 
-  \code{pems} object. Note: This different handling is experiment and may be subject to 
+  \code{pems} object. Note: This different handling is experimental and may be subject to 
   change in future. 
 }
 

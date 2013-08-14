@@ -58,10 +58,14 @@
 calcVSP <- function(speed = NULL, accel = NULL, slope = NULL, 
                     time = NULL, distance = NULL, data = NULL,
                     calc.method = calcVSPJimenezPalaciosCMEM,
-                    ..., fun.name = "calcVSP", hijack= FALSE){
+                    ..., fun.name = "calcVSP", this.call = NULL, 
+                    hijack= FALSE){
   
     #setup
-    this.call <- match.call()
+#temp fix
+#think about using listUpdate in loa
+    if(is.null(this.call)) 
+        this.call <- match.call() 
     
     #run checks
     settings <- calcChecks(fun.name, ..., data = data)
@@ -106,18 +110,23 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
         }
     }
 
+
+###################################
+#rearrange this bit so 
+#it can pack here?
+#not sure????
+###################################
+
+
     if(is.function(calc.method))
         return(calc.method(speed = speed, accel = accel, slope = slope, data = data, 
-                    ..., fun.name = "calcVSP", hijack= TRUE))
+                    ..., fun.name = fun.name, this.call = this.call, hijack= TRUE))
 
     #not good
     checkIfMissing(if.missing = settings$if.missing, 
                    reply = "could not run calc.method!", 
                            suggest = "check ?calcVSP if reason unclear", if.warning = "returning NULL", 
                            fun.name = fun.name)
-
-
-
 
     return(NULL)    
 }
@@ -127,11 +136,14 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
 calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL, 
                     slope = NULL, m = NULL, a = NULL, b = NULL, 
                     c = NULL, g = NULL, ..., data = NULL,  
-                    fun.name = "calcVSPJimenezPalaciosCMEM", hijack= FALSE){
+                    fun.name = "calcVSPJimenezPalaciosCMEM", 
+                    this.call = NULL, hijack= FALSE){
   
     #setup
-    this.call <- match.call()
-    
+#temp fix
+    if(is.null(this.call)) 
+        this.call <- match.call() 
+
     #run checks
     settings <- calcChecks(fun.name, ..., data = data)
 

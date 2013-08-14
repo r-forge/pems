@@ -6,7 +6,7 @@
 \alias{plot.pems.element}
 
 
-\title{ Generic handling of pems objects }
+\title{ Generic handling of pems.element objects }
 
 \description{
   pems elements objects can be manipulated using generic functions like print, plot and 
@@ -62,9 +62,8 @@
 
 \dontrun{
 
-#make object
-print(pems.object)
-names(pems.object)
+#the velocity pems.element in pems.1
+pems.1$velocity
 
 } 
 

@@ -29,7 +29,7 @@
 
 ##########################
 ##########################
-##calcVSP
+##summaryReport
 ##########################
 ##########################
 
@@ -37,7 +37,7 @@
 
 #what it does
 ##########################
-#calculates VSP
+#generates a summary of journey metrics
 
 
 #to do
@@ -97,7 +97,35 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
         distance <- checkInput(distance, data=data, if.missing = "return")
     }
 
-    #get what we need
+#######################
+#suggestion 
+#######################
+
+   #could have lod test here for those not null?
+   #then subsequent calcs, e.g. calcAccel(speed) would use this?
+
+
+    if(!is.null(speed) & !is.null(lod.speed))
+        speed[speed<lod.speed] <- 0
+
+    #moved from later
+    if(length(lod.accel)==1) 
+        lod.accel <- c(-lod.accel, lod.accel)
+
+    if(!is.null(accel) & !is.null(lod.accel))
+        accel[accel<max(lod.accel) & accel>min(lod.accel)] <- 0
+
+
+
+#######################
+
+########################
+#suggestion
+########################
+
+    #get what we need if incomplete
+    #could make this a function 
+    #tiggered by any(c(is.null(...), is.null(...),...))?
 
     if(is.null(speed) & is.null(accel) & is.null(time) &is.null(distance))
             checkIfMissing(if.missing = settings$if.missing, 
@@ -141,6 +169,11 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
         }
     }
 
+################################
+
+    
+
+
     #make sure distance, speed and accel are in all right units for next bit
 
     #note: 
@@ -167,8 +200,10 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
 
     #calculations
 
-    if(length(lod.accel)==1) 
-        lod.accel <- c(-lod.accel, lod.accel)
+#now earlier 
+
+#    if(length(lod.accel)==1) 
+#        lod.accel <- c(-lod.accel, lod.accel)
 
     distance.travelled.km <- sum(distance, na.rm = TRUE)
     time.total.s <- sum(d.time, na.rm = TRUE)

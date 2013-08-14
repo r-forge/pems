@@ -8,15 +8,18 @@
 #################
 #pemsElement
 #pemsData
-#
+#pemsConstants
+#pemsHistory
 
 
 
 #TO DO
 ################
+
+#pemsConstants
 #tidy
 #document
-#
+#namespace
 
 
 
@@ -113,5 +116,58 @@ pemsData <- function(pems=NULL, ...,
     }
     class(pems) <- "not.pems"
     pems$data
+
+}
+
+
+
+
+##############################
+##############################
+##pemsConstants
+##############################
+##############################
+
+
+pemsConstants <- function(pems=NULL, ..., 
+         fun.name = "pemsConstants", if.missing = "stop",
+         pems.name = deparse(substitute(pems))){
+
+    if(is.null(pems)){
+          checkIfMissing(if.missing = if.missing,
+               reply = paste("pems '", pems.name[1], "' not found", sep=""),
+               suggest = "checking call arguments", 
+               if.warning = NULL, 
+               fun.name = fun.name)
+    }
+    class(pems) <- "not.pems"
+    pems$constants
+
+}
+
+
+
+
+
+##############################
+##############################
+##pemsHistory
+##############################
+##############################
+
+
+pemsHistory <- function(pems=NULL, ..., 
+         fun.name = "pemsHistory", if.missing = "stop",
+         pems.name = deparse(substitute(pems))){
+
+    if(is.null(pems)){
+          checkIfMissing(if.missing = if.missing,
+               reply = paste("pems '", pems.name[1], "' not found", sep=""),
+               suggest = "checking call arguments", 
+               if.warning = NULL, 
+               fun.name = fun.name)
+    }
+    class(pems) <- "not.pems"
+    pems$history
 
 }

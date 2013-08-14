@@ -1,5 +1,5 @@
-\name{2.3.1.vsp.calculations}
-\alias{2.3.1.vsp.calculations}
+\name{2.3.2.vsp.calculations}
+\alias{2.3.2.vsp.calculations}
 \alias{vsp.calculations}
 \alias{vsp}
 \alias{calcVSP}
@@ -19,13 +19,14 @@
 calcVSP(speed = NULL, accel = NULL, slope = NULL, 
           time = NULL, distance = NULL, data = NULL,
           calc.method = calcVSPJimenezPalaciosCMEM,
-          ..., fun.name = "calcVSP", hijack= FALSE)
+          ..., fun.name = "calcVSP", this.call = NULL, 
+          hijack= FALSE)
 
 calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL, 
           slope = NULL, m = NULL, a = NULL, b = NULL, 
           c = NULL, g = NULL, ..., data = NULL,  
           fun.name = "calcVSPJimenezPalaciosCMEM", 
-          hijack= FALSE)
+          this.call = NULL, hijack= FALSE)
 
 }
 
@@ -58,6 +59,11 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
   \item{fun.name}{
   (Optional character) The name of the parent function, to be used in error messaging.
+}
+
+  \item{this.call}{
+  (Optional) Initial call, should generally be ignored. See code{\link{common.calculations}} 
+  for further details.
 }
 
   \item{hijack}{
@@ -105,6 +111,46 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
 }
 
+
+\section{Warning }{
+  \code{calcVSPJimenezPalaciosCMEM} does not currently have special case for buses as of 
+  Giannelli et al (2005). (Please let me know if you need to use them.)  
+}
+
+\note{
+
+  \code{calcVSP...} constants can be set/modified in the calculation call, e.g. 
+  \code{calcVSP(..., a = [new.value])}. If not supplied these are first checked for 
+  in the associated \code{pems} object (if supplied), or set to default values. See 
+  References. If VSP constants are to be added to a \code{pems} object, these should 
+  have the prefix 'vsp.', so for, e.g., \code{a} is stored in pems constants are 
+  \code{vsp.a}. This is because the common VSP designations (\code{a}, \code{b}, \code{c}, 
+  etc.) can be very easily wrongly assigned. 
+  
+  Unit handling in \code{pems.utils} is via \code{\link{checkUnits}}, \code{\link{getUnits}}, 
+  \code{\link{setUnits}} and \code{\link{convertUnits}}. See \code{\link{common.calculations}} 
+  for details.
+
+  \code{hijack} is an in-development argument, supplied to allow code developers to run multiple 
+  functions in different function environments. When developers 'mix and match' code from 
+  several sources it can become unstable, especially if functions are run within functions within 
+  functions, etc. \code{hijack = TRUE} and associated code makes a function local to 'side-step' 
+  this issue. This work by assuming/expecting all inputs to be local, i.e. supplied directly by 
+  the code user.          
+ 
+}
+
+
+
+\seealso{
+  See \code{\link{common.calculations}} (and \code{\link{checkInput}}, \code{\link{checkUnits}} and 
+  \code{\link{convertUnits}}) for details of data management.
+}
+
+\author{
+  Karl Ropkins
+}
+
 \references{
   
  \code{calcVSPJimenezPalaciosCMEM} uses methods described in:
@@ -137,41 +183,8 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
  zero and \code{m} is assumed to 1.5 metric tons.
 
 }
-\author{
-  Karl Ropkins
-}
-\note{
 
-  \code{calcVSP...} constants can be set/modified in the calculation call, e.g. 
-  \code{calcVSP(..., a = [new.value])}. If not supplied these are first checked for 
-  in the associated \code{pems} object (if supplied), or set to default values. See 
-  References. If VSP constants are to be added to a \code{pems} object, these should 
-  have the prefix 'vsp.', so for, e.g., \code{a} is stored in pems constants are 
-  \code{vsp.a}. This is because the common VSP designations (\code{a}, \code{b}, \code{c}, 
-  etc.) can be very easily wrongly assigned. 
-  
-  Unit handling in \code{pems.utils} is via \code{\link{checkUnits}}, \code{\link{getUnits}}, 
-  \code{\link{setUnits}} and \code{\link{convertUnits}}. See \code{\link{common.calculations}} 
-  for details.
 
-  \code{hijack} is an in-development argument, supplied to allow code developers to run multiple 
-  functions in different function environments. When developers 'mix and match' code from 
-  several sources it can become unstable, especially if functions are run within functions within 
-  functions, etc. \code{hijack = TRUE} and associated code makes a function local to 'side-step' 
-  this issue. This work by assuming/expecting all inputs to be local, i.e. supplied directly by 
-  the code user.          
- 
-}
-
-\section{Warning }{
-  \code{calcVSPJimenezPalaciosCMEM} does not currently have special case for buses as of 
-  Giannelli et al (2005) encoded. (Please let me know if you need to use them.)  
-}
-
-\seealso{
-  See \code{\link{common.calculations}} (and \code{\link{checkInput}}, \code{\link{checkUnits}} and 
-  \code{\link{convertUnits}}) for details of data management.
-}
 \examples{
 
 ###########

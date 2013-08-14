@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.3\cr
-Date: \tab 2013-06-20\cr
+Version: \tab 0.2.4\cr
+Date: \tab 2013-08-08\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -42,9 +42,13 @@ follows:
 
 2.2. Unit handler functions: \code{\link{getUnits}}, \code{\link{setUnits}}, \code{\link{convertUnits}}, etc.
 
-2.3. Common calculations: \code{\link{common.calculations}}, \code{\link{calcDistance}}, \code{\link{calcAccel}}, etc.
+2.3. Calculations
 
-2.3.1. (Other calculations) VSP calculations: \code{\link{calcVSP}}, etc.
+2.3.1. Common calculations: \code{\link{common.calculations}}, \code{\link{calcDistance}}, \code{\link{calcAccel}}, etc.
+
+2.3.2. VSP calculations: \code{\link{calcVSP}}, etc.
+
+2.3.3. Emissions calculations: \code{\link{calcEm}}, etc.
 
 2.4. Plots for pems objects: \code{\link{pems.plots}}, \code{\link{latticePlot}}, etc.
 

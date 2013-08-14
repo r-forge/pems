@@ -3,6 +3,8 @@
 \alias{pems.structure}
 \alias{pemsElement}
 \alias{pemsData}
+\alias{pemsConstants}
+\alias{pemsHistory}
 
 
 
@@ -24,6 +26,14 @@ pemsElement(element, pems=NULL, ...,
 pemsData(pems=NULL, ..., 
           fun.name = "pemsData", if.missing = "stop",
           pems.name = deparse(substitute(pems)))
+
+pemsConstants(pems=NULL, ..., 
+          fun.name = "pemsConstants", if.missing = "stop",
+          pems.name = deparse(substitute(pems)))
+
+pemsHistory(pems=NULL, ..., 
+         fun.name = "pemsHistory", if.missing = "stop",
+         pems.name = deparse(substitute(pems)))
 
 }
 
@@ -68,6 +78,10 @@ pemsData(pems=NULL, ...,
 
   \code{pemsData} gets the data component of a supplied \code{pems} object.
 
+  \code{pemsConstants} gets all constants locally defined for the the supplied \code{pems} object. 
+
+  \code{pemsHistory} gets the history of supplied \code{pems} object.
+
 }
 
 
@@ -79,6 +93,9 @@ pemsData(pems=NULL, ...,
 
   \code{pemsData} returns the data component of a supplied \code{pems} object as a \code{data.frame}. 
 
+  \code{pemsConstants} returns the constants component of a supplied \code{pems} object as a \code{list}. 
+
+  \code{pemsHistory} returns the history component of a supplied \code{pems} object as a \code{list}.
 
 }
 

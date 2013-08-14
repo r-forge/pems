@@ -531,16 +531,28 @@ ans <- input
         }
 
         #if units match return
-        if(units==input.units)
-            return(ans)
+        
+#####################
+#testing 
+#####################
 
-        #if new units set
-        #check for unique conversion
-
+       #moved forward
        if(is.null(unit.conversions)){
             unit.conversions <- ref.unit.conversions
        }
 
+        #get all aliases of input.units
+        temp <- unlist(sapply(unit.conversions, function(x) if(input.units %in% x$to) x$to))
+        temp <- unique(c(input.units, temp))
+        if(units %in% temp)
+            return(ans)
+
+        #replacing#
+        #if(units==input.units)
+        #    return(ans)
+
+        #if new units set
+        #check for unique conversion
 
         temp <- sapply(unit.conversions, function(x) 
                                             if(units %in% x$to & input.units %in% x$from) 

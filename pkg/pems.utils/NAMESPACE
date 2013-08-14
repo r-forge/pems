@@ -24,7 +24,8 @@ export(importRoyalTek2PEMS)
 #structure
 export(pemsElement)
 export(pemsData)
-
+export(pemsConstants)
+export(pemsHistory)
 
 #merge.pems
 export(bindPEMS)
@@ -67,6 +68,8 @@ export(calcAcceleration)
 export(calcJerk)
 export(calcVSP)
 export(calcVSPJimenezPalaciosCMEM)
+export(calcEm)
+export(calcEmHoribaPitot)
 
 #cutBy
 export(cutBy)

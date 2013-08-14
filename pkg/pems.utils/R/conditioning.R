@@ -22,7 +22,12 @@
 
 #comments
 ##########################
-#
+#cutBy could be intelligent
+#i.e. choose a method based on ref and inputs
+#see below
+#also the output could be a list of 
+#pems cut by the cut term
+
 
 
 
@@ -65,7 +70,15 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
                             unit.conversions = settings$unit.conversions)  
 
     if(is.null(cut.method)){
-        #select suiitable cut.method
+        #select suitable cut.method
+
+######################
+#this could be based on 
+#ref and args in ...
+##so e.g. if ref NULL and n or rows in ... 
+##        use cutByROw 
+#######################
+
         cut.method <- cutByRow
 
     }

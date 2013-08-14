@@ -20,6 +20,8 @@
 #urgent
 #convert units to log in history?
 #################
+#fix for aliases in convertUnits
+#################
 #removeUnitConversion
 #removeUnitAlias
 ##this needs a stop orphaning ids option?
@@ -194,7 +196,12 @@ convertUnits <- function(input = NULL, to = NULL, from = NULL, data = NULL, ...,
 
      }else { 
 
-        if(force & as.character(from) != as.character(temp)){
+#################################
+#fix for later
+#from could be an alias of temp
+#################################
+
+        if(!force & as.character(from) != as.character(temp)){
             if(if.missing=="stop")
                 stop(paste("\t In ", fun.name,"(...) from/input unit mismatch", sep=""),
                      paste("\n\t [suggest confirming input units/conversion]", sep=""),
@@ -247,7 +254,8 @@ convertUnits <- function(input = NULL, to = NULL, from = NULL, data = NULL, ...,
 
 
     if(!is.null(to)){
-        ans <- checkUnits(ans, to, unit.conversions = unit.conversions, hijack = hijack)
+        ans <- checkUnits(ans, to, unit.conversions = unit.conversions, hijack = hijack, 
+                          fun.name = fun.name)
     }
 
     checkOutput(input = ans, data = data, if.missing = if.missing, 

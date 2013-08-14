@@ -1,5 +1,5 @@
-\name{2.3.common.calculations}
-\alias{2.3.common.calculations}
+\name{2.3.1.common.calculations}
+\alias{2.3.1.common.calculations}
 \alias{common.calculations}
 \alias{calcDistance}
 \alias{calcSpeed}
@@ -147,13 +147,13 @@ calcPack(output = NULL, data = NULL, settings = NULL,
  
 }
 
-\section{Warning }{
-  No warnings
-}
+%\section{Warning }{
+%  No warnings
+%}
 
 \seealso{
 
-  \code{\link{calcVSP}} for VSP calculations.
+  \code{\link{calcVSP}} for VSP calculations. \code{\link{calcEm}} for emissions calculations.
  
   \code{\link{getElement}} (\code{\link{checkInput}} if passing elements as inputs), \code{\link{checkUnits}} 
   and \code{\link{convertUnits}} for data management.
