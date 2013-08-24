@@ -207,6 +207,196 @@ checkInput <- function(input = NULL, data = NULL,
 
 ########################
 ########################
+##checkInput2
+########################
+########################
+
+#side steps hijack
+
+#version 0.3.0
+#karl 17/09/2010
+
+#this can be simplified once 
+#pems and pems.element full set up
+
+
+checkInput2 <- function(input = NULL, data = NULL, 
+                       input.name = NULL, fun.name = NULL, 
+                       if.missing = c("stop", "warning", "return"),
+                       output = c("input", "test.result"),
+                       ... ){
+
+
+#new
+    temp <- try(comment(input), silent=TRUE)
+    if(class(temp)[1]!="try-error" && !is.null(temp) && temp[1]=="hijack")
+         return(input)
+#note
+#this current ignores missing and output
+#
+
+
+#######################
+#check defaults present/sensible
+#######################
+
+
+    input.name <- if(!is.character(input.name)) "input" else input.name[1]
+
+    fun.name <- if(!is.character(fun.name)) "checkInput" else fun.name[1]
+
+    pems <- checkPEMS(data)
+
+    output <- checkOption(output[1], eval(formals(checkInput)$output), 
+                          "output", "allowed outputs", 
+                          fun.name = "checkInput")
+
+    if.missing <- checkOption(if.missing[1], eval(formals(checkInput)$if.missing), 
+                              "if.missing", "allowed if.missings", 
+                              fun.name = "checkInput")
+#new
+suppressWarnings(
+#this kills warning below
+#
+
+    if(is.null(try(input, silent=TRUE))){
+         if(if.missing == "stop")
+              stop(paste("\t In ", fun.name,"(...) no ", input.name, " set", sep=""), 
+                  call. = FALSE, domain = NA)
+         if(if.missing== "warning")
+             warning(paste("In ", fun.name,"(...) no ", input.name, " set", sep=""),
+                     "\n\t [returning NULL]", 
+                     call. = FALSE, domain = NA)
+         return(NULL)
+    }
+
+#new
+)
+#
+
+
+    ###########################
+    #sneaky chase back of input
+    ###########################
+    ..x.ans <- input.name
+
+#new
+suppressWarnings(
+#
+    for(i in length(sys.frames()):1){
+        temp <- eval(parse(text=
+                     paste("deparse(substitute(", ..x.ans, ", sys.frames()[[i]]))", sep="")
+                     ))
+        if(length(temp)<2 & temp[1] !=..x.ans & temp[1] !="") ..x.ans <- temp
+    }
+
+
+#new
+)
+#
+
+    #tidy character inputs
+    ..x.ans <- gsub("\"", "", ..x.ans)
+
+    #if pems units available add in
+    #unit NA in pems?
+    #rethink this anyway
+
+    #also want name handled in same way as below?
+
+    units <- if(isPEMS(pems))
+                 as.character(units(pems)[1, ..x.ans]) else NULL
+    if(length(units)<1) units <- NULL
+
+    
+    ##########################
+    #check data is there
+    ##########################
+    #not strictly need if used conventionally
+    #but makes error tracking easier 
+    if(is(try(eval(pems), silent=TRUE))[1]=="try-error")
+        if(output=="test.result") return(FALSE) else
+            stop(paste("\t In ", fun.name,"(...) pems/data source not found", sep=""), 
+                call. = FALSE, domain = NA)
+
+    #########################
+    #recover and test input
+    #########################
+    #first for local case
+    #
+
+    if(length(temp)>1 || is.null(data)) {
+         text <- temp 
+         temp <- try(eval(parse(text = text)), silent=TRUE)
+    } else { 
+         text <- paste("pems$", ..x.ans, sep="") 
+         text <- try(eval(parse(text = text)), silent=TRUE)
+         temp <- if(class(text)[1]=="try-error" || is.null(text))
+                     try(eval(parse(text = temp)), silent=TRUE) else 
+                     text
+    }
+
+##########################
+#this needs thinking about because it puts the unit of 
+#that name in the pems source on that case
+#what we really need is if input comes from 
+#source and units there add them
+#make object pems2
+##########################
+
+
+    if(is.function(temp)){
+        temp <- "temp"
+        class(temp) <- "try-error" #catch functions as well!
+    }
+
+
+
+    if(output=="test.result"){
+        temp <- if(is(temp)[1]=="try-error") FALSE else TRUE
+        attr(temp, "name") <- ..x.ans
+        if(!is.null(units))
+            attr(temp, "units") <- units
+        return(temp)
+    }
+
+    if(output=="input"){
+        if(is(temp)[1]=="try-error")
+            switch(if.missing,
+                return = { return(NULL) },
+                warning = { warning(paste("In ", fun.name,"(...) ", input.name, " '", ..x.ans[1], "' not found", sep=""),
+                    ", but ignoring", "\n\t [returning NULL]", call. = FALSE, domain = NA)
+                return(NULL) },
+                stop = { stop(paste("\t In ", fun.name,"(...) ", input.name, " '", ..x.ans[1], "' not found", sep=""),
+                    call. = FALSE, domain = NA) } ) else {
+            if(length(temp)==1) temp <- as.vector(temp)
+            attr(temp, "name") <- ..x.ans
+            if(!is.null(units))
+                attr(temp, "units") <- units
+
+#new
+           comment(temp) <- "hijack"
+#
+            class(temp) <- "pems.element"
+            return(temp) } 
+    }
+
+    stop(paste("\t In ", fun.name,"(...) unexpected error", sep=""),
+        "\n\t [please contact pems admin]", call. = FALSE, domain = NA)  
+
+}
+
+
+
+
+
+
+
+
+
+
+########################
+########################
 ##checkOption
 ########################
 ########################

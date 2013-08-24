@@ -1,7 +1,7 @@
 
 ##########################
 ##########################
-##emission calculations
+##common.corrections
 ##########################
 ##########################
 
@@ -9,68 +9,84 @@
 
 #description
 ##########################
-#functions to calculate emissions
+#functions to apply corrections
+#so take an input, modify and 
+#(unless told not to) 
+#save it as the same thing
 
 
 #includes 
 ##########################
-#calcEm
-#calcEMHoribaPitot
+#correctInput
+#correctPitotDrift
 #
 
 
-#to do
-##########################
-
-#comments
-##########################
 #
-
-
-
-##########################
-##########################
-##calcVSP
-##########################
-##########################
-
-#kr 23/01/2012 v 0.0.6
-
-#what it does
-##########################
-#calculates Emissions
-
 #most urgent
 ######################################
-#confirm inputs to calcEmHoribaPitot
-##what exhaust parameters are needed? 
-##what delay offset is being applied to conc.co2
-##round up/round down?
 #
 
 #urgent
 ##########################
-#need to tidy the this.call
-#handling give current
-#not parent call!!!
-##########################
-#need to tidy calcEmHoribaPitot
-#error catchers to add
-#tempGet to be tidied 
-#fix to be tidied
 #
-
-
-
 
 #to do
 ##########################
-#make test more robust?
+#
 
 #comments
 ##########################
 #
 
+
+
+##########################
+##########################
+##correctInput
+##########################
+##########################
+
+#kr 23/11/2013 v 0.0.1
+
+#what it does
+##########################
+#takes an input
+#applies a correction
+#return that as input
+
+
+
+################################
+################################
+##correctInput
+################################
+################################
+
+
+correctInput <- function(input = NULL, ..., data = NULL,
+                         correction = NULL){
+
+    #think about using listUpdate in loa
+    #if(is.null(this.call)) 
+    #    this.call <- match.call() 
+    
+    #run checks
+    extra.args <- listUpdate(list(this.call=match.call()), list(...))
+
+
+#fun.name = "correctInput", 
+#                         force = FALSE, this.call = NULL, 
+#                         overwrite = TRUE, hijack= FALSE
+
+#    settings <- calcChecks(fun.name, ..., data = data)
+
+#settings
+
+extra.args
+
+
+}
 
 
 ################################
