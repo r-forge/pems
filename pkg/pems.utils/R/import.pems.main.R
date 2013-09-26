@@ -12,6 +12,7 @@
 #importTAB2PEMS
 #importCSV2PEMS
 #importOBS2PEMS
+#importOB12PEMS
 #
 
 #to do
@@ -337,10 +338,7 @@ importOBS2PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
     }
 
     output <- makePEMS(x = data, units = data.units, constants = constants, 
-                       history = history, pems = pems) 
-    
-    #reset history?
-    output$history[[length(output$history)]] <- this.call 
+                       history = history, pems = pems, ..., silent = TRUE) 
     
     output
 
@@ -349,3 +347,195 @@ importOBS2PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
 
 
 
+
+
+
+
+
+##########################
+##########################
+##importOB12PEMS
+##########################
+##########################
+
+#kr 12/09/2013 v 0.1.0
+
+#what it does
+##########################
+#import OB1 files previously created using observer
+##
+#adds time.stamp based on reported start.time/date
+#sets units
+#
+
+
+#to do
+##########################
+#tidy code
+#this could be done better now
+###################
+#to tidy
+###################
+#
+
+#comments
+##########################
+
+
+importOB12PEMS <- function(file.name = file.choose(), pems = "Horiba OBS", 
+          constants = NULL, history = NULL, 
+          analytes = c("co", "co2", "nox", "hc"),  
+          fuel = c("petrol", "diesel", "gasoline"), ...){
+
+################################
+#could do this a lot better now
+################################
+
+    #setup
+    this.call <- match.call()
+
+    #create fuel.constants
+#not sure fuel matters for OB1
+#already set
+
+    fuel <- checkOption(fuel[1], formals(importOBS2PEMS)$fuel, 
+                        "fuel", "known fuel types", 
+                        fun.name = "importOBS2PEMS")
+    fuel.constants <- list()
+    if(fuel == "diesel")
+        fuel.constants <- ref.diesel
+    if(fuel == "petrol" | fuel == "gasoline")
+        fuel.constants <- ref.petrol
+
+    #checks
+    suspect.tags <- ""
+
+    #read first header
+    input <- readLines(file.name, n = 14)
+    temp <- strsplit(input[1:6], "\t")
+
+    if(temp[[1]][2]!= "OBServer 1.0.0.")
+        suspect.tags <- c(suspect.tags, "file source unrecognised")
+    if(temp[[1]][3]!= "OB1 format version 1.1")
+           suspect.tags <- c(suspect.tags, "suspect OB1 format")
+    
+    #date (yyyy/mm/dd) from line 2
+    date <- as.character(temp[[2]][2])
+
+    if(length(suspect.tags)>1)
+        print(paste(suspect.tags, sep="\n"))
+ 
+    constants <- as.list(as.numeric(temp[[6]]))
+    
+    #reset names 
+    temp <- temp[[5]]
+    temp[temp=="Log Rate"] <- "log.rate"
+    temp[temp=="CO delay time"] <- "delay.co"
+    temp[temp=="CO2 delay time"] <- "delay.co2"
+    temp[temp=="HC delay time"] <- "delay.hc"
+    temp[temp=="NOx delay time"] <- "delay.nox"
+    temp[temp=="AFR delay time"] <- "delay.afr"
+    temp[temp=="O2 conc"] <- "conc.o2"
+
+    temp[temp=="CO mol mass"] <- "mm.co"
+    temp[temp=="CO2 mol mass"] <- "mm.co2"
+    temp[temp=="NOx mol mass"] <- "mm.nox"
+    temp[temp=="C mol mass"] <- "mm.c"
+    temp[temp=="H mol mass"] <- "mm.h"
+    temp[temp=="O mol mass"] <- "mm.0"
+
+    temp[temp=="PITOT k"] <- "pitot.k"
+    temp[temp=="PITOT z"] <- "pitot.z"
+
+    temp[temp=="THC/C6"] <- "thc.c6" 
+    temp[temp=="Exhaust density"] <- "density.exhaust"
+    temp[temp=="Fuel density"] <- "density.fuel"
+
+    temp[temp=="COCO2HC select"] <- "setting.coco2hc"
+    temp[temp=="720NOx select"] <- "setting.720nox"
+    temp[temp=="K(wgec)"] <- "k.wgec" 
+    temp[temp=="H/C"] <- "alpha.hc" 
+    temp[temp=="Exh H/C"] <- "alpha.exhaust.hc"
+    temp[temp=="GPS port"] <- "setting.gps.port"
+    temp[temp=="velocity select"] <- "setting.velocity"
+    temp[temp=="O/C"] <- "beta.oc"  
+    temp[temp=="GPS select"] <- "setting.gps" 
+    temp[temp=="HC select"] <- "setting.hc"
+    temp[temp=="OPTION select"] <- "setting.option"
+    temp[temp=="AFR select"] <- "setting.afr" 
+    temp[temp=="Fuel select"] <- "setting.fuel"
+    temp[temp=="Vehicle type"] <- "vehicle.type"
+
+    names(constants) <- temp
+
+    test.fun <- function(x)
+                     if(is.na(names(constants)[x])  || names(constants)[x]=="O") 
+                         FALSE else TRUE
+
+    constants <- constants[sapply(1:length(constants), test.fun)]
+
+    history <- list(input, this.call)
+
+    units <- read.delim(file.name, skip=14, nrows=1, header=TRUE, stringsAsFactors=FALSE)
+
+    names(units) <- tolower(names(units))
+    names(units) <- gsub("real.time.fuel.consumption.by.", "rtfc.", names(units))
+    names(units) <- gsub("fuel.consumption.by.", "fc.", names(units))
+    names(units) <- gsub("afr.by.", "afr.", names(units))
+    names(units) <- gsub("option[.]", "option", names(units))
+    names(units) <- gsub(".sensor", "", names(units))
+    names(units) <- gsub("pitot.output..retro.calc.", "pitot.output", names(units))
+
+    names(units)[names(units)=="time.1"] <- "time.stamp"
+    names(units)[names(units)=="time"] <- "local.time"
+    for(i in analytes){
+        names(units)[names(units)==i]<- paste("conc.", i, sep="")
+        names(units)[names(units)==paste(i, ".1", sep="")]<- paste("em.", i, sep="")
+    }
+    
+    temp <- as.character(units)
+    temp <- gsub("[(]", "", temp)
+    temp <- gsub("[)]", "", temp)
+    temp[temp=="hh:mm:ss"] <- "Y-M-D H:M:S GMT"
+    temp[temp=="NA"] <- ""
+    temp[temp=="g/sec"] <- "g/s"
+    units[] <- temp 
+
+    data <- read.delim(file.name, skip=16, header=FALSE, na.strings = c("NA", "Inf (No Carbon)"))
+    names(data) <- names(units)
+    data$time.stamp <- paste(date, data$time.stamp, sep=" ")
+
+    #earlier versions of OB1 files did not set lat lon sign
+    #later versions did 
+    #so cannot assume systematic handling
+    #so reset all to positive and redo signs based on n.s and w.e
+    
+    if("latitude" %in% names(data) & "n.s" %in% names(data)){
+        
+        #north/south - as lower case 1 character 
+        temp <- substr(tolower(as.character(data$n.s)),1,2)
+        temp <- ifelse(is.na(temp), "n", temp)
+
+        data$latitude <- abs(data$latitude)
+        data$latitude <- ifelse(temp == "n", data$latitude, -data$latitude)
+
+        temp[names(units)=="latitude"] <- "d.degLat"
+    }
+
+    if("longitude" %in% names(data) & "w.e" %in% names(data)){
+        
+        #east/west - as lower case 1 character 
+        temp <- substr(tolower(as.character(data$w.e)),1,2)
+        temp <- ifelse(is.na(temp), "e", temp)
+
+        data$longitude <- abs(data$longitude)
+        data$longitude <- ifelse(temp == "w", -data$longitude, data$longitude)
+        
+        temp[names(units)=="longitude"] <- "d.degLon"
+    }
+
+    output <- makePEMS(x = data, units = units, constants = constants, 
+                       history = history, pems = pems, ..., silent=TRUE) 
+    
+    output
+    }

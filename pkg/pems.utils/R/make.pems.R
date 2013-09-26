@@ -126,16 +126,24 @@ makePEMS <- function(x, units = NULL, constants = NULL,
 ####################
 #update constants
 
+    if(is.null(history)) history <- list()
+    extra.args <- list(...)
+
+    #update silently?
+    test <- if("silent" %in% names(extra.args))
+                extra.args$silent else FALSE
+    extra.args <- extra.args[names(extra.args)!="silent"]
+
     #history
-    history <- if(is.null(history))
-                   c(match.call()) else c(history, match.call())    
+    history <- if(test)
+                   history else c(history, match.call())    
 
     #output
     output <- list(data = x, units = units, constants = constants, 
                    history = history)
 
     #add in ... args
-    temp <- list(...)
+    temp <- extra.args
     output[names(temp)] <- temp
 
     class(output) <- "pems"

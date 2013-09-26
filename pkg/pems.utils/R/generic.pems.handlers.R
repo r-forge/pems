@@ -9,6 +9,7 @@
 #includes 
 #(functions/code below) 
 ##########################
+#as.data.frame.pems
 #[.pems
 #$.pems
 #print.pems
@@ -28,6 +29,24 @@
 #comments
 ##########################
 #
+
+
+
+##########################
+##########################
+##as.data.frame.pems
+##########################
+##########################
+
+#pull data.frame out of pems
+#for lattice, lm, etc.
+
+as.data.frame.pems <- function(x, ...){
+
+    class(x) <- "not.pems"
+    x$data    
+
+}
 
 
 

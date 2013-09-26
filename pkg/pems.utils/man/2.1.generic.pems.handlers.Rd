@@ -2,6 +2,7 @@
 
 \alias{generic.pems.handlers}
 \alias{pems.generics}
+\alias{as.data.frame.pems}
 \alias{$.pems}
 \alias{[.pems}
 \alias{names.pems}
@@ -19,6 +20,9 @@
 }
 
 \usage{
+
+
+\method{as.data.frame}{pems}(x,...)
 
 \method{$}{pems} (x, i, ...)
 
@@ -73,6 +77,12 @@
 \value{
   Generic functions provide appropriate (conventional) handling of objects of 
   \code{'pems'} class: 
+
+  \code{as.data.frame(pem.object)} extracts the \code{data.frame} component of a 
+  pems object. 
+
+  \code{pems.object$element.name} extracts the named element from the pems objects 
+  in a similar fashion to \code{data.frame$element.name}.   
 
   \code{pems.object[i, j]} extracts the [i.j] elements of the data held in the 
   \code{pems} object. This is returned as either a \code{pems} or \code{pems.element} 
