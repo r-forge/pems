@@ -15,12 +15,9 @@
 
 \usage{
 
-
-
 \method{print}{pems.element}(x, ...)
 
 \method{plot}{pems.element}(x, y = NULL, xlab = NULL, ylab = NULL, ...)
-
 
 }
 

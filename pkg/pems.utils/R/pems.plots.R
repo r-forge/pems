@@ -13,6 +13,8 @@
 
 #includes 
 ##########################
+#pemsPlot
+#(preprocess, panel and plot)
 #latticePlot
 #panel.PEMSXYPlot
 #XYZPlot
@@ -26,6 +28,254 @@
 ##########################
 #XYZPlot is not staying
 #
+
+
+###########################
+###########################
+##pemsPlot
+###########################
+###########################
+
+####################
+#pemsPlot
+####################
+
+#kr 17/02/2014
+#version 0.0.1
+
+
+pemsPlot <- function(x, y = NULL, z = NULL, ..., data = NULL, 
+         cond = NULL, units = TRUE, fun.name="pemsPlot",
+         panel = panel.pemsPlot, scheme = pems.scheme){
+
+    #passes settings on to convert units
+
+    #setup
+    extra.args <- list(...)
+    settings <- calcChecks(fun.name, ..., data = data)
+
+    #standardise formula or x,y,z,cond input as formula
+    #and grab units
+    extra.args$units <- listLoad(listUpdate(extra.args, list(load="units")))
+    extra.args <- pemsXYZCondUnitsHandler(x, y, z, cond, data = data,
+                              units = units, settings = settings, ...)
+
+    extra.args <- listUpdate(extra.args, list(panel = panel, scheme = scheme, 
+                                              data = data))
+
+    do.call(loaPlot, extra.args)
+
+}
+
+
+##############################
+#pemsXYZCondUnitsHandler
+##############################
+
+pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = NULL, units = TRUE, 
+         ..., fun.name = "pemsXYZCondHandler", hijack= FALSE){
+
+#think about error messaging and 
+#visible message sources
+
+#think about returning redundant data with not.formula
+
+    #allows user to use both 
+    #plot(x,y,z,...) and plot(formula,...) type calls
+    #returns plot(formula) and updates units
+
+    #setup
+    extra.args <- list(...)
+    settings <- calcChecks(fun.name, ..., data = data)
+
+    #units handling 
+    #note: this could be less complex
+    extra.args <- do.call(listLoad, listUpdate(extra.args, 
+                                               list(load="units", units=units)))
+    extra.args$units <- listUpdate(list(add.to.labels=TRUE), extra.args$units)
+    extra.args$units$units <- if(isGood4LOA(units)) TRUE else FALSE
+
+    temp <- if(hijack) x else 
+                checkInput(x, data=data, if.missing="return")
+    if(as.character(temp)[1]=="~"){
+        #this is a formula
+        is.formula <- TRUE
+    } else {
+        is.formula <- FALSE
+        x <- temp
+    }
+
+    #if formula I assume you have put everything in formula
+    if(is.formula){
+
+         #add x and y units to units
+         temp <- formulaHandler(x, data, output="lattice.like")
+         extra.args$units$x.units <- eval(parse(text=paste("getUnits(", temp$xlab,", ", "data", ", if.missing='return')", sep="")))
+         extra.args$units$y.units <- eval(parse(text=paste("getUnits(", temp$ylab,", ", "data", ", if.missing='return')", sep="")))
+         if("zlab" %in% names(temp))
+             extra.args$units$z.units <- eval(parse(text=paste("getUnits(", temp$zlab,", ", "data", ", if.missing='return')", sep="")))
+         #return ans
+         #note units already in extra.args
+         return(listUpdate(extra.args, list(x=x, data=data)))
+        
+    }
+
+    #if formula you cant get to here
+    #so this is none formula handling
+
+    if(!hijack){   
+        y <- checkInput(y, data=data, if.missing="return")
+        z <- checkInput(z, data=data, if.missing="return")
+    }
+
+    if(is.null(x))
+        checkIfMissing(settings$if.missing, reply = "argument 'x' not supplied or null")
+    extra.args$units$x.units <- getUnits(x, unit.conversions = settings$unit.conversions, hijack = TRUE)
+    if(is.null(y))
+        checkIfMissing(settings$if.missing, reply = "argument 'y' not supplied or null")
+    extra.args$units$y.units <- getUnits(y, unit.conversions = settings$unit.conversions, hijack = TRUE)
+    if(!is.null(z))
+        extra.args$units$z.units <- getUnits(z, unit.conversions = settings$unit.conversions, hijack = TRUE)
+
+    if(is.null(z) & is.null(cond)) extra.args$x <- ~x*y
+    if(is.null(z) & !is.null(cond)) extra.args$x <- ~x*y|cond
+    if(!is.null(z) & is.null(cond)) extra.args$x <- z~x*y
+    if(!is.null(z) & !is.null(cond)) extra.args$x <- z~x*y|cond
+
+#    lab.fun <- function(x, def, units, units2){
+#        temp <- if(is.null(attr(x, "name"))) def else attr(x, "name")
+#        if(isGood4LOA(units$units))
+#            if(units$add.to.label)
+#                if(!is.null(units2))
+#                    temp <- paste(temp, " [", units2, "]", sep="") 
+#        temp
+#    } 
+    if(!"xlab" %in% names(extra.args)) 
+       extra.args$xlab <- if(is.null(attr(x, "name"))) "x" else attr(x, "name")
+    if(!"ylab" %in% names(extra.args)) 
+       extra.args$ylab <- if(is.null(attr(y, "name"))) "y" else attr(y, "name")
+    if(!is.null(z) && !"zlab" %in% names(extra.args)) 
+       extra.args$zlab <- if(is.null(attr(z, "name"))) "z" else attr(z, "name")
+
+
+
+#        extra.args$xlab <- lab.fun(x, "x", extra.args$units, extra.args$units$x.units)
+
+    #extra.args$x must exist and data not needed
+    #extra.args$units updated
+    return(extra.args)
+
+
+}
+
+
+
+#######################
+#preprocess.pemsPlot
+#######################
+
+preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
+
+#this is a bit messy
+#might rethink how stuff goes in 
+
+        extra.args <- list(...)
+        settings <- calcChecks(...) #don't set fun.name or data here or put back in later
+
+        xlab <- if(is.null(extra.args$xlab)) lattice.like$xlab else extra.args$xlab
+        ylab <- if(is.null(extra.args$ylab)) lattice.like$ylab else extra.args$ylab
+        zlab <- if(is.null(extra.args$zlab)) lattice.like$zlab else extra.args$zlab
+
+#think about conversion.ref
+#settings should pass down
+
+        if(is.null(lattice.like$z)) lattice.like$z <- 1
+        if(isGood4LOA(units$units)){
+
+            if("x.to" %in% names(extra.args)){
+                from <- if("x.from" %in% names(extra.args)) extra.args$x.from else units$x.units     
+                lattice.like$x <- convertUnits(lattice.like$x, to=extra.args$x.to, from=from, 
+                                               unit.conversions = settings$unit.conversions, 
+                                               hijack=TRUE, force=TRUE)
+                units$x.units <- extra.args$x.to
+            }
+            if("y.to" %in% names(extra.args)){
+                from <- if("y.from" %in% names(extra.args)) extra.args$y.from else units$y.units     
+                lattice.like$y <- convertUnits(lattice.like$y, to=extra.args$y.to, from=from, 
+                                               unit.conversions = settings$unit.conversions,
+                                               hijack=TRUE, force=TRUE)
+                units$y.units <- extra.args$y.to
+            }
+            if("z.to" %in% names(extra.args)){
+                from <- if("z.from" %in% names(extra.args)) extra.args$z.from else units$z.units     
+                lattice.like$z <- convertUnits(lattice.like$z, to=extra.args$z.to, from=from, 
+                                               unit.conversions = settings$unit.conversions,
+                                               hijack=TRUE, force=TRUE)
+                units$z.units <- extra.args$z.to
+            }
+
+            if("add.to.labels" %in% names(units) && units$add.to.labels){
+                if(!is.null(xlab) && "x.units" %in% names(units))
+                    lattice.like$xlab <- paste(xlab, " [", units$x.units, "]", sep="")
+                xlab <- lattice.like$xlab
+                if(!is.null(ylab) && "y.units" %in% names(units))
+                    lattice.like$ylab <- paste(ylab, " [", units$y.units, "]", sep="")
+                ylab <- lattice.like$ylab
+                if(!is.null(zlab) && "z.units" %in% names(units))
+                    lattice.like$zlab <- paste(zlab, " [", units$z.units, "]", sep="")
+                zlab <- lattice.like$zlab
+
+            }
+
+        list(lattice.like=lattice.like, units=units, xlab=xlab, ylab=ylab, zlab=zlab)
+        }
+     }
+
+
+############################
+#panel.pemsPlot
+############################
+
+panel.pemsPlot <- function(..., plot=TRUE, process=TRUE, loa.settings = FALSE){
+
+#could probably loss a lot of these arguments
+#but then I would not document them anywhere
+
+        extra.args <- list(...)
+
+        if(loa.settings){
+            temp <- loaHandler(panel.loaPlot)
+            temp$common.args <- unique(c(temp$common.args, "units"))
+            temp$default.settings <- listUpdate(temp$default.settings, 
+                                                list(loa.preprocess = preprocess.pemsPlot))
+            return(temp)
+        }
+
+        if(process){
+               #stuff to do if processing
+               #when processing and not plotting what to return
+               #what you want to save or reference in all plots
+        if(!plot) return(list())
+        }
+        if(plot){
+            panel.loaPlot(...)
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

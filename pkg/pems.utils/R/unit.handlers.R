@@ -201,7 +201,7 @@ convertUnits <- function(input = NULL, to = NULL, from = NULL, data = NULL, ...,
 #from could be an alias of temp
 #################################
 
-        if(!force & as.character(from) != as.character(temp)){
+        if(!force && as.character(from) != as.character(temp)){
             if(if.missing=="stop")
                 stop(paste("\t In ", fun.name,"(...) from/input unit mismatch", sep=""),
                      paste("\n\t [suggest confirming input units/conversion]", sep=""),

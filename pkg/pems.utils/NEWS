@@ -1,8 +1,21 @@
+Changes in pems.utils 0.2.7 [2014-02-17]
+========================================
+
+*       added pems.scheme, default pems 
+        plotting scheme
+*       convertUnits update, force now 
+        forces to from unit conversion 
+        if input units are either not 
+        set or do not match from
+*       added pemsPlot function to package
+        (preprocess, panel and plot 
+        using loa)
+        
+
 Changes in pems.utils 0.2.6 [2013-09-26]
 ========================================
 
 *       added as.data.frame.pems 
-
 
 
 Changes in pems.utils 0.2.5 [2013-08-11]
@@ -13,7 +26,6 @@ Changes in pems.utils 0.2.5 [2013-08-11]
         (correctInput, zeroNegatives)
 *       added importOB12PEMS function
         (imports OB1 format files)
-
 
 
 Changes in pems.utils 0.2.4 [2013-08-08]

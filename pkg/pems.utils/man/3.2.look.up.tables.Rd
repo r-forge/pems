@@ -5,7 +5,7 @@
 \alias{ref.chem}
 \alias{ref.petrol}
 \alias{ref.diesel}
-
+\alias{pems.scheme}
 
 \docType{data}
 
@@ -28,6 +28,8 @@
 
    ref.diesel
 
+   pems.scheme
+
 }
 
 
@@ -35,6 +37,8 @@
   \code{ref.unit.conversions}: Unit conversion methods stored as a list of lists. See Details.
 
   \code{ref.chem, ref.petrol, ref.diesel}: Common chemical and fuel constants stored as lists.  
+
+  \code{pems.scheme}: Default scheme for \code{pems.utils} plots.
 
 }
 

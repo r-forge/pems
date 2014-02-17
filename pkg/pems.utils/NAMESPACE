@@ -60,6 +60,10 @@ S3method(plot, pems.element)
 export(latticePlot)
 export(panel.PEMSXYPlot)
 export(XYZPlot)
+export(pemsPlot)
+export(panel.pemsPlot)
+export(preprocess.pemsPlot)
+export(pemsXYZCondUnitsHandler)
 
 #calcs
 export(calcDistance)

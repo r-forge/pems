@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.6\cr
-Date: \tab 2013-26-09\cr
+Version: \tab 0.2.7\cr
+Date: \tab 2014-02-17\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -50,7 +50,7 @@ follows:
 
 2.3.3. Emissions calculations: \code{\link{calcEm}}, etc.
 
-2.4. Plots for pems objects: \code{\link{pems.plots}}, \code{\link{latticePlot}}, etc.
+2.4. Plots for pems objects: \code{\link{pems.plots}}, \code{\link{latticePlot}}, \code{\link{pemsPlot}}, etc.
 
 2.5. Analysing data in pems objects: \code{\link{summary.reports}}
 
