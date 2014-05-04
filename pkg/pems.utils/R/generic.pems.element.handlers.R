@@ -11,6 +11,9 @@
 ##########################
 #print.pems.element
 #plot.pems.element
+#units.pems.element
+#[.pems.element
+
 
 #to do
 #########################
@@ -47,9 +50,22 @@ print.pems.element <- function (x, ...){
     #data 
     #print with default method and attributes stripped
     ans <- x
-    class(ans) <- "default"
-    attributes(ans) <- NULL
-    print.default(ans, ...)
+
+#############
+#test
+#############
+#    class(ans) <- "default"
+#    attributes(ans) <- NULL
+#    print.default(ans, ...)
+
+    class(ans) <- class(ans)[class(ans)!="pems.element"]
+    attributes(ans) <- attributes(ans)[names(attributes(ans))!=c("name", "units")]
+
+#allows element to print as prior class
+#############
+
+    print(ans, ...)
+
 
     #attr
     #local report
@@ -60,9 +76,10 @@ print.pems.element <- function (x, ...){
 
     temp2 <- paste(temp2, " [n = ", length(x), "]", sep = "")
     
-    cat(" pems.element;", temp2, "\n")
+    cat("pems.element;", temp2, "\n")
 
 }
+
 
 
 
@@ -114,3 +131,64 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
 
 }
 
+
+
+
+##################
+#units.pems.element
+##################
+
+#need to think about this some more
+units.pems.element <- function(x) attr(x, "units")
+
+
+
+
+##########################
+##########################
+##[.pems.element
+##########################
+##########################
+
+#kr 31/04/2014 v 0.2.1
+
+#what it does
+##########################
+#handles pems.element[] calls 
+#etc
+#
+
+#to do
+##########################
+#tidy
+#think about force, simplify
+
+`[.pems.element` <- function(x, i, ..., force=TRUE, wrap=FALSE){
+
+    #pems.element handling
+    #x[1] element 1 of x, etc 
+    
+    #output 
+    #x[i] with pems.element attributes retained
+
+    att <- attributes(x)
+    class(x) <- class(x)[class(x)!="pems.element"]
+
+    if(!force){
+        i <- if(is.character(i)) 
+                 i[i %in% names(x)] else i[i %in% 1:length(x)]
+    }
+    if(wrap && is.numeric(i)){
+        if(length(x) < max(i, na.rm=TRUE)) x <- rep(x, length.out=max(i, na.rm=TRUE))
+        
+    }
+     
+    x <- try(x[i], silent = TRUE)
+    if(is(x)[1] == "try-error") 
+      stop("In pems.element[i] 'i' unknown/unfound", 
+          call. = FALSE)
+    attributes(x) <- att
+    
+    x
+
+}

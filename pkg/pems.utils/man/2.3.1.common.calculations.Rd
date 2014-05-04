@@ -38,7 +38,7 @@ calcJerk(accel = NULL, time = NULL, data = NULL,
 
 #associated
 
-calcChecks(fun.name = "calcChecks", ..., data = data,
+calcChecks(fun.name = "calcChecks", ..., data = NULL,
           if.missing = c("stop", "warning", "return"), 
           output = c("special", "input", "data.frame", "pems"),
           unit.conversions = NULL, overwrite = FALSE)

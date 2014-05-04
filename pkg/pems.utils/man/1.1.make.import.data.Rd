@@ -3,6 +3,7 @@
 \alias{pems.objects}
 \alias{isPEMS}
 \alias{makePEMS}
+\alias{makePEMSElement}
 \alias{import2PEMS}
 \alias{importTAB2PEMS}
 \alias{importCSV2PEMS}
@@ -28,6 +29,10 @@ isPEMS(x, full.test = TRUE, ...)
 
 makePEMS(x, units = NULL, constants = NULL, history = NULL,  
           ...)
+
+makePEMSElement(x, name = NULL, units = NULL,   
+          ...)
+
 
 #importing data as pems objects
 
@@ -85,11 +90,18 @@ importRoyalTek2PEMS(file.name = file.choose(),
 }
 
   \item{units, constants, history}{
-  (Default pems arguments) These are arguments that are routinely included generated for 
+  (Default pems arguments) These are arguments that are routinely generated for 
   \code{pems} objects. \code{units} holds unit ids for unit management, \code{constants} holds 
   constants that should used specifically with data in the \code{pems} object, and \code{history} 
   holds the \code{pems} object modification history.   
 }
+
+  \item{name}{
+  (Default pems.element argument) \code{name} (and \code{units}) are arguments that are routinely 
+  generated for \code{pems.element} objects.    
+}
+
+
 
   \item{file.name}{
   (file connection, etc.) For \code{import...} functions, the file/source to be imported. Note: the 

@@ -1,11 +1,11 @@
 Package: pems.utils
 Type: Package
 Title: pems.utils 
-Version: 0.2.7
-Date: 2014-02-17
+Version: 0.2.8
+Date: 2014-04-30
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
-Depends: R (>= 2.10.0), grid, lattice, latticeExtra, RColorBrewer, loa 
+Depends: R (>= 2.10.0), utils, grid, lattice, latticeExtra, RColorBrewer, loa 
 Description: tools for the analysis and visualisation of pems data
 License: GPL (>= 2)
 LazyLoad: yes

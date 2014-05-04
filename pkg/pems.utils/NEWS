@@ -1,3 +1,20 @@
+Changes in pems.utils 0.2.8 [2014-04-30]
+========================================
+
+*       simplified pems[,n] and pems$n code
+*       added [n], units pems.element methods
+*       added utils to depends (for head.default 
+        and tail.default access)
+*       added head and tail pems methods
+*       added makePEMSElement (makePEMS
+        equivalent)
+*       added the WatsonPlot functions used in 
+        CRC and PEMS 2014 work 
+*       updated pems default col scheme to match scheme 
+        used in CRC and PEMS 2014 work
+*       calcChecks code update 
+
+
 Changes in pems.utils 0.2.7 [2014-02-17]
 ========================================
 

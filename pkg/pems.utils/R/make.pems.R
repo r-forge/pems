@@ -15,6 +15,7 @@
 ##########################
 #isPEMS
 #makePEMS
+#makePEMSElement
 
 #to do
 ##########################
@@ -148,4 +149,23 @@ makePEMS <- function(x, units = NULL, constants = NULL,
 
     class(output) <- "pems"
     invisible(output)
+}
+
+
+
+
+########################
+########################
+##makePEMSElement
+########################
+########################
+
+makePEMSElement <- function(x, name=NULL, units=NULL, ...){
+
+    attr(x, "class") <- unique(c("pems.element", attr(x, "class")))
+    attr(x, "name") <- name
+    attr(x, "units") <- units
+
+    invisible(x)
+
 }

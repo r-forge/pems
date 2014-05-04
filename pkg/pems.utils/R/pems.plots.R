@@ -14,7 +14,11 @@
 #includes 
 ##########################
 #pemsPlot
-#(preprocess, panel and plot)
+#(plot, preprocess, panel)
+#WatsonPlot
+#(plot, preprocess, panels for different plot.types)
+
+#old plots
 #latticePlot
 #panel.PEMSXYPlot
 #XYZPlot
@@ -186,10 +190,11 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
         ylab <- if(is.null(extra.args$ylab)) lattice.like$ylab else extra.args$ylab
         zlab <- if(is.null(extra.args$zlab)) lattice.like$zlab else extra.args$zlab
 
-#think about conversion.ref
-#settings should pass down
 
-        if(is.null(lattice.like$z)) lattice.like$z <- 1
+# this is now in panel so ignored by key
+# 
+#        if(is.null(lattice.like$z)) lattice.like$z <- 1
+
         if(isGood4LOA(units$units)){
 
             if("x.to" %in% names(extra.args)){
@@ -227,8 +232,8 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
 
             }
 
-        list(lattice.like=lattice.like, units=units, xlab=xlab, ylab=ylab, zlab=zlab)
         }
+        list(lattice.like=lattice.like, units=units, xlab=xlab, ylab=ylab, zlab=zlab)
      }
 
 
@@ -236,7 +241,7 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
 #panel.pemsPlot
 ############################
 
-panel.pemsPlot <- function(..., plot=TRUE, process=TRUE, loa.settings = FALSE){
+panel.pemsPlot <- function(..., loa.settings = FALSE){
 
 #could probably loss a lot of these arguments
 #but then I would not document them anywhere
@@ -251,15 +256,16 @@ panel.pemsPlot <- function(..., plot=TRUE, process=TRUE, loa.settings = FALSE){
             return(temp)
         }
 
-        if(process){
-               #stuff to do if processing
-               #when processing and not plotting what to return
-               #what you want to save or reference in all plots
-        if(!plot) return(list())
-        }
-        if(plot){
-            panel.loaPlot(...)
-        }
+        #add z if missing
+
+#this will be redundant if I can find a better way of
+#handling colHandler(z = 1 or NULL or 1:n ... 
+#with different colour schemes 
+
+        if(is.null(extra.args$z)) extra.args$z <- 1
+
+        #plot
+        do.call(panel.loaPlot, extra.args)
 
     }
 
@@ -271,7 +277,210 @@ panel.pemsPlot <- function(..., plot=TRUE, process=TRUE, loa.settings = FALSE){
 
 
 
+###########################
+###########################
+##WatsonPlot
+###########################
+###########################
 
+####################
+#WatsonPlot
+####################
+
+#kr 17/02/2014
+#version 0.0.1
+
+#to do
+######################
+#wireframe output for plot.type
+
+
+WatsonPlot <- function (x, y = NULL, ..., data = NULL, z = NULL, cond = NULL, 
+    plot.type=1, fun.name = "WatsonPlot", scheme = pems.scheme) 
+{
+    extra.args <- listUpdate(list(units = TRUE), 
+                             list(...))
+    settings <- calcChecks(fun.name, ..., data = data)
+    #extra.args <- listLoad(listUpdate(extra.args, list(load = "units")))
+    extra.args <- pemsXYZCondUnitsHandler(x, y, z, cond, data = data, 
+        settings = settings, ...)
+
+    #panel reset
+    if(!"panel" %in% names(extra.args)){
+        if(plot.type==1) extra.args$panel <- panel.WatsonBinPlot
+        if(plot.type==2) extra.args$panel <- panel.WatsonContourPlot
+#        if(plot.type==3) extra.args$panel <- panel.binPlot
+    }
+    if(is.null(extra.args$panel)) 
+        warning("WatsonPlot: unknown plot.type [generating scatter plot]", 
+                call.=FALSE)
+
+    extra.args <- listUpdate(extra.args, list(data = data, scheme =scheme))
+    do.call(loaPlot, extra.args)
+}
+
+
+
+
+
+
+####################
+#preprocess.WatsonPlot
+####################
+
+preprocess.WatsonPlot <- function (lattice.like = lattice.like, ...) 
+{
+
+    #setup
+    extra.args <- list(...)
+
+    #use preprocess.pemsPlot to handle units
+    temp <- preprocess.pemsPlot(lattice.like=lattice.like, ...)
+    lattice.like <- temp$lattice.like
+    new.args <- temp[names(temp) != "lattice.like"]
+
+    new.args$scheme <- if(is.null(extra.args$scheme))
+                           pems.scheme else extra.args$scheme
+
+    #x.breaks y.breaks defaults for speed/accel based data
+    new.args$x.breaks <- if(is.null(extra.args$x.breaks))
+         pretty(c(0, max(lattice.like$x, na.rm=T)), 20) else new.args$x.breaks 
+    new.args$y.breaks <- if(is.null(extra.args$y.breaks))
+         pretty(lattice.like$y, 20) else new.args$y.breaks
+
+    #stopped handling
+    omit.stopped <- if("omit.stopped" %in% names(extra.args))
+                        extra.args$omit.stopped else "none"
+    if(is.logical(omit.stopped))
+        omit.stopped <- if(omit.stopped) "points" else "none"
+
+    if(omit.stopped == "points"){
+        temp <- extra.args$stopped.speed.accel
+        if(length(temp)<1 || !is.numeric(temp)) temp <- 0.1
+        if(length(temp)==1) temp <- c(temp, range(c(-temp, temp)))
+        if(length(temp)==2) temp <- c(temp[1], range(c(-temp[2], temp[2])))
+        if(length(temp)==3) temp <- c(temp[1], range(c(-temp[2:3], temp[2:3])))
+
+        test1 <- lattice.like$x <= temp[1]
+        test2 <- lattice.like$y >= temp[2]
+        test3 <- lattice.like$y <= temp[3]
+
+        lattice.like$x[test1 & test2 & test3] <- NA
+        lattice.like$y[test1 & test2 & test3] <- NA
+        if(!is.null(lattice.like$z))
+            lattice.like$z[test1 & test2 & test3] <- NA
+    }
+
+    if(omit.stopped == "cell" | omit.stopped == "cells"){
+        
+        temp <- new.args$x.breaks
+        temp <- min(temp[temp>0])
+        test1 <- lattice.like$x <= temp
+        temp <- new.args$y.breaks
+        temp2 <- max(temp[temp<0])
+        test2 <- lattice.like$y >= temp2
+        temp2 <- min(temp[temp>0])
+        test3 <- lattice.like$y <= temp2
+
+        lattice.like$x[test1 & test2 & test3] <- NA
+        lattice.like$y[test1 & test2 & test3] <- NA
+        if(!is.null(lattice.like$z))
+            lattice.like$z[test1 & test2 & test3] <- NA
+
+    }
+ 
+    #output
+    listUpdate(list(lattice.like = lattice.like), new.args)
+
+}
+
+
+#############################
+#panel.Watson...
+#############################
+
+
+panel.WatsonBinPlot <- function(..., ref.line = TRUE,
+         process.panel = panel.binPlot, plot.panel = panel.binPlot, 
+         omit.stopped = FALSE, process = TRUE, plot = TRUE, 
+         loa.settings = FALSE){
+
+    extra.args <- list(...)
+
+    if (loa.settings) {
+        temp <- loaHandler(process.panel)
+        temp$common.args <- unique(c(temp$common.args, "units", "omit.stopped", 
+                                     "stopped.speed.accel", "settings"))
+        temp$default.settings <- listUpdate(temp$default.settings, 
+                                     list(loa.preprocess = preprocess.WatsonPlot, aspect = 0.5,
+                                          statistic = function(x) length(na.omit(x))))
+        return(temp)
+    }
+
+    if(process){
+        if(!"z" %in% names(extra.args))
+            extra.args$z <- rep(1, length(extra.args$x))
+        ans <- do.call(process.panel, 
+                       listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
+        if(!plot) return(ans)
+    }
+
+    if(plot){
+
+        #bin border cols
+        col <- getPlotArgs("background")$col
+        if(col=="transparent") col <- "white" 
+        if(!"col" %in% names(extra.args))
+            extra.args$col <- col
+                        
+
+        #plot bins and ref.line
+        do.call(plot.panel, 
+            listUpdate(extra.args, list(plot=TRUE, process=FALSE)))
+        if(isGood4LOA(ref.line))
+            do.call(panel.abline, getPlotArgs(local.resets=list(h=0, lty=3), user.resets=ref.line, defaults.only=FALSE))               
+    }
+}
+
+
+panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,          
+         process = TRUE, plot = TRUE, loa.settings = FALSE){
+
+    extra.args <- listUpdate(list(...), list(plot.panel=plot.panel, 
+                                             process=process, plot=plot, 
+                                             loa.settings=loa.settings))
+
+    if(loa.settings){
+        temp <- loaHandler(panel.WatsonBinPlot)
+        temp$default.settings <- listUpdate(temp$default.settings, list(key=FALSE))
+        return(temp)
+    }
+
+    if(plot & !process){
+
+        if(!"at" %in% names(extra.args)){
+            temp <- pretty(extra.args$zlim, 10)
+            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
+            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
+            temp <- unique(temp)
+            extra.args$at <- temp
+        }
+
+    #contout cols
+    if(!"col" %in% names(extra.args))
+        extra.args$col <- getPlotArgs()$col
+    
+    #other tweaks
+
+    if(!"labels" %in% names(extra.args))
+        extra.args$labels <- TRUE
+    if(!"alpha" %in% names(extra.args))
+        extra.args$alpha <- 0.5
+
+    }
+                     
+    do.call(panel.WatsonBinPlot, extra.args)
+}
 
 
 

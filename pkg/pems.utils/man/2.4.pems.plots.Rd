@@ -8,6 +8,10 @@
 \alias{panel.pemsPlot}
 \alias{preprocess.pemsPlot}
 \alias{pemsXYZCondUnitsHandler}
+\alias{WatsonPlot}
+\alias{preprocess.WatsonPlot}
+\alias{panel.WatsonBinPlot}
+\alias{panel.WatsonContourPlot}
 
 
 \title{
@@ -20,11 +24,15 @@
 
 \usage{
 
+#new plots
+
+#pemsPlot
+
 pemsPlot(x, y = NULL, z = NULL, ..., data = NULL, cond = NULL, 
          units = TRUE, fun.name="pemsPlot", panel = panel.pemsPlot, 
          scheme = pems.scheme)
 
-#elements
+#pemsPlot elements
 
 pemsXYZCondUnitsHandler(x, y = NULL, z = NULL, cond = NULL, 
          data = NULL, units = TRUE, ..., fun.name = "pemsXYZCondHandler", 
@@ -32,7 +40,24 @@ pemsXYZCondUnitsHandler(x, y = NULL, z = NULL, cond = NULL,
 
 preprocess.pemsPlot(lattice.like = lattice.like, units = units, ...)
 
-panel.pemsPlot(..., plot = TRUE, process = TRUE, loa.settings = FALSE)
+panel.pemsPlot(..., loa.settings = FALSE)
+
+#WatsonPlot
+
+WatsonPlot(x, y = NULL, ..., data = NULL, z = NULL, cond = NULL, 
+         plot.type=1, fun.name = "WatsonPlot", scheme = pems.scheme)
+
+#WatsonPlot elements
+
+preprocess.WatsonPlot(lattice.like = lattice.like, ...)
+
+panel.WatsonBinPlot(..., ref.line = TRUE, process.panel = panel.binPlot, 
+         plot.panel = panel.binPlot, omit.stopped = FALSE, process = TRUE, 
+         plot = TRUE, loa.settings = FALSE)
+
+panel.WatsonContourPlot(..., plot.panel=panel.kernelDensity, process = TRUE, 
+         plot = TRUE, loa.settings = FALSE)
+
 
 
 #old plots
@@ -61,12 +86,13 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   for a surface plot. \code{cond} is a conditioning terms that can be used to 
   subset the supplied data and generate multiple plot panels. See Note Below.
 
-  For (pemsPlot), these can be supplied either individually or as a formula, e.g.
+  For new plots, these can be supplied either individually or as a formula, e.g. 
+  for \code{pemsPlot}:
 
   \code{pemsPlot(x, y, z, cond)} or \cr
   \code{pemsPlot(z~x*y|cond)}
 
-  For other earlier plots, these must be formulae.         
+  For old plots, these must be formulae.         
 
   For \code{latticePlot} the basic formula structure is \code{y ~ x | cond}, where 
   \code{y} is the data series to use as the y-axis, \code{x} is the data series to 
@@ -106,8 +132,11 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   (Various) \code{pems.utils} management settings, can typically be ignored by most users.
   }
 
-  \item{panel}{
-  (Function) The function to use to generate the individual plot panels. 
+  \item{panel, plot.panel, process.panel}{
+  (Functions) These functions are used to generate the content of individual plot panels. 
+  Typically, all in-panel data processing and plotting is carried out using \code{panel}. 
+  However, these steps can be handled by separate functions if these are supplied as 
+  \code{plot.panel} and \code{process.panel}.  
   }
 
   \item{scheme}{
@@ -117,8 +146,25 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   
   \item{lattice.like, plot, process, loa.settings}{
   (Various) Plot management elements. These can typically be ignored by most users, but 
-  allow plot developers to fine-tune the appear of plots. See Note below.
+  allow plot developers to fine-tune plots. See Details below.
   }
+
+  \item{ref.line}{
+  (Logical or list) For \code{WatsonPlot}. This argument manages the speed = 0 reference 
+  added to WatsonPlots. It can be either a logical (\code{TRUE}/\code{FALSE}), to turn the 
+  line on or off, or a list of parameters to set the properties of the line.
+  }
+
+  \item{omit.stopped}{
+  (Logical or character) For {WatsonPlot}. How to handle idling data: \code{FALSE} include 
+  in plot; \code{TRUE} or \code{'points'} removes idle points before plotting; \code{'cell'} or 
+  \code{cells} removes any cells that include idling points before plotting.   
+  } 
+
+  \item{plot.type}{
+  (numeric) For {WatsonPlot}. Pre-set plot types: \code{1} bin plot of frequencies; 
+  \code{2} contour plot of frequencies.     
+  } 
 
   \item{greyscale}{
   (Logical) For older plots. Should the plot be greyscale by default? This option resets 
@@ -183,8 +229,12 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 \value{
 
   \code{pemsPlot} generates a bubble plot, so it plots \code{(x,y)} points, and 
-  by default color-grades and size-scales them according to \code{z}.  
+  by default color-grades and size-scales them according to \code{z}.
 
+  If supplied speed and accel as \code{x} and \code{y} cases, the \code{WatsonPlot} 
+  generates various forms of Watson's classic speed/accel frequency distribution 
+  plot. 
+   
   \code{latticePlot} and \code{XYZPlot} are general purpose 'xy' and 'xyz' data 
   plotting functions.  
 
@@ -322,10 +372,13 @@ XYZPlot(~accel*velocity, data=a, plot = wireframe, shade=TRUE)
 #like latticePlot example above 
 pemsPlot(~local.time*velocity, data=pems.1, type="l")
 
-#note formula format z~x*y, with z ignored for stanard scatter plot
+#note formula format z~x*y, with z ignored for standard scatter plot
 
 #or in conventional plot(x, y, ...) format
 #pemsPlot(local.time, velocity, data=pems.1, type="l")
+
+
+
 
 
 }

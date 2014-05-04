@@ -236,9 +236,10 @@ tempGet <- function(..., id=NULL, data=NULL, default=NULL){
     }
 
     em <- conc * mm * exflow * (1/60) * (1/100) * (1/22.415)  * (273.15/293.15)
-    attr(em, "name") <- paste("em.", analyte[1], sep="")
-    attr(em, "units") <- "g/s"
-    class(em) <- "pems.element"
+
+    #my structure
+    em <- makePEMSElement(em, name=paste("em.", analyte[1], sep=""), units="g/s")
+
     
 ########################
 #temp fix

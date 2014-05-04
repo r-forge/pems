@@ -60,8 +60,9 @@
 
 #front end management
 
+#changed data = data to data = null
 
-calcChecks <- function(fun.name = "calcChecks", ..., data = data,
+calcChecks <- function(fun.name = "calcChecks", ..., data = NULL,
                    if.missing = c("stop", "warning", "return"), 
                    output = c("special", "input", "data.frame", "pems"),
                    unit.conversions = NULL, overwrite = FALSE){
@@ -153,9 +154,8 @@ calcDistance <- function(speed = NULL, time = NULL, data = NULL,
     #my calculation
     distance <- speed * temp
 
-    #my units
-    attr(distance, "name") <- "distance"
-    attr(distance, "units") <- "m"
+    #my structure
+    distance <- makePEMSElement(distance, name="distance", units="m")
 
     calcPack(output = distance, data = data, settings = settings, 
                fun.name = fun.name, this.call = this.call) 
@@ -211,9 +211,8 @@ calcSpeed <- function(distance = NULL, time = NULL, data = NULL,
     #my calculation
     speed <- distance / temp
 
-    #my units
-    attr(speed, "name") <- "speed"
-    attr(speed, "units") <- "m/s"
+    #my structure
+    speed <- makePEMSElement(speed, name="speed", units="m/s")
 
     calcPack(output = distance, data = data, settings = settings, 
                fun.name = fun.name, this.call = this.call) 
@@ -271,9 +270,8 @@ calcAccel <- function(speed = NULL, time = NULL, data = NULL,
     #my calculation
     accel <- c(0, d.speed / d.time)
 
-    #my units
-    attr(accel, "name") <- "accel"
-    attr(accel, "units") <- "m/s/s"
+    #my structure
+    accel <- makePEMSElement(accel, name="accel", units="m/s/s")
 
     #make output
     calcPack(output = accel, data = data, settings = settings, 
@@ -334,6 +332,8 @@ calcJerk <- function(accel = NULL, time = NULL, data = NULL,
     #my units
     attr(jerk, "name") <- "jerk"
     attr(jerk, "units") <- "m/s/s/s"
+    #my structure
+    jerk <- makePEMSElement(jerk, name="jerk", units="m/s/s/s")
 
     #make output
     calcPack(output = jerk, data = data, settings = settings, 

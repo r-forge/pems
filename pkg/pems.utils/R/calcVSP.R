@@ -226,9 +226,8 @@ calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
         this.vsp.units <- "kW/metric Ton"
 
     #my units
-    attr(vsp, "name") <- "vsp"
-    attr(vsp, "units") <- "kW/metric ton"
-    class(vsp) <- "pems.element"
+    vsp <- makePEMSElement(vsp, name="vsp", units="kW/metric ton")
+
 
 ########################
 #temp fix

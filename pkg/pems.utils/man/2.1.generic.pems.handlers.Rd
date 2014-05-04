@@ -5,6 +5,8 @@
 \alias{as.data.frame.pems}
 \alias{$.pems}
 \alias{[.pems}
+\alias{head.pems}
+\alias{tail.pems}
 \alias{names.pems}
 \alias{print.pems}
 \alias{plot.pems}
@@ -26,13 +28,17 @@
 
 \method{$}{pems} (x, i, ...)
 
-\method{[}{pems} (x, i, j, ..., force = FALSE, simplify = TRUE)
+\method{[}{pems} (x, i, j, ..., force = TRUE, simplify = TRUE)
 
 \method{names}{pems}(x, ...)
 
 \method{print}{pems}(x, verbose = FALSE, ...)
 
 \method{plot}{pems}(x, id = NULL, ignore = "time.stamp", n = 3, ...)
+
+\method{head}{pems}(x, n = 6, ...)
+
+\method{tail}{pems}(x, n = 6, ...)
 
 \method{summary}{pems}(object, ...)
 
@@ -58,7 +64,7 @@
 
   \item{force, simplify}{ 
   (Logicals) Data element handling options: \code{force} forces data to fit it destination; 
-  \code{simplify} minimised \code{pems} objects to \code{pems.elements}.
+  \code{simplify} returns a \code{pems.element} rather than a \code{pems} object if possible.
 }
 
   \item{verbose}{ 
@@ -66,11 +72,17 @@
   with short and long output versions return the short form.
 }
    
-  \item{id, ignore, n}{ 
+  \item{id, ignore}{ 
   (local plot parameters). \code{id} identifies which data series to plot; \code{ignore} identifies 
   which data series to ignore when leaving the choice of \code{id} to the function; and, \code{n} gives 
   the maximum number of data series to plot when leaving the choice of \code{id} to the function.
 }
+
+  \item{n}{ 
+  (various). For \code{plot}, sets the maximum number of data series to plot when leaving the choice of 
+  \code{id} to the function. For \code{head} or \code{tail}, sets the number of rows. 
+}
+
 
 }
 

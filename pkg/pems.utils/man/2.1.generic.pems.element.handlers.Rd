@@ -4,6 +4,8 @@
 \alias{pems.element.generics}
 \alias{print.pems.element}
 \alias{plot.pems.element}
+\alias{units.pems.element}
+\alias{[.pems.element}
 
 
 \title{ Generic handling of pems.element objects }
@@ -15,9 +17,13 @@
 
 \usage{
 
+\method{[}{pems.element} (x, i, ..., force = TRUE, wrap = FALSE)
+
 \method{print}{pems.element}(x, ...)
 
 \method{plot}{pems.element}(x, y = NULL, xlab = NULL, ylab = NULL, ...)
+
+\method{units}{pems.element}(x)
 
 }
 
@@ -29,8 +35,18 @@
   base function in R, so naming can vary by method.
 }
 
+  \item{i}{ 
+  Element indices, which operate in a similar fashion to \code{vector} indices.
+}
+
+
   \item{...}{ 
   Addition options, typically passed to associated default method(s).
+}
+
+  \item{force, wrap}{ 
+  (Logicals) Data element handling options: \code{force} forces data to fit it destination; 
+  \code{wrap} expands data to fit its destination by wrapping the source \code{pems.element}.
 }
 
   \item{y, xlab, ylab}{ 
@@ -49,6 +65,10 @@
   supplied \code{pems.element} object. 
 
   \code{plot(pems.element)} generates a standard R plot of the supplied 
+  \code{pems.element}. 
+
+
+  \code{units(pems.element)} extracts the units from the supplied 
   \code{pems.element}.  
  
 }

@@ -16,6 +16,8 @@
 #plot.pems
 #names.pems
 #summary.pems
+#head.pems
+#tail.pems
 #units.pems
 #
 
@@ -24,6 +26,14 @@
 #so much
 #see individual methods 
 #all need work
+
+# verbose printing? 
+# but needs to be hidden when dumped 
+# to object
+#
+# head.pems <- function(x, n =6,...) x[1:n,]
+# tail
+#
 
 
 #comments
@@ -69,7 +79,7 @@ as.data.frame.pems <- function(x, ...){
 #tidy
 #think about force, simplify
 
-`[.pems` <- function(x, i, j, ..., force = FALSE, simplify = TRUE){
+`[.pems` <- function(x, i, j, ..., force = TRUE, simplify = TRUE){
 
     #pems handling
     #x[1] element 1 as 1 col data.frame
@@ -111,7 +121,7 @@ as.data.frame.pems <- function(x, ...){
     #by col as pems 
     ###############################
     if(check.i && !check.j && length(as.character(call1))==length(as.character(call2))){
-         if(force){
+         if(!force){
              i <- if(is.character(i)) 
                        i[i %in% names(x$data)] else i[i %in% 1:ncol(x$data)]
          }
@@ -135,7 +145,7 @@ as.data.frame.pems <- function(x, ...){
     #by col as pems 
     ###############################
     if(check.i && !check.j && length(as.character(call1))!=length(as.character(call2))){
-         if(force){
+         if(!force){
              i <- if(is.character(i)) 
                        i[i %in% row.names(x$data)] else i[i %in% 1:nrow(x$data)]
          }
@@ -152,7 +162,7 @@ as.data.frame.pems <- function(x, ...){
     #by col as pems 
     ###############################
     if(!check.i && check.j){
-         if(force){
+         if(!force){
              j <- if(is.character(j)) 
                        j[j %in% names(x$data)] else j[j %in% 1:ncol(x$data)]
          }
@@ -176,7 +186,7 @@ as.data.frame.pems <- function(x, ...){
     #by col as pems 
     ###############################
     if(check.i && check.j){
-         if(force){
+         if(!force){
              i <- if(is.character(i)) 
                        i[i %in% row.names(x$data)] else i[i %in% 1:nrow(x$data)]
              j <- if(is.character(j)) 
@@ -204,11 +214,30 @@ as.data.frame.pems <- function(x, ...){
     #simplify
     ########################
     if(simplify && ncol(x$data)==1){
-        d1 <- as.vector(t(x$data))
+
+############
+#new test
+###########
+#replacing
+#        d1 <- as.vector(t(x$data))
+        d1 <- x$data[,1] 
+###########
+
         attr(d1, "row.names") <- NULL
         attr(d1, "name") <- names(x$data[1])
         attr(d1, "units") <- as.character(x$units[1,1])
-        class(d1) <- "pems.element"
+
+################
+#new test
+################
+#used to be just pems.element
+#class(d1) <- "pems.element" 
+        class(d1) <- unique(c("pems.element", class(d1)))
+
+################
+#think about makePEMSElement
+################
+
         return(d1)
     }
 
@@ -232,9 +261,28 @@ as.data.frame.pems <- function(x, ...){
 
 `$.pems` <- function(x, i, ...){
 
-    class(x) <- "not.pems"
 
-    ans <- try(x$data[, i], silent = TRUE)
+#####################
+#old version
+#####################
+#    class(x) <- "not.pems"
+#    ans <- try(x$data[, i], silent = TRUE)
+#    if(class(ans)[1] == "try-error"){
+#        warning("Element '", i, "' not found in pems", call. = FALSE)
+#        return(NULL)
+#    }
+#    if (!is.null(ans)) 
+#        attr(ans, "name") <- i
+#    if (!is.null(ans) && !is.null(units)) 
+#        if (is.null(attributes(ans)$units)) 
+#            attr(ans, "units") <- x$units[1,i]
+#        class(ans) <- "pems.element"
+#    ans
+
+#think about x[,i, simplify=TRUE]
+#might not be need because
+
+    ans <- try(x[, i], silent = TRUE)
     if(class(ans)[1] == "try-error"){
         warning("Element '", i, "' not found in pems", call. = FALSE)
         return(NULL)
@@ -245,7 +293,6 @@ as.data.frame.pems <- function(x, ...){
     if (!is.null(ans) && !is.null(units)) 
         if (is.null(attributes(ans)$units)) 
             attr(ans, "units") <- x$units[1,i]
-        class(ans) <- "pems.element"
 
     ans
 
@@ -475,7 +522,7 @@ summary.pems <- function(object, ...) {
 
 
 
-##' @S3method print pems
+##' @S3method units pems
 units.pems <- function(x) {
 
     class(x) <- "no.class"
@@ -488,6 +535,27 @@ units.pems <- function(x) {
 
     return(x)
 
+}
+
+
+
+
+
+##########################
+##########################
+##head.pems
+##tail.pems
+##########################
+##########################
+
+#kr 31/04/2014 v 0.2.4
+
+
+head.pems <- function(x, n=6, ...) x[1:n,]
+
+tail.pems <- function(x, n=6, ...) {
+    temp <- dim(as.data.frame(x))
+    x[(temp-n+1):temp,]
 }
 
 
