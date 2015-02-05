@@ -4,14 +4,18 @@
 \alias{pems.generics}
 \alias{as.data.frame.pems}
 \alias{$.pems}
+\alias{$<-.pems}
 \alias{[.pems}
+\alias{[<-.pems}
 \alias{head.pems}
 \alias{tail.pems}
 \alias{names.pems}
+\alias{names<-.pems}
 \alias{print.pems}
 \alias{plot.pems}
 \alias{summary.pems}
 \alias{units.pems}
+\alias{units<-.pems}
 
 
 \title{ Generic handling of pems objects }
@@ -23,16 +27,21 @@
 
 \usage{
 
-
 \method{as.data.frame}{pems}(x,...)
 
-\method{$}{pems} (x, i, ...)
+\method{$}{pems} (x, name, ...)
 
-\method{[}{pems} (x, i, j, ..., force = TRUE, simplify = TRUE)
+\method{$}{pems} (x, name, ...) <- value
+
+\method{[}{pems} (x, i, j, ..., force = FALSE, simplify = TRUE)
+
+\method{[}{pems} (x, i, j, ..., force = FALSE) <- value
 
 \method{names}{pems}(x, ...)
 
-\method{print}{pems}(x, verbose = FALSE, ...)
+\method{names}{pems}(x, ...) <- value
+
+\method{print}{pems}(x, verbose = FALSE, n = 6, ...)
 
 \method{plot}{pems}(x, id = NULL, ignore = "time.stamp", n = 3, ...)
 
@@ -44,6 +53,8 @@
 
 \method{units}{pems}(x)
 
+\method{units}{pems}(x) <- value
+
 }
 
 \arguments{
@@ -54,22 +65,45 @@
   base function in R, so naming can vary by method.
 }
 
+  \item{name}{ 
+  Element name, which operates in a similar fashion to \code{data.frame} names, e.g. 
+  \code{pems$name} extracts the element \code{name} from the pems object \code{pems}.
+}
+
   \item{i, j}{ 
-  Column and row indices, which operate in a similar fashion to \code{data.frame} indices.
+  Column (elements) and row indices, which operate in a stricter version of 
+  \code{data.frame} indices. See Note below.
+}
+
+  \item{value}{
+   (vector, data.frame or pems) An object to be inserted into a \code{pems} object in e.g. the form 
+   \code{pems[i,j] <- value} or \code{pems$name <- value}. 
 }
 
   \item{...}{ 
   Addition options, typically passed to associated default method(s).
 }
 
-  \item{force, simplify}{ 
-  (Logicals) Data element handling options: \code{force} forces data to fit it destination; 
-  \code{simplify} returns a \code{pems.element} rather than a \code{pems} object if possible.
+  \item{force}{ 
+  (Logical or character) Data element handling options. \code{force} provides various options to 
+  forces data to fit it destination. This can either be set as a logical (\code{TRUE}/\code{FALSE} 
+  force/don't force) or one or more character strings to specify particular types of forcing to try 
+  when e.g. fitting \code{value} into \code{pems[i,j]}: \code{'omit.err.cases'}, equivalent to 
+  \code{TRUE}, remove any unknown/unfound \code{i} or \code{j} terms; \code{'na.pad.insert'} expand 
+  the \code{value} to fit larger \code{pems[i,j]}, placing \code{NAs} in any holes generated; 
+  \code{'na.pad.target'} like previous but expanding \code{pems[i,j]} to fit larger \code{value}; 
+  \code{'fill.insert'} like \code{'na.pad.inert'} but holes are filled by wrapping the supplied 
+  \code{value} within elements and then by element. 
+}
+
+  \item{simplify}{ 
+  (Logical) \code{simplify} returns a \code{pems.element} rather than a \code{pems} object 
+  if possible. 
 }
 
   \item{verbose}{ 
-  (Logical, TRUE/FALSE). Should the longer form of the output be returned? By default, functions 
-  with short and long output versions return the short form.
+  (Logical, TRUE/FALSE). Should the longer form of the output be returned? By default, most 
+  functions with short and long output versions return the shorter form.
 }
    
   \item{id, ignore}{ 
@@ -93,41 +127,112 @@
   \code{as.data.frame(pem.object)} extracts the \code{data.frame} component of a 
   pems object. 
 
-  \code{pems.object$element.name} extracts the named element from the pems objects 
-  in a similar fashion to \code{data.frame$element.name}.   
+  \code{pems$name} extracts the named element from a pems objects 
+  in a similar fashion to \code{data.frame$named.vector}.   
 
-  \code{pems.object[i, j]} extracts the [i.j] elements of the data held in the 
+  \code{pems.object[i, j]} extracts the [i,j] elements of the data held in a 
   \code{pems} object. This is returned as either a \code{pems} or \code{pems.element} 
   object depending on the dimension of the extracted data and the \code{simplify} 
-  setting.  
+  setting.
 
-  \code{print(pems.object)} provides a (to console) description of that \code{pems} 
+  \code{pems.object[i, j]<-} insert \code{value} into the [i,j] region of the supplied  
+  \code{pems} object. By default this action is strict and mismatching \code{pems[i, j]} 
+  and \code{value} dimension produce an error, although mismatching insertions may be 
+  forced using the \code{force} argument.  
+
+  \code{print(pems.object)} provides a (to console) description of a \code{pems} 
   object. 
 
   \code{plot(pems.object)} generates a standard R plot using selected data series in 
-  that \code{pems} object.
+  a \code{pems} object.
  
   \code{names(pems.object)} returns a vector of the names of data series held in a 
-  \code{pems} object. 
+  \code{pems} object when used in the form \code{names(pems)} or resets names when 
+  used in the form \code{names(pems) <- new.names}. 
 
   \code{summary(pems.object)} generates a summary report for data series held in a 
   \code{pems} object. 
 
-  \code{units(pems.object)} extracts the units from the supplied \code{pems} object. 
+  \code{units(pems.object)} extracts the units from a supplied \code{pems} object 
+  when used in the form \code{units(pems)} or resets units when used in the form 
+  \code{units(pems) <- new.units}. 
 
 }
 
 \author{ Karl Ropkins }
 
+\note{
+
+  The \code{pems} object is intended to be a stricter version of a standard R 
+  \code{data.frame}. Unless the user specifically forces the operation, a \code{pems[]} 
+  or \code{pems[]<-} call is not allowed unless it fits exactly. So, for example by default 
+  the call \code{pems[,1]<-10} will not place 10 in every row of column one in the 
+  same fashion as \code{data.frame[,1]<-10}. 
+
+  The logic behind this is that columns (elements) of \code{pems} objects are time-series. 
+  So, users would want to place these exactly and avoid any unintended wrapping. The 
+  \code{force} argument should be used in cases where data padding or wrapping operations 
+  are required. 
+
+  \code{pems$name} and \code{pems$name<-} are not are rigorously managed, so behave more 
+  like \code{data.frame$name} and \code{data.frame$name<-} calls, although even these do 
+  wrap by default. 
+ 
+}
+
+
 \examples{
 
-\dontrun{
+##example 1
+##basics pem handling
 
-#make object
-print(pems.object)
-names(pems.object)
+#extract a subset pems object from pems.1
+a <- pems.1[1:4, 1:5]
+a      
 
-} 
+#indices work like data.frame
+#a[x] and a[,x] recovers element/column number x
+#a[x,] recovers row number x
+#a["name"] and a[,"name"] recovers element/column named "name"
+#a[4:5, "name"] recovers rows 4 to 5 of element/column named "name"
+#a[x,y] <- z inserts z into a at row x, element y 
+#etc
+
+#insert 10 in at element 3, row 2
+a[2,3] <- 10
+a
+
+#replace element conc.co2 with conc.co
+a["conc.co2"] <- a$conc.co
+a
+
+#Note: by default pems objects subsetting and inserting is 
+#more rigorous than data.frame subsetting/insertion
+#for example, the following would generate an error 
+#a[1:2, "conc.hc"] <- 8
+#because the target, a[], and insert, value, dimensions do not 
+#match exactly: target 2 x 1; insert 1 x 1 
+
+#By default no wrapping is applied.  
+
+#the force argument allows the user to control how mismatching 
+#targets and insertions are handled
+
+#na pad target for larger insert
+a[1:2, "conc.hc", force="na.pad.target"] <- 1:5
+a
+
+#Note here when the target is padded existing enteries are NOT 
+#overwritten if they are not declared in a[], and the next 
+#previously unassigned cells are used for any extra cases in
+#the insert.
+
+#wrap insert to fill hole made by a[i,j]  
+a[1:2, "conc.hc", force="fill.insert"] <- 8
+a
+
+
+
 
 }
 

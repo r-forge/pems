@@ -5,7 +5,9 @@
 \alias{print.pems.element}
 \alias{plot.pems.element}
 \alias{units.pems.element}
+\alias{units<-.pems.element}
 \alias{[.pems.element}
+\alias{[<-.pems.element}
 
 
 \title{ Generic handling of pems.element objects }
@@ -19,11 +21,15 @@
 
 \method{[}{pems.element} (x, i, ..., force = TRUE, wrap = FALSE)
 
+\method{[}{pems.element} (x, i, ..., force = TRUE, wrap = FALSE) <- value
+
 \method{print}{pems.element}(x, ...)
 
 \method{plot}{pems.element}(x, y = NULL, xlab = NULL, ylab = NULL, ...)
 
 \method{units}{pems.element}(x)
+
+\method{units}{pems.element}(x) <- value
 
 }
 
@@ -47,6 +53,11 @@
   \item{force, wrap}{ 
   (Logicals) Data element handling options: \code{force} forces data to fit it destination; 
   \code{wrap} expands data to fit its destination by wrapping the source \code{pems.element}.
+}
+
+  \item{value}{
+   (Vector) For calls in \code{pems.element[1] <- value} or \code{units(pems.element) <- value}, 
+   the value to be inserted.
 }
 
   \item{y, xlab, ylab}{ 

@@ -12,21 +12,33 @@
 #print.pems.element
 #plot.pems.element
 #units.pems.element
+#<-.units.pems.element
 #[.pems.element
+#[<-.pems.element
+
 
 
 #to do
 #########################
-#
+#export [<-.pems.element
+
 
 
 as.data.frame.pems.element <- function(x, ...){
 
-    temp <- data.frame(as.vector(x))
+#####################
+#translation to data.frame changed
+#    temp <- data.frame(as.vector(x))
+#####################
+    temp <- as.data.frame(as.vector(x), drop=FALSE)
     names(temp) <- if(is.null(attr(x, "name")))
                        "x" else 
                            as.character(attr(x, "name")[1])
     names(temp) <- make.names(names(temp))
+#################
+#this attribute handling needs to be checked
+#################
+    attributes(temp[,names(temp)]) <- attributes(x)
     temp    
 
 }
@@ -58,7 +70,15 @@ print.pems.element <- function (x, ...){
 #    attributes(ans) <- NULL
 #    print.default(ans, ...)
 
-    class(ans) <- class(ans)[class(ans)!="pems.element"]
+####################
+#update to class handling for factors etc
+#might be able to replace with an inherits???
+#if I understood them
+#    class(ans) <- class(ans)[class(ans)!="pems.element"]
+####################
+    if(length(class(ans))>1) class(ans) <- class(ans)[-1] else
+         class(ans)[1] <- if("levels" %in% names(attributes(ans)))
+                                "factor" else mode(ans)
     attributes(ans) <- attributes(ans)[names(attributes(ans))!=c("name", "units")]
 
 #allows element to print as prior class
@@ -99,7 +119,13 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
 #output styles?
 
     #x reset
-    class(x) <- "default"
+#############
+#previous
+#    class(x) <- "default"
+#############
+    if(length(class(x))>1) class(x) <- class(x)[-1] else
+        class(x)[1] <- if("levels" %in% names(attributes(x)))
+                             "factor" else mode(x)
 
     #get x name
     if(is.null(y)){ 
@@ -141,6 +167,14 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
 #need to think about this some more
 units.pems.element <- function(x) attr(x, "units")
 
+`units<-.pems.element` <- function(x, value) { 
+
+    #could add padding to provent bad inserts being tried
+
+    attr(x, "units") <- value 
+    x
+}
+
 
 
 
@@ -171,8 +205,15 @@ units.pems.element <- function(x) attr(x, "units")
     #output 
     #x[i] with pems.element attributes retained
 
+#    att <- attributes(x)
+#    class(x) <- class(x)[class(x)!="pems.element"]
+
+############
+#new
     att <- attributes(x)
-    class(x) <- class(x)[class(x)!="pems.element"]
+    old.class <- class(x)
+    class(x)[1] <- "not.pems.element"
+############
 
     if(!force){
         i <- if(is.character(i)) 
@@ -188,7 +229,112 @@ units.pems.element <- function(x) attr(x, "units")
       stop("In pems.element[i] 'i' unknown/unfound", 
           call. = FALSE)
     attributes(x) <- att
-    
+################
+#new
+    class(x) <- old.class
+################    
     x
 
 }
+
+
+
+
+
+
+##########################
+##########################
+##[<-.pems.element
+##########################
+##########################
+
+#kr 31/04/2014 v 0.2.1
+
+#what it does
+##########################
+#handles pems.element[] <- calls 
+#etc
+#
+
+#to do
+##########################
+#tidy
+#think about force, simplify
+
+`[<-.pems.element` <- function(x, i, ..., force=TRUE, wrap=FALSE, value){
+
+    #pems.element handling
+    #x[1] <- 2 replace first case of x with 2, etc 
+    #output 
+    #x with pems.element attributes retained and requested insert
+    #if allowed
+
+#####################
+#think about this bit here
+#and in above function
+#####################
+
+#    att <- attributes(x)
+#    class(x) <- class(x)[class(x)!="pems.element"]
+
+############
+#new
+    att <- attributes(x)
+    old.class <- class(x)
+    class(x) <- if(length(class(x))<2)
+                    mode(x) else class(x)[-1]
+############
+
+    if(!force){
+        if(length(i) != length(value))
+                  stop("In pems.element[i]<-value: i/value dimensions mismatch", 
+                        call. = FALSE)
+    } 
+     
+
+    test <- try(x[i]<- value, silent = TRUE)
+    if(is(test)[1]=="try-error")
+       stop("In pems.element[i]<- value: cannot coerce value into x[i]", 
+          call. = FALSE)
+#    x <- test
+
+###############
+#we currently generate a warning message here
+#if attributes don't match but be coerced...
+###############
+
+    #attributes(x) <- att
+################
+#new
+    class(x)[1] <- "pems.element"
+################   
+    x
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#############################
+#working
+#############################
+
+
+#need to look at plot and print etc.
+#Warning message:
+#In class(ans) <- class(ans)[class(ans) != "pems.element"] :
+#  NAs introduced by coercion
+#compare with other pems.element[] and pems.element[]<-
+
+
+

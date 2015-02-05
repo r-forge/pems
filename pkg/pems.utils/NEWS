@@ -1,3 +1,22 @@
+Changes in pems.utils 0.2.9 [2015-01-23]
+========================================
+
+*       updated citation, now uses meta$ 
+        (thanks to Achim Zeileis of JSS) 
+*       refined head.pems and tail.pems
+*       changed print.pems defaults (thanks to 
+        Stephen Hanley of ITS)
+*       refined pems[], now allows more forcing 
+        options
+*       simplified pems$name and pems$name <- 
+        further, so they now behave more like 
+        data.frame$name 
+*       refined pems[]<-, extended forcing options 
+*       added units(pems)<-  and names(pems) <- 
+        methods
+*       added units(pems.element)<- method 
+         
+
 Changes in pems.utils 0.2.8 [2014-04-30]
 ========================================
 

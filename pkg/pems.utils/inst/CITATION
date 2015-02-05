@@ -1,18 +1,21 @@
 citHeader("To cite 'pems.utils' package in publications use:")
 
+year <- sub("-.*", "", meta$Date) 
+version <- meta$Version
+note <- sprintf("R package version %s", version) 
+
 citEntry(entry="Manual",
          title = "pems.ultils: Data handling, analysis and visualisation tools for data from portable emissions monitoring systems and other mobile sources.",
          author = personList(as.person("Karl Ropkins")),
-         year = format(as.Date(packageDescription("pems.utils", fields = c("Date"))), "%Y"),
-         note = paste("R package version ", packageDescription("pems.utils", fields = c("Version"))[1], sep=""),
+         year = year,
+         note = note,
 
          textVersion =
-         paste("Karl Ropkins (",
-               format(as.Date(packageDescription("pems.utils", fields = c("Date"))), "%Y"),
+         paste("Karl Ropkins (", year,
                "). pems.ultils: Data handling, analysis and visualisation tools for data from portable emissions monitoring systems and other mobile sources. ",
                "R package version ",
-               packageDescription("pems.utils", fields = c("Version"))[1],
-               ".", sep=""))
+               packageDescription("pems.utils", version,
+               ".", sep="")) 
 
 citEntry(entry="proceedings",
          title = "The R package pems.utils: open-source processing, Visualization and Analysis Tools for Portable Emissions Measurement Systems data.",

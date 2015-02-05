@@ -10,6 +10,7 @@
 #pemsData
 #pemsConstants
 #pemsHistory
+#pemsDim
 
 
 
@@ -23,11 +24,13 @@
 
 
 
+
+
 #questions
 ###################
 #is this better than check...
+#do functions need a test that first element is pems, etc?
 #
-
 
 
 
@@ -169,5 +172,35 @@ pemsHistory <- function(pems=NULL, ...,
     }
     class(pems) <- "not.pems"
     pems$history
+
+}
+
+
+
+
+
+
+
+
+##############################
+##############################
+##pemsDim
+##############################
+##############################
+
+
+pemsDim <- function(pems=NULL, ..., 
+         fun.name = "pemsDim", if.missing = "stop",
+         pems.name = deparse(substitute(pems))){
+
+    if(is.null(pems)){
+          checkIfMissing(if.missing = if.missing,
+               reply = paste("pems '", pems.name[1], "' not found", sep=""),
+               suggest = "checking call arguments", 
+               if.warning = NULL, 
+               fun.name = fun.name)
+    }
+    class(pems) <- "not.pems"
+    dim(pems$data)
 
 }

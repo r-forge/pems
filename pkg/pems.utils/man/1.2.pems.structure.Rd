@@ -133,5 +133,10 @@ pemsElement(velocity, pems.1)
 #check... equivalent
 #checkInput(velocity, pems.1)
 
+#generic equivalents
+#pems.1$velocity
+#pems.1$velocity["velocity"]
+#etc
+
 }
 \keyword{ methods }
