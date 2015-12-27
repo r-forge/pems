@@ -180,32 +180,68 @@
 ##example 1 
 ###########
 
-#some data
+##data vector alignment
+
+#make two offset ranges
 temp <- rnorm(500)
-
-#get two offset ranges
-
 x <- temp[25:300]
 y <- temp[10:200]
 
+#plot pre-alignment data
 plot(x, type="l"); lines(y, col="blue", lty=2)
 
 #estimated offset
-
 findLinearOffset(x,y)
 #[1] -15
 
 #applying linear offset
-
 ans <- align(x, y, findLinearOffset(x,y))
 names(ans) <- c("x", "y")
 
+#plot post-alignment data
 plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
 
-#shortcut
+#shortcut using cAlign
 #plot(x, type="l"); lines(y, col="blue", lty=2)
 #ans <- cAlign(x~y)
 #plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
+
+
+###########
+##example 2 
+###########
+
+##aligning and merging data sets
+##(pems object example)
+
+#make some offset data
+p1 <- pems.1[101:200, 1:5]
+p2 <- pems.1[103:350, 1:3]
+
+#correlation alignment using ccf 
+ans <- cAlign(~conc.co, p1, p2)
+
+#this aligns by comparing p1$conc.co and p2$conc.co
+#and aligning at point of best linear regression fit
+
+#compare:
+
+#cAlign(~conc.co, p2, p1)
+#cAlign(conc.co2~conc.co, p1, p2)
+#(aligns using p1$conc.co2 and p2$conc.co)
+#cAlign(conc.co2~conc.co, p1)
+#(realigns just conc.co within p1 based on best fit 
+# with conc.co2 and returns as output ans)
+ 
+#time stamp alignment using join 
+#tAlign(~time.stamp, p1, p2)
+
+#this aligns by pairing elements in p1$time.stamp 
+#and p2$time.stamp
+#(NOTE: if time stamps have different names, as in 
+# tAlign(time1~time2, p1, p2), the time stamp name 
+# from p1, would be retained when merging time1$p1 
+# and time2$p2, generating ans$time1)  
 
 }
 
