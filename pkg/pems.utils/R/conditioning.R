@@ -87,7 +87,7 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
     if(is.function(cut.method)){
 
         cut <- cut.method(ref = ref, data = data, output = "input",
-                          ..., fun.name = "calcVSP", hijack= TRUE)
+                          ..., fun.name = "cutBy", hijack= TRUE)
 
         #check for attributes 
         #if not give it some

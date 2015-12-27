@@ -13,9 +13,11 @@
 
 #includes 
 ##########################
-#isPEMS
-#makePEMS
-#makePEMSElement
+#pems (nee makePEMS)
+#is.pems (nee isPEMS)
+#pems.element (nee makePEMSElement)
+#as.pems...
+
 
 #to do
 ##########################
@@ -27,56 +29,13 @@
 
 
 
-
 ##########################
 ##########################
-##isPEMS
-##########################
-##########################
-
-#kr 23/10/2010 v 0.0.1
-
-#what it does
-##########################
-#is.pems -two level tester
-
-#to do
-##########################
-#make test more robust?
-
-#comments
-##########################
-#widely used. 
-#think carefully before changing name or argument ordering
-
-
-isPEMS <- function(x, full.test = TRUE, ...){
-
-   #standard test
-   output <- if(is(x)[1]=="pems") TRUE else FALSE
-   #full.test
-   if(full.test){
-       if(is.null(x)) comment(output) <- "NULL" else 
-           if(is(x)[1]=="pems") comment(output) <- "pems" else
-               if(is.data.frame(x)) comment(output) <- "data.frame" else
-                    comment(output) <- "other"
-   }
-   #output
-   output
-}
-
-
-
-
-
-
-##########################
-##########################
-##makePEMS
+##pems   nee makePEMS
 ##########################
 ##########################
 
-#kr 23/10/2010 ver 0.0.1
+#kr 18/09/2015 ver 0.0.2
 
 #what it does
 ##########################
@@ -96,13 +55,33 @@ isPEMS <- function(x, full.test = TRUE, ...){
 #think carefully before changing name or argument ordering
 
 
-makePEMS <- function(x, units = NULL, constants = NULL,  
+pems <- function(x, units = NULL, constants = NULL,  
                      history = NULL, ...){
 
 #################
 #currently assuming 
 # x = data.frame
 #################
+
+##################
+#testing
+#supply a pems/return it
+#might want to unpack and repack?
+#################
+
+                 if(is(x)[1]=="pems") return(x)
+
+##################
+#testing 
+#allow x = vector or pems.element
+##################
+
+    
+
+    if(is.null(units) && "units" %in% names(attributes(x)))
+        units <- attr(x, "units")
+    x <- as.data.frame(x)
+
 
 #reported issue if data.frame[1,n]
 
@@ -148,19 +127,70 @@ makePEMS <- function(x, units = NULL, constants = NULL,
     output[names(temp)] <- temp
 
     class(output) <- "pems"
+
+#do I want this to be invisible?
+
     invisible(output)
 }
 
 
+makePEMS <- function(...) pems(...)
 
 
+
+
+
+
+
+
+##########################
+##########################
+##is.pems nee isPEMS
+##########################
+##########################
+
+#kr 18/09/2015 v 0.0.2
+
+#what it does
+##########################
+#is.pems -two level tester
+
+#to do
+##########################
+#make test more robust?
+
+#comments
+##########################
+#widely used. 
+#think carefully before changing name or argument ordering
+
+
+is.pems <- function(x, full.test = TRUE, ...){
+
+   #standard test
+   output <- if(is(x)[1]=="pems") TRUE else FALSE
+   #full.test
+   if(full.test){
+       if(is.null(x)) comment(output) <- "NULL" else 
+           if(is(x)[1]=="pems") comment(output) <- "pems" else
+               if(is.data.frame(x)) comment(output) <- "data.frame" else
+                    comment(output) <- "other"
+   }
+   #output
+   output
+}
+
+isPEMS <- function(...) is.pems(...)
+
+
+
 ########################
 ########################
-##makePEMSElement
+##pems.element    nee makePEMSElement
 ########################
 ########################
 
-makePEMSElement <- function(x, name=NULL, units=NULL, ...){
+pems.element <- function(x, name=NULL, units=NULL, ...){
 
     attr(x, "class") <- unique(c("pems.element", attr(x, "class")))
     attr(x, "name") <- name
@@ -169,3 +199,34 @@ makePEMSElement <- function(x, name=NULL, units=NULL, ...){
     invisible(x)
 
 }
+
+makePEMSElement <- function(...) pems.element(...)
+
+
+
+
+#######################
+#######################
+##as.pems....
+#######################
+#######################
+
+##as.pems @S3 setup 
+as.pems <- function(x,...)
+                  UseMethod("as.pems")
+
+##as.pems @S3 default
+as.pems.default <- function(x,...){
+
+#might need to think about this
+    if(class(x)[1]=="pems") return(x)
+
+    stop("no 'as.pems...' method for class ", 
+        class(x), call. = FALSE)
+
+}
+
+as.pems.data.frame <- function(x,...) pems(x,...)
+
+
+

@@ -17,6 +17,8 @@
 #(plot, preprocess, panel)
 #WatsonPlot
 #(plot, preprocess, panels for different plot.types)
+#fortify.pems to work with ggplot2
+#
 
 #old plots
 #latticePlot
@@ -132,14 +134,24 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = N
         z <- checkInput(z, data=data, if.missing="return")
     }
 
+    #this bit is for index case, like plot(x)
+        if(is.null(y)){
+        y <- x
+        x <- 1:length(x)
+        attr(x, "name") <- "Index"
+    }
+
+
+    #this bit may now continue if there are no units
+
     if(is.null(x))
         checkIfMissing(settings$if.missing, reply = "argument 'x' not supplied or null")
-    extra.args$units$x.units <- getUnits(x, unit.conversions = settings$unit.conversions, hijack = TRUE)
+    extra.args$units$x.units <- getUnits(x, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
     if(is.null(y))
         checkIfMissing(settings$if.missing, reply = "argument 'y' not supplied or null")
-    extra.args$units$y.units <- getUnits(y, unit.conversions = settings$unit.conversions, hijack = TRUE)
+    extra.args$units$y.units <- getUnits(y, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
     if(!is.null(z))
-        extra.args$units$z.units <- getUnits(z, unit.conversions = settings$unit.conversions, hijack = TRUE)
+        extra.args$units$z.units <- getUnits(z, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
 
     if(is.null(z) & is.null(cond)) extra.args$x <- ~x*y
     if(is.null(z) & !is.null(cond)) extra.args$x <- ~x*y|cond
@@ -220,16 +232,18 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
             }
 
             if("add.to.labels" %in% names(units) && units$add.to.labels){
-                if(!is.null(xlab) && "x.units" %in% names(units))
-                    lattice.like$xlab <- paste(xlab, " [", units$x.units, "]", sep="")
-                xlab <- lattice.like$xlab
-                if(!is.null(ylab) && "y.units" %in% names(units))
-                    lattice.like$ylab <- paste(ylab, " [", units$y.units, "]", sep="")
-                ylab <- lattice.like$ylab
-                if(!is.null(zlab) && "z.units" %in% names(units))
-                    lattice.like$zlab <- paste(zlab, " [", units$z.units, "]", sep="")
-                zlab <- lattice.like$zlab
-
+               if(!is.null(xlab))
+                   lattice.like$xlab <- if("x.units" %in% names(units))
+                        paste(xlab, " [", units$x.units, "]", sep = "") else xlab
+               xlab <- lattice.like$xlab
+               if(!is.null(ylab))
+                   lattice.like$ylab <- if("y.units" %in% names(units))
+                        paste(ylab, " [", units$y.units, "]", sep = "") else ylab
+               ylab <- lattice.like$ylab
+               if(!is.null(zlab))
+                   lattice.like$zlab <- if("z.units" %in% names(units))
+                        paste(zlab, " [", units$z.units, "]", sep = "") else zlab
+               zlab <- lattice.like$zlab
             }
 
         }
@@ -252,7 +266,8 @@ panel.pemsPlot <- function(..., loa.settings = FALSE){
             temp <- loaHandler(panel.loaPlot)
             temp$common.args <- unique(c(temp$common.args, "units"))
             temp$default.settings <- listUpdate(temp$default.settings, 
-                                                list(loa.preprocess = preprocess.pemsPlot))
+                                                list(loa.preprocess = preprocess.pemsPlot, 
+                                                     grid=TRUE))
             return(temp)
         }
 
@@ -481,6 +496,53 @@ panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,
                      
     do.call(panel.WatsonBinPlot, extra.args)
 }
+
+
+
+
+
+
+
+
+
+
+###########################
+###########################
+##fortify.pems
+###########################
+###########################
+
+####################
+#fortify.pems
+####################
+
+#kr 13/08/2015
+#version 0.0.1
+
+#what it does
+###########################################
+#allows users to work directly with ggplot2
+#
+
+#to do
+######################
+#decide if we are keeping it
+
+
+fortify.pems <- function (model, data, ...) as.data.frame(model)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

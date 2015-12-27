@@ -6,21 +6,36 @@
 #currently library loaded
 #so user/examples accessible
 
-##import(grid)
-##import(lattice)
-##import(RColorBrewer)
+#imported packages 
+#import(utils) #just importing head and tail methods
+import(grid)
+import(RColorBrewer)
+import(latticeExtra)
+import(plyr)
+
 
 #front.of.house
 
-#make.import.pems
+#make.pems
+export(is.pems)
+export(pems)
+export(pems.element)
 export(isPEMS) 
 export(makePEMS)
 export(makePEMSElement)
+export(as.pems)
+
+S3method(as.pems, default)
+S3method(as.pems, data.frame)
+
+#import.pems
 export(import2PEMS) 
 export(importTAB2PEMS) 
 export(importCSV2PEMS) 
 export(importOBS2PEMS) 
 export(importOB12PEMS) 
+export(importParSYNC2PEMS)
+export(importCAGE2PEMS)
 export(importRoyalTek2PEMS) 
 
 #structure
@@ -30,9 +45,11 @@ export(pemsConstants)
 export(pemsHistory)
 
 #merge.pems
-export(bindPEMS)
-export(findLinearOffset)
+export(align)
 export(cAlign)
+export(findLinearOffset)
+export(tAlign)
+#bindPEMS
 
 #export
 export(exportData)
@@ -41,14 +58,21 @@ export(exportData)
 #generic.pems.handlers
 
 #imports for non-base
-##importFrom(utils,head)
-##importFrom(utils,tail)
+importFrom(utils,head)
+importFrom(utils,tail)
 
 S3method(as.data.frame, pems)
+S3method(dim, pems)
+###### dim does these
+#S3method(nrow, pems)
+#S3method(ncol, pems)
+######
 S3method("$", pems)
 S3method("$<-", pems)
 S3method("[", pems)
 S3method("[<-", pems)
+S3method("[[", pems)
+S3method("[[<-", pems)
 S3method(print, pems)
 S3method(plot, pems)
 S3method(names, pems)
@@ -58,6 +82,8 @@ S3method(tail, pems)
 S3method(summary, pems)
 S3method(units, pems)
 S3method("units<-", pems)
+S3method(with, pems)
+S3method(subset, pems)
 
 S3method("[", pems.element)
 S3method("[<-", pems.element)
@@ -66,12 +92,14 @@ S3method(print, pems.element)
 S3method(plot, pems.element)
 S3method(units, pems.element)
 S3method("units<-", pems.element)
+S3method(summary, pems.element)
 
+###########################
+#imported whole thing above
 #need for head and tail
-
-importFrom(utils,head)
-importFrom(utils,tail)
-
+##importFrom(utils,head)
+##importFrom(utils,tail)
+###########################
 
 #plots
 export(latticePlot)
@@ -85,6 +113,10 @@ export(WatsonPlot)
 export(preprocess.WatsonPlot)
 export(panel.WatsonBinPlot)
 export(panel.WatsonContourPlot)
+
+#need for ggplot2 add-in
+S3method(fortify, pems)
+importFrom(ggplot2, fortify)
 
 #calcs
 export(calcDistance)

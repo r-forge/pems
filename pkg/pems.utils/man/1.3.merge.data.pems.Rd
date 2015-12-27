@@ -1,11 +1,10 @@
 \name{1.3.merge.data.pems}
 \alias{1.3.merge.data.pems}
 \alias{merge.pems}
-\alias{bindPEMS}
+\alias{align}
 \alias{cAlign}
+\alias{tAlign}
 \alias{findLinearOffset}
-
-
 
 \title{
   Merging data and pems objects
@@ -17,62 +16,61 @@
 
 \usage{
 
-#main function(s)
+  #basic alignment
+  align(data1, data2, n = 0, ...)
+ 
+  #alignment based on correlation
+  cAlign(form, data1 = NULL, data2 = NULL, ...)
 
-bindPEMS(x = NULL, y = NULL, ..., by = NULL)
+  #alignment based on time.stamp
+  tAlign(form, data1, data2 = NULL, order=TRUE, ...)
 
-#associated
 
-cAlign(x = NULL, y = NULL, y.offset = 0, all = TRUE,
-           suffixes = FALSE)
-
-findLinearOffset(x = NULL, y = NULL, offset.range = NULL)
+  #historical
+  findLinearOffset(x = NULL, y = NULL, offset.range = NULL)
 
 }
-
 
 
 \arguments{
 
+    \item{data1, data2}{
+   (\code{pems} or \code{data.frame}; optional for \code{cAlign}, required for other
+    alignment functions) \code{pems} objects or \code{data.frame}s to be aligned. 
+}
+
+  \item{n}{
+   (\code{numeric}; required) An offset to be applied to \code{data2} when aligning 
+   \code{data1} and \code{data2}. The default, \code{n = 0}, applies no offset and directly 
+   aligns the two supplied data sets, first row to first row.  
+}
+
+  \item{...}{
+   (An other arguments) May be passed on but are typically ignored. See Notes.
+}
+
+  \item{form}{
+   (\code{formula}; required) A formula identifying the elements in the supplied 
+   data sets to be used as references for the alignment. This typically takes 
+   the form, e.g. \code{cAlign(x~y, d1, d2)} where \code{d1$x} and \code{d2$y} 
+   are the data series to be used to correlation align the two data sets. 
+}
+
+  \item{order}{
+   (\code{logical}; optional) If \code{TRUE} the function orders the data. 
+}
+
   \item{x, y}{
-  (Required objects, typically pems objects, data.frames or vectors) For \code{bindPEMS} 
-  and \code{cAlign}, two objects to be bound together. For \code{findLinearOffset}, two 
-  objects to be aligned.
+  (Required objects, various classes) For \code{bindPEMS}, two \code{pems}, 
+  \code{data.frame}, \code{pems.elements} or \code{vectors} to be bound together. 
+  For \code{findLinearOffset}, two \code{pems.elements} or \code{vectors} to be 
+  aligned.
 } 
-
-  \item{\dots}{
-  (Optional) Other arguments, currently passed on to \code{cAlign} and \code{findLinearOffset}.
-}
-
-  \item{by}{
-  (Optional numeric or character) When \code{bindPEMS} is supplied \code{data.frames} or 
-  \code{pems} objects as \code{x} and \code{y} and is asked to use \code{findLinearOffset} 
-  to find \code{y.offset}, which elements of \code{x} and \code{y} should be used? (If this 
-  is not supplied and required, the default assumption is the first element of each.)
-}
-
-  \item{y.offset}{
-  (Function or numeric) The number of rows to offset data in \code{y} by relative to data in \code{x} 
-  when combining them. For \code{bindPEMS}, this can be either a function that deteremines an 
-  offset, e.g. \code{findLinearOffset}, or a numeric value to be used directly as an offset. For \code{cAlign}, 
-  only a numeric is allowed.  
-} 
-
-  \item{all}{
-  (Currently disabled) Argument in revision. 
-}
-
-  \item{suffixes}{
-  (Logical, or character) Any suffixes to be added to \code{x} and \code{y}. If one 
-  character terms is supplied this is used as a suffix for all names in \code{y}. If 
-  two character terms are supplied these are used as suffixes for all names in \code{x} 
-  and \code{y}, respectively. (The default \code{FALSE} does not add suffixes to either 
-  object.) 
-}
 
   \item{offset.range}{
-  (Numeric) For \code{findLinearOffset}, the 'lag window' to compare \code{x} and \code{x} 
-  across. By default, the function applies the widest possible window.  
+  (Numeric) For \code{findLinearOffset}, the 'lag window' to compare \code{x} 
+  and \code{x} across. By default, the function applies the widest possible 
+  window.  
 } 
     
 }
@@ -80,57 +78,101 @@ findLinearOffset(x = NULL, y = NULL, offset.range = NULL)
 
 \details{
 
-  \code{bindPEMS} is a column binding function that binds various objects types (e.g. 
-  \code{pems} objects, \code{data.frames} and \code{vectors}) and returns results as 
-  \code{pems} objects. It uses \code{cAlign} to bind associated data. Also, if requested, 
-  it uses \code{findLinearOffset} to handle alignments.   
+   The \code{align} function accepts two \code{pems} objects, 
+   \code{data.frame}, etc, and returns a single dataset (as 
+   a \code{pems} object) of the aligned data. An extra argument, 
+   \code{n}, may be supplied to offset the starting row of the 
+   second data set relative to the first. It is intended to be 
+   used in the form:
 
-  \code{cAlign} is a modification of the standard \code{R} column binding function 
-  \code{\link{cbind}}. \code{cAlign} binds \code{data.frames} (or \code{vectors}) subject 
-  to an applied offset, \code{y.offset}. The row displacement of the second 
-  \code{data.frame} relative to the first. Unlike \code{cbind}, \code{cAlign} does not 
-  require \code{x} and \code{y} to have the same number of columns. See NOte below.  
+   \code{aligned.data <- align(data1, data2)}    #aligned row 1-to-1
 
-  \code{findLinearOffset} is a wrapper for the \code{R} function \code{\link{ccf}}. 
-  It is a lag function to find the best linear offset between two data series. 
- 
+   \code{aligned.data <- align(data1, data2, 3)} #row 3-to-1, etc
+
+   The \code{cAlign} function accepts a formula and up to two data 
+   sets and returns a single data set (as a \code{pems} object) of 
+   correlation aligned data. This uses the best fit linear offset 
+   correlation for the elements identifed in the formula term. 
+
+   It is intended to be used in the form:
+
+   \code{aligned.data <- cAlign(name1~name2, data1, data2)}
+
+   The \code{tAlign} function accepts a formula and two data sets 
+   and returns a single data set (as a \code{pems} object) of the 
+   time stamp aligned data. This is this done by matching entries 
+   in the elements identifed in the formula term. 
+
+   It is intended to be used in the form:
+
+   \code{aligned.data <- tAlign(name1~name2, data1, data2)}
+
+   Historical functions:
+
+   \code{findLinearOffset} is historical code.  
+
 }
 
 
 \value{
 
-  \code{bindPEMS} returns supplied objects, \code{x} and \code{y}, as a single \code{pems} object, 
-  subject to requested alignment and naming modifications.
+   \code{align}, \code{cAlign}, \code{tAlign}, etc all return a 
+   single object of \code{pem} class containing the aligned data 
+   from \code{data1} and \code{data2}.
 
-  \code{cAlign} returns supplied objects, \code{x} and \code{y}, as a single \code{data.frame}, 
-  subject to requested alignment and naming modifications. 
-
-  \code{findLinearOffset} returns the best fit offset for \code{y} relative to \code{x}. 
+   \code{findLinearOffset} returns the best fit offset for \code{y} 
+   relative to \code{x}. 
 
 }
 
 \references{
-  References in preparation.
+
+   \code{align} uses the \code{plyr} function \code{join}.         
+
+   \code{cAlign} function uses the \code{stats} function \code{ccf}.         
+
+   \code{tAlign} uses the \code{plyr} function \code{join}.         
+
 }
+
 \author{
+
   Karl Ropkins
+
 }
+
 \note{
 
-  \code{cAlign} generates offsets and pads out \code{data.frames} of different column lengths by 
-  the addition of \code{NAs}. So, \code{data.frames} do not need to be the same column length to 
-  be bound, and alignment is subject \code{y.offset}, a numeric giving the starting row for 
-  \code{y} relative to \code{x}. \code{data.frame} names are handled using \code{\link{make.names}}, 
-  by the \code{suffixes} argument to manage names directly.         
- 
+  These functions are under revision and need to be handled 
+  with care.
+
+  \code{cAlign}: By default \code{cAlign} generates an alignment 
+  plot and returns a \code{pems} object of aligned data. But it 
+  also allows several hidden arguments to refine outputs, the 
+  logicals \code{plot}, \code{offset} and \code{pems}, which turn 
+  off/on plot, offset and pems reporting individually, and  
+  code{output = c("plot", "offset", "pems")} or combinations thereof 
+  also provides a single argument alternative.     
+
+  \code{bindPEMS}: The historical function \code{bindPEMS} has 
+  been superceded by \code{align}, \code{cAlign} options. 
+
+  \code{findLinearOffset}: \code{findLinearOffset} is currently 
+  retained but will most likely be removed from future versions of 
+  \code{pems.utils}. 
+
+  The call \code{cAlign(x, y, output = "offset")} is equivalent to 
+  \code{findLinearOffset(x, y)}.
+     
 }
 
-\section{Warning }{
-  No warnings
-}
+%\section{Warning }{
+%  No warnings
+%}
 
 \seealso{
-  See \code{\link{cbind}} for standard column binding in R. 
+  See also: \code{\link{cbind}} for standard column binding in \code{R}; 
+  \code{\link{plyr}} for \code{\link{join}}. 
 }
 \examples{
 
@@ -155,9 +197,15 @@ findLinearOffset(x,y)
 
 #applying linear offset
 
-ans <- cAlign(x,y, findLinearOffset(x,y))
+ans <- align(x, y, findLinearOffset(x,y))
+names(ans) <- c("x", "y")
 
 plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
+
+#shortcut
+#plot(x, type="l"); lines(y, col="blue", lty=2)
+#ans <- cAlign(x~y)
+#plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
 
 }
 

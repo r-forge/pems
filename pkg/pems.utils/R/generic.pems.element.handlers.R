@@ -9,9 +9,11 @@
 #includes 
 #(functions/code below) 
 ##########################
+#as.data.frame.pems.element
 #print.pems.element
 #plot.pems.element
 #units.pems.element
+#summary.pems.element
 #<-.units.pems.element
 #[.pems.element
 #[<-.pems.element
@@ -87,12 +89,20 @@ print.pems.element <- function (x, ...){
     print(ans, ...)
 
 
+#see note below in plot.pems.element about
+#units = "[]" plotting
+
     #attr
     #local report
     temp2 <- if(is.null(attributes(x)$name))
                  " [unamed]" else paste(" ", attributes(x)$name, sep = "")
-    if(!is.null(attributes(x)$units))  
-        temp2 <- paste(temp2, " [", attributes(x)$units, "]", sep = "")
+    #old line
+    #         temp2 <- paste(temp2, " [", attributes(x)$units, "]", sep = "")
+    if(!is.null(attributes(x)$units)){
+         temp <- paste(" [", attributes(x)$units, "]", sep="")
+         if(temp != " []") temp2 <- paste(temp2, temp, sep = "")
+    }
+
 
     temp2 <- paste(temp2, " [n = ", length(x), "]", sep = "")
     
@@ -127,29 +137,41 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
         class(x)[1] <- if("levels" %in% names(attributes(x)))
                              "factor" else mode(x)
 
+##could not use && attributes(x)$units!=""
+##in condition term for adding [unit] to labs
+##(to stop []) in plots
+##must be a better way of doing this
+##current is retrospective
+
     #get x name
     if(is.null(y)){ 
         if(is.null(ylab)){
             ylab <- if(is.null(attributes(x)$name))
                         deparse(substitute(x)) else 
                             attributes(x)$name
-            if(!is.null(attributes(x)$units))
-                ylab <- paste(ylab, " [", attributes(x)$units, "]", sep = "")
+            if(!is.null(attributes(x)$units)){
+                temp <- paste(" [", attributes(x)$units, "]", sep="")
+                if(!temp %in% c(" []", " [NA]")) ylab <- paste(ylab, temp, sep = "")
+            }
         }
     } else {
         if(is.null(xlab)){
             xlab <- if(is.null(attributes(x)$name))
                         deparse(substitute(x)) else 
                             attributes(x)$name
-            if(!is.null(attributes(x)$units))
-                xlab <- paste(xlab, " [", attributes(x)$units, "]", sep = "")
+            if(!is.null(attributes(x)$units)){
+                temp <- paste(" [", attributes(x)$units, "]", sep="")
+                if(!temp %in% c(" []", " [NA]"))xlab <- paste(xlab, temp, sep = "")
+            }
         }
         if(is.null(ylab)){
             ylab <- if(is.null(attributes(y)$name))
                         deparse(substitute(y)) else 
                             attributes(y)$name
-            if(!is.null(attributes(y)$units))
-                ylab <- paste(ylab, " [", attributes(y)$units, "]", sep = "")
+            if(!is.null(attributes(y)$units)){
+                temp <- paste(" [", attributes(y)$units, "]", sep="")
+                if(!temp %in% c(" []", " [NA]")) ylab <- paste(ylab, temp, sep = "")
+            }
         }
     }
 
@@ -174,6 +196,27 @@ units.pems.element <- function(x) attr(x, "units")
     attr(x, "units") <- value 
     x
 }
+
+
+####################
+#summary.pems.element
+####################
+
+
+#summary 
+
+
+summary.pems.element <- function(object, ...){
+
+    attr(object, "class") <- attr(object, "class")[attr(object, "class") != "pems.element"]
+    summary(object)
+
+}
+
+
+
+
+
 
 
 

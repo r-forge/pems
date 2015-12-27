@@ -15,10 +15,17 @@
 #(functions/code below) 
 ##########################
 #as.data.frame.pems
+#dim.pems
+#############->nrow.pems
+#############->ncol.pems
 #[.pems
 #[<-.pems
+#[[.pems
+#[[.<-pems
 #$.pems
 #$<-.pems
+#with.pems
+#subset.pems
 #print.pems
 #plot.pems
 #names.pems
@@ -42,6 +49,11 @@
 #
 # head.pems <- function(x, n =6,...) x[1:n,]
 # tail
+
+#as.list.pems <- function(x, ...) unclass(x)
+#as.pems.list <- function(x, ...) do.call(makePEMS, x)
+#but latter would need a method make
+
 #
 
 
@@ -69,6 +81,99 @@ as.data.frame.pems <- function(x, ...){
     x$data    
 
 }
+
+
+
+
+##########################
+##########################
+##dim.pems
+##nrow.pems
+##ncol.pems
+##########################
+##########################
+
+#get pems dimensions
+
+dim.pems <- function(x, ...) dim(as.data.frame(x))
+
+#not needs because dim.pems gives you these
+#nrow.pems <- function(x, ...) nrow(as.data.frame(x))
+#ncol.pems <- function(x, ...) ncol(as.data.frame(x)) 
+
+
+
+
+
+
+##########################
+##########################
+##[[.pems
+##########################
+##########################
+
+#kr 18/08/2015 v 0.1.0
+
+#what it does
+##########################
+#handles pems[[]] calls 
+#for access to data, units and other tags
+#
+
+#to do
+##########################
+#tidy
+#think about this
+
+##need pems[[]]<- operator
+
+
+`[[.pems` <- function(x, k, ...){
+
+    #break pems
+    class(x) <- "list"
+
+    #return as list is nothing declared
+    if(missing(k)) return(x)
+
+    #select structural elements
+    temp.fun <- function(k){
+        ans <- try(x[[k]], silent=TRUE)
+        if(class(ans)[1] == "try-error") NULL else ans
+    }
+    if(length(k)==1) return(temp.fun(k))
+    lapply(k, temp.fun)
+
+}
+
+
+
+
+#########################
+#########################
+##[[<-.pems
+#########################
+#########################
+
+`[[<-.pems` <- function(x, k, ..., value){
+
+    #break pems
+    old.class <- class(x)
+    class(x) <- "list"
+
+    #return as list is nothing declared
+    if(missing(k) | missing(value)) return(x)
+
+    #add in if it exists or not
+    #might want to think about this?
+
+    x[[k]] <- value 
+    class(x) <- old.class
+    x
+
+}
+
+
 
 
 
@@ -913,6 +1018,49 @@ as.data.frame.pems <- function(x, ...){
 
 
 
+#########################
+#########################
+##with.pems
+#########################
+#########################
+
+#version 0.1.0 kr 2015-08-02
+
+#test run parsync/carb data analysis
+
+#note currently discards units
+#not sure there is a way around this...
+
+with.pems <- function(data, expr, ...) {
+
+   eval(substitute(expr), pemsData(data), enclos = parent.frame())
+
+}
+
+
+
+
+
+#########################
+#########################
+##subset.pems
+#########################
+#########################
+
+#version 0.1.0 kr 2015-09-07
+
+#test run parsync/ucr data analysis
+
+subset.pems <- function(x,...){
+
+    x[["data"]] <- subset(x[["data"]], ...)
+    x
+
+}
+
+
+
+
 
 
 ##########################
@@ -952,7 +1100,7 @@ print.pems <- function (x, verbose = FALSE, n=6, ...) {
 
         if(is.null(nrow(temp$data)) || nrow(temp$data)<=n) 
            print.data.frame(temp$data) else {
-           print.data.frame(temp$data[1:n,])
+           print.data.frame(temp$data[1:n, , drop=FALSE])
            message("...")
         } 
     }

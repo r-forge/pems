@@ -1,3 +1,87 @@
+Changes in pems.utils 0.2.16 [2015-12-26]
+========================================
+
+*       added plyr to imports
+*       added align and tAlign functions 
+*       updated cAlign function
+*       removed bindPEMS (superceded by 
+        align and new cAlign)
+
+
+Changes in pems.utils 0.2.15 [2015-09-18]
+========================================
+
+*       moved latticeExtra to imports
+*       added with.pems method 
+*       updated makePEMS, now accepts 
+        vector, pems.element, etc
+*       updates pemsPlot, grid now added 
+        by default 
+*       added pems[[]]<- as quick reset 
+        for object structure
+*       added subset.pems method
+*       update to print.pems
+*       added is.pems, pems, pems.element; 
+        these replace isPEMS, makePEMS, 
+        makePEMSElement (retained as wrappers)
+*       added as.pems methods (default, 
+        data.frame)
+
+
+Changes in pems.utils 0.2.14 [2015-08-18]
+========================================
+
+*       added importCAGE2PEMS function, 
+        loads 3DATX CAGE data as pems 
+        object
+*       updated importParSYNC2PEMS, now 
+        defaults to local time zone 
+*       updated print.pems.element and 
+        plot.pems.element, labelling now 
+        ignores "" units 
+*       added fortify.pems method to 
+        simplfy use ggplot2 functions 
+        with pems objects; also added
+        ggplot2:fortify.defaults to 
+        imports
+*       moved utils, grid, RColorBrewer 
+        from depends to imports
+*       added dim.pems ncol.pms and 
+        nrow.pems method
+*       added pems[[]] as quick access 
+        to object structure
+
+
+Changes in pems.utils 0.2.13 [2015-08-06]
+========================================
+
+*       updated checkInput, improved 
+        handling of POSIXct class 
+        pems.elements 
+        
+
+Changes in pems.utils 0.2.12 [2015-07-29]
+========================================
+
+*       modified importParSYNC2PEMS 
+        function. The more general arg
+        reset.signals replaces previous 
+        reset.opacity
+
+
+Changes in pems.utils 0.2.11 [2015-04-13]
+========================================
+
+*       added summary.pems.element method
+
+
+Changes in pems.utils 0.2.10 [2015-03-14]
+========================================
+
+*       added importParSYNC2PEMS function
+*       updated cutBy error message
+ 
+
 Changes in pems.utils 0.2.9 [2015-01-23]
 ========================================
 

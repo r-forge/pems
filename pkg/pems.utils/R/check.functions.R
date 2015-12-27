@@ -190,7 +190,14 @@ checkInput <- function(input = NULL, data = NULL,
             attr(temp, "name") <- ..x.ans
             if(!is.null(units))
                 attr(temp, "units") <- units
-            class(temp) <- "pems.element"
+###################
+#new bit testing
+###################
+#kills pems.element posixct
+#
+#            class(temp) <- "pems.element"
+            class(temp) <- unique(c("pems.element", class(temp)))
+###################
             return(temp) } 
     }
 

@@ -130,8 +130,14 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
                        history = history, ...) 
     
     #reset history?
-    output$history[[length(output$history)]] <- this.call 
-    
+    if(is.null(output[["histroy"]])){
+         output[["history"]] <- this.call
+    } else {
+         temp <- output[["history"]]
+         temp[length(temp)] <- this.call
+         output[["history"]] <- temp
+    }
+
     output    
 
 
@@ -155,8 +161,8 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
 #import a comma delimited file to PEMS
 #
 
-importTAB2PEMS <- function(..., file.reader = read.delim) import2PEMS(..., file.reader = import.delim)
-importCSV2PEMS <- function(..., file.reader = read.csv) import2PEMS(..., file.reader = import.csv)
+importTAB2PEMS <- function(..., file.reader = read.delim) import2PEMS(..., file.reader = file.reader)
+importCSV2PEMS <- function(..., file.reader = read.csv) import2PEMS(..., file.reader = file.reader)
 
 
 

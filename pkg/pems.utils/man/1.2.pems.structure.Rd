@@ -69,10 +69,10 @@ pemsHistory(pems=NULL, ...,
   \code{units}, \code{constants}, \code{history} and \code{tags}. \code{data} is the main 
   \code{data.frame}. Each element (named \code{data.frame} column) is a data-series of the original 
   PEMS data. \code{units} are the associated unit definitions. \code{constants} is a list of associated 
-  constants that are to be used with the \code{pems} object. (The preference order is defaults set by 
-  \code{pems.utils} < \code{constants} declared for the \code{pems} object < constants given in a 
-  call.) \code{history} is a log of \code{pems} object modifications. \code{tags} are basically any other 
-  components that the user wishes to add to a \code{pems} object as identifiers.
+  constants that are to be used with the \code{pems} object. (The preference order is arguments given in a 
+  call then \code{constants} declared in the \code{pems} object then \code{constant} defaults held by the 
+  \code{pems.utils} package.) \code{history} is a log of \code{pems} object modifications. \code{tags} are 
+  any other components that the user wishes to add to a \code{pems} object as identifiers.
 
   \code{pemsElement} gets a requested data element. 
 
@@ -116,10 +116,11 @@ pemsHistory(pems=NULL, ...,
  
 }
 
-
 \seealso{
-  See \code{\link{check...}}. 
+  See Also: \code{\link{check...}} for \code{check...} function equivalents; \code{\link{pems.generics}} 
+  for \code{pems} object class generic functions.
 }
+
 \examples{
 
 ###########
@@ -135,7 +136,7 @@ pemsElement(velocity, pems.1)
 
 #generic equivalents
 #pems.1$velocity
-#pems.1$velocity["velocity"]
+#pems.1["velocity"]
 #etc
 
 }

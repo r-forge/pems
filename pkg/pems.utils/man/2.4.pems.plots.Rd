@@ -208,10 +208,10 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
   \code{pemsXYZCondUnitsHandler} handles the two plot call styles by converting 
   conventional plot calls to formula-based calls. It is typically included in a function 
-  function like \code{pemsPlot} at an early stage. After it is run, the returned \code{x} 
+  like \code{pemsPlot} at an early stage. After it is run, the returned \code{x} 
   can be treated as a formula and \code{y}, \code{z} and \code{cond} can be ignored. This 
   routine is included as a discrete function within this package and others are welcome to 
-  use elsewhere for similar purposes. \code{edit(pemsPlot)} to see.  
+  use elsewhere for similar purposes. \code{edit(pemsPlot)} to see it.  
 
   Newer plots also use a combination of \code{\link{lattice}} and \code{\link{loa}} 
   functions to provide a range of additional plotting options, such as integrated panel and key 

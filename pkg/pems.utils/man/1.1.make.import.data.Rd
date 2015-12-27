@@ -1,14 +1,22 @@
 \name{1.1.make.import.data}
 \alias{1.1.make.import.data}
 \alias{pems.objects}
+\alias{is.pems}
 \alias{isPEMS}
+\alias{pems}
 \alias{makePEMS}
+\alias{pems.element}
+\alias{as.pems}
+\alias{as.pems.default}
+\alias{as.pems.data.frame}
 \alias{makePEMSElement}
 \alias{import2PEMS}
 \alias{importTAB2PEMS}
 \alias{importCSV2PEMS}
 \alias{importOBS2PEMS}
 \alias{importOB12PEMS}
+\alias{importParSYNC2PEMS}
+\alias{importCAGE2PEMS}
 \alias{importRoyalTek2PEMS}
 
 
@@ -25,13 +33,21 @@
 
 #making pems objects
  
-isPEMS(x, full.test = TRUE, ...)
+is.pems(x, full.test = TRUE, ...)
 
-makePEMS(x, units = NULL, constants = NULL, history = NULL,  
+pems(x, units = NULL, constants = NULL, history = NULL,  
           ...)
 
-makePEMSElement(x, name = NULL, units = NULL,   
+pems.element(x, name = NULL, units = NULL,   
           ...)
+
+#associated 
+
+isPEMS(...)
+makePEMS(...)
+makePEMSElement(...)
+
+\method{as.pems}{data.frame}(x, ...)
 
 
 #importing data as pems objects
@@ -59,6 +75,18 @@ importOB12PEMS(file.name = file.choose(), pems = "Horiba OBS",
           analytes = c("co", "co2", "nox", "hc"),  
           fuel = c("petrol", "diesel", "gasoline"), ...)
 
+
+#3DATX parSYNC
+
+importParSYNC2PEMS(file.name = file.choose(), reset.signals = TRUE, 
+         history = NULL, constants = NULL, pm.analyzer = "parSYNC",
+         ... )
+
+
+#3DATX CAGE
+importCAGE2PEMS(..., calibrator = "CAGE")
+
+
 #RoyalTek GPS
 
 importRoyalTek2PEMS(file.name = file.choose(), 
@@ -71,19 +99,19 @@ importRoyalTek2PEMS(file.name = file.choose(),
 \arguments{
 
   \item{x}{
-  (A required object) For \code{isPEMS}, any object to be tested as a \code{pems} object. 
-  For \code{makePEMS}, an object to be used as the starting point to make a \code{pems} 
-  objects, so typically a \code{data.frame} or another \code{pems} object. 
+  (A required object) For \code{is.pems}, any object to be tested as a \code{pems} object. 
+  For \code{pems}, an object to be used as the starting point to make a \code{pems} 
+  object, so typically a \code{data.frame} or another \code{pems} object. 
 } 
 
   \item{full.test}{
-  (Logical) For \code{isPEMS}, should the full pems test be applied and the \code{pems} 
+  (Logical) For \code{is.pems}, should the full pems test be applied and the \code{pems} 
   structure confirmed?  
 } 
 
   \item{\dots}{
-  (Optional) Other arguments, handling varies. For \code{isPEMS} these are ignored. For 
-  \code{makePEMS} these are added to the pems object unmodified. For \code{import...} 
+  (Optional) Other arguments, handling varies. For \code{is.pems} these are ignored. For 
+  \code{pems} these are added to the pems object unmodified. For \code{import...} 
   functions, these are passed on and added to the \code{constants} component of the 
   \code{pems} object. Note: This different handling is experimental and may be subject to 
   change in future. 
@@ -130,7 +158,7 @@ importRoyalTek2PEMS(file.name = file.choose(),
   respectively.   
 }
 
-  \item{pems, vbox}{
+  \item{pems, vbox, pm.analyzer, calibrator}{
   (Character vectors) For some \code{import...} functions, data source descriptions may be automatically 
   added to the \code{pems} object. \code{pems} and \code{vbox} are two examples, but others, such as 
   vehicle and fuel descritpions can also be added in a similar fashion. Note: These are for user-reference, 
@@ -149,20 +177,33 @@ importRoyalTek2PEMS(file.name = file.choose(),
   calibrating inputs or calculating constants. In such cases the \code{fuel} argument is also included 
   to identify which fuel was used. 
 }
-    
+
+  \item{reset.signals}{
+   (Logical or Character vector) For \code{importParSYNC2PEMS}, should any raw signal be reset? The 
+   default (\code{TRUE}) reverses the sign of opacity and ionization signals.      
 }
 
+}
 
 \details{
 
-  \code{isPEMS} tests if an object is/is not a \code{pems} object.
+  \code{is.pems} tests if an object is/is not a \code{pems} object.
 
-  \code{makePEMS} makes a \code{pems} object using supplied data and information. 
+  \code{pems} makes a \code{pems} object using supplied data and information. 
+
+  \code{pems.element} makes a \code{pems.element} object using supplied data and information.
+
+  \code{as.pems...} functions attempt to convert a supplied object into a \code{pems} object. 
+  Currently, there is only a \code{data.frame} method and (by \code{default}) a \code{pems} 
+  method.
+
+  \code{isPEMS}, \code{makePEMS} and \code{makePEMSElement} are historical code, retained for 
+  backward compatibility.
 
   Crude \code{import...} functions import simple file structures, and are useful for getting 
   data quickly into \code{R:pems.utils}. \code{importTAB2PEMS} imports tab delimited files and 
   clipboard content. \code{importCSV2PEMS} imports comma delimited files. Both assume a simple 
-  file structure (i.e. data series in columns with names as headers), by require some time data 
+  file structure (i.e. data series in columns with names as headers), but require some time data 
   management by the user. Note: These are wrappers for \code{import2PEMS}. 
 
   Other \code{import...} import specific file types.
@@ -173,6 +214,12 @@ importRoyalTek2PEMS(file.name = file.choose(),
   \code{importOB12PEMS} imports \code{.OB1} files and converts them to \code{pems} objects. \code{OB1} 
   files are generated by a Visual Basic PEMS data handler used during the RETEMM project. Notes below. 
 
+  \code{importParSYNC2PEMS} imports standard parSYNC files and converts them to \code{pems} 
+  objects. See Notes below. 
+
+  \code{importCAGE2PEMS} imports standard CAGE files and converts them to \code{pems} objects. 
+  See \code{importParSYNC2PEMS} Notes below.
+
   \code{importRoyalTek2PEMS} imports \code{.txt} and \code{.nmea} format Royal Tek GPS files and 
   converts them to \code{pems} objects. See Notes below. 
  
@@ -181,13 +228,14 @@ importRoyalTek2PEMS(file.name = file.choose(),
 
 \value{
 
-  \code{isPEMS} return a logical, \code{TRUE} if the supplied object is \code{pems} class, 
+  \code{is.pems} return a logical, \code{TRUE} if the supplied object is \code{pems} class, 
   otherwise \code{FALSE}. If the argument \code{full.test = TRUE} is also supplied, additional 
   information about the object is returned as \code{comment(output)}. 
 
-  \code{makePEMS} returns a \code{pems} object, made using the supplied data and any additional 
-  information also supplied in the same call. 
- 
+  \code{pems} and \code{pems.element} functions return \code{pems} and \code{pems.element} 
+  objects, respectively, made using the supplied file and any additional information also 
+  supplied in the same call.
+
   \code{import...} functions return a \code{pems} object, made using the supplied file and any 
   additional information also supplied in the same call. 
 
@@ -201,6 +249,10 @@ importRoyalTek2PEMS(file.name = file.choose(),
 }
 \note{
 
+  \code{isPEMS}, \code{makePEMS} and \code{makePEMSElement} were earlier functions that performed 
+  the same functions as \code{is.pems}, \code{pems} and \code{pems.elements}, respectively. The 
+  the current versions of these functions are wrappers for their replacements. 
+     
   With the crude \code{import...} functions (\code{import2PEMS}, \code{importTAB2PEMS}, 
   \code{importCSV2PEMS}) modifications are minimal. Unless any additional changes are requested 
   in the \code{import...(...)} call, the data is simply read in as a \code{data.frame} and 
@@ -218,14 +270,26 @@ importRoyalTek2PEMS(file.name = file.choose(),
 
   With \code{importOB12PEMS}, handling is similar to that with \code{importOBS2PEMS}. 
 
+  With \code{importParSYNC2PEMS}, the parSYNC data modifications are as follows: parSYNC Date and Time 
+  data-series are merged and converted into \code{*POSIX} as \code{time.stamp}; \code{local.time} is calculated 
+  from this; the parSYNC data series Timestamp is retained as \code{parsync.timestamp}; by default units are 
+  removed from data-series names, but retained as \code{units(pems)}; (again by default) all names are 
+  converted to lower case. The default option \code{reset.signal = TRUE} reverses the voltage reading 
+  of opacity and ionization time-series (x = - x), if present. Alternatively, imports can be identified 
+  specifically by name, e.g. \code{reset.signal = "opacity"} to just reset opacity. Typical OBS constants 
+  are currently assumed, if not supplied. Several of these are based on emission source fuel. The default 
+  assumption is that the fuel is \code{'petrol'} unless \code{fuel} has been assigned.  
+
+  With \code{importCAGE2PEMS}, handling is similar to that with \code{importParSYNC2PEMS}. 
+
   With \code{importRoyalTek2PEMS}, the Royal Tek data modifications are currently being documented.   
  
 }
 
-\section{Warning }{
-  Currently, \code{makePEMS} and \code{import...} functions handle extra arguments differently. (See 
-  Arguments above for details.) This may be subject to change.
-}
+%\section{Warning }{
+%  Currently, \code{makePEMS} and \code{import...} functions handle extra arguments differently. (See 
+%  Arguments above for details.) This may be subject to change.
+%}
 
 \seealso{
   See \code{\link{ref.unit.conversions}} and \code{\link{convertUnits}} for general unit handling. 
@@ -239,11 +303,11 @@ importRoyalTek2PEMS(file.name = file.choose(),
 #make little pems
 data <- data.frame(speed=1:10, emissions=1:10)
 units <- c("m/s", "g/s")
-pems <- makePEMS(x = data, units=units, example="my record") 
+pems <- pems(x = data, units=units, example="my record") 
  
 pems                       #the pems object
 summary(pems)              #summary of held data
-checkInput(speed, pems)    #speed element
+pems$speed                 #the speed pems.element
 
 }
 

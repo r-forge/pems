@@ -44,7 +44,7 @@ cutByRow(ref = NULL, n = 4, rows = NULL, ..., data = NULL,
 
   \item{cut.method}{
   (Optional function) For \code{cutBy} only, the method to use when cutting \code{ref}. If not supplied, 
-  this is supply \code{cutByRow} by default. 
+  \code{cutByRow} used by default. 
 } 
 
   \item{labels}{

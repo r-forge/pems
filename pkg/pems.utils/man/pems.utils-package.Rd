@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.9\cr
-Date: \tab 2015-01-23\cr
+Version: \tab 0.2.16\cr 
+Date: \tab 2015-12-26\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -31,14 +31,18 @@ follows:
 
 1.2. The pems object structure: \code{\link{pems.structure}}, \code{\link{pemsElement}}, etc. 
 
-1.3. Merging pems objects: \code{\link{merge.pems}}, \code{\link{bindPEMS}}, etc. 
+1.3. Merging pems objects: \code{\link{merge.pems}}, \code{\link{align}}, etc. 
 
 1.4. Exporting data from pems objects and R: \code{\link{export.data}}.
 
 
 2. Routine use
 
-2.1. Generic pems handling: \code{\link{pems.generics}}.
+2.1. Generic pems handling
+
+2.1.1. pems objects, \code{\link{pems.generics}}.
+
+2.1.2. pems.element objects, \code{\link{pems.element.generics}}.
 
 2.2. Unit handler functions: \code{\link{getUnits}}, \code{\link{setUnits}}, \code{\link{convertUnits}}, etc.
 
@@ -89,7 +93,7 @@ Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 \keyword{ package }
 
 \seealso{
-  \code{\link{makePEMS}}, \code{\link{import2PEMS}} 
+  \code{\link{pems}}, \code{\link{import2PEMS}} 
 }
 
 %\examples{
