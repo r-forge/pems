@@ -6,6 +6,10 @@
 #currently library loaded
 #so user/examples accessible
 
+#seems to need these imported as well as depends
+import(lattice)
+import(loa)
+
 #imported packages 
 #import(utils) #just importing head and tail methods
 import(grid)
