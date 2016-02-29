@@ -81,7 +81,7 @@ print.pems.element <- function (x, ...){
     if(length(class(ans))>1) class(ans) <- class(ans)[-1] else
          class(ans)[1] <- if("levels" %in% names(attributes(ans)))
                                 "factor" else mode(ans)
-    attributes(ans) <- attributes(ans)[names(attributes(ans))!=c("name", "units")]
+    attributes(ans) <- attributes(ans)[!names(attributes(ans))%in% c("name", "units")]
 
 #allows element to print as prior class
 #############
@@ -95,7 +95,7 @@ print.pems.element <- function (x, ...){
     #attr
     #local report
     temp2 <- if(is.null(attributes(x)$name))
-                 " [unamed]" else paste(" ", attributes(x)$name, sep = "")
+                 " [unnamed]" else paste(" ", attributes(x)$name, sep = "")
     #old line
     #         temp2 <- paste(temp2, " [", attributes(x)$units, "]", sep = "")
     if(!is.null(attributes(x)$units)){
@@ -106,7 +106,7 @@ print.pems.element <- function (x, ...){
 
     temp2 <- paste(temp2, " [n = ", length(x), "]", sep = "")
     
-    cat("pems.element;", temp2, "\n")
+    cat("pems.element;", temp2, "\n", sep="")
 
 }
 

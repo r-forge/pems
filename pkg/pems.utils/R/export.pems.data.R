@@ -30,7 +30,7 @@
 
 ########################
 ########################
-##exportData
+##exportPEMSData
 ########################
 ########################
 
@@ -38,12 +38,12 @@
 #karl 17/09/2010
 
 
-exportData <- function(data, file="tempfile.txt", ..., sep="\t", file.writer = write.table,
+exportPEMSData <- function(data, file="tempfile", ..., sep="\t", file.writer = write.table,
                        row.names = FALSE){
 
     if(isPEMS(data))
         data <- pemsData(data)
-    
+
     file.writer(data, file = file, sep="\t", row.names = row.names)
 
 }

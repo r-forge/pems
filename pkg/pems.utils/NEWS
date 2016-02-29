@@ -1,4 +1,16 @@
-Changes in pems.utils 0.2.16 [2015-12-26]
+Changes in pems.utils 0.2.17 [2016-02-29]
+========================================
+
+*       expanded description, tidy re 
+        pems.utils2CRAN.
+*       changed calcEmHoribaPitot formals 
+        (catch check note; re pems.utils2CRAN)
+*       documentation tidy re pems.utils2CRAN
+*       pemsPlot zlab tidy re pems.utils2CRAN
+*
+
+
+Changes in pems.utils 0.2.16 [2015-12-28]
 ========================================
 
 *       added plyr to imports
@@ -6,6 +18,10 @@ Changes in pems.utils 0.2.16 [2015-12-26]
 *       updated cAlign function
 *       removed bindPEMS (superceded by 
         align and new cAlign)
+*       update to WatsonPlot, revised 
+        argument order in formals
+*       added and documented 
+        panel.WatsonSmoothContourPlot
 
 
 Changes in pems.utils 0.2.15 [2015-09-18]
@@ -15,7 +31,7 @@ Changes in pems.utils 0.2.15 [2015-09-18]
 *       added with.pems method 
 *       updated makePEMS, now accepts 
         vector, pems.element, etc
-*       updates pemsPlot, grid now added 
+*       update to pemsPlot, grid now added 
         by default 
 *       added pems[[]]<- as quick reset 
         for object structure

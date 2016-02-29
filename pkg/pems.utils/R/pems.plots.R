@@ -132,6 +132,7 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = N
     if(!hijack){   
         y <- checkInput(y, data=data, if.missing="return")
         z <- checkInput(z, data=data, if.missing="return")
+        cond <- checkInput(cond, data=data, if.missing="return")
     }
 
     #this bit is for index case, like plot(x)
@@ -240,9 +241,12 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
                    lattice.like$ylab <- if("y.units" %in% names(units))
                         paste(ylab, " [", units$y.units, "]", sep = "") else ylab
                ylab <- lattice.like$ylab
+###################
+#update to zlab so units on next line
+###################
                if(!is.null(zlab))
                    lattice.like$zlab <- if("z.units" %in% names(units))
-                        paste(zlab, " [", units$z.units, "]", sep = "") else zlab
+                        paste(zlab, "\n[", units$z.units, "]", sep = "") else zlab
                zlab <- lattice.like$zlab
             }
 
@@ -257,7 +261,7 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
 
 panel.pemsPlot <- function(..., loa.settings = FALSE){
 
-#could probably loss a lot of these arguments
+#could probably lose a lot of these arguments
 #but then I would not document them anywhere
 
         extra.args <- list(...)
@@ -307,28 +311,39 @@ panel.pemsPlot <- function(..., loa.settings = FALSE){
 
 #to do
 ######################
-#wireframe output for plot.type
+#wireframe output for plot.type = 3
+
+#to look into
+######################
+#move z and cond to front of arg
+##so (x,y,z, data=...) works
+##currently need (x,y, z=z, data=...)
+#n/breaks does not pass to contour plot version
+#maybe use bin then surfacesmooth for contour plot version
 
 
-WatsonPlot <- function (x, y = NULL, ..., data = NULL, z = NULL, cond = NULL, 
-    plot.type=1, fun.name = "WatsonPlot", scheme = pems.scheme) 
+WatsonPlot <- function (speed, accel = NULL, z = NULL, cond = NULL, ..., data = NULL, 
+    plot.type=2, fun.name = "WatsonPlot", scheme = pems.scheme) 
 {
     extra.args <- listUpdate(list(units = TRUE), 
                              list(...))
     settings <- calcChecks(fun.name, ..., data = data)
     #extra.args <- listLoad(listUpdate(extra.args, list(load = "units")))
-    extra.args <- pemsXYZCondUnitsHandler(x, y, z, cond, data = data, 
+    extra.args <- pemsXYZCondUnitsHandler(speed, accel, z, cond, data = data, 
         settings = settings, ...)
 
     #panel reset
     if(!"panel" %in% names(extra.args)){
-        if(plot.type==1) extra.args$panel <- panel.WatsonBinPlot
-        if(plot.type==2) extra.args$panel <- panel.WatsonContourPlot
-#        if(plot.type==3) extra.args$panel <- panel.binPlot
+        if(plot.type==1) extra.args$panel <- panel.pemsPlot
+        if(plot.type==2) extra.args$panel <- panel.WatsonBinPlot
+        if(plot.type==3) extra.args$panel <- panel.WatsonContourPlot
+        if(plot.type==4) extra.args$panel <- panel.WatsonSmoothContourPlot
     }
-    if(is.null(extra.args$panel)) 
+    if(is.null(extra.args$panel)){ 
         warning("WatsonPlot: unknown plot.type [generating scatter plot]", 
                 call.=FALSE)
+        extra.args$panel <- panel.pemsPlot
+    }
 
     extra.args <- listUpdate(extra.args, list(data = data, scheme =scheme))
     do.call(loaPlot, extra.args)
@@ -358,11 +373,32 @@ preprocess.WatsonPlot <- function (lattice.like = lattice.like, ...)
                            pems.scheme else extra.args$scheme
 
     #x.breaks y.breaks defaults for speed/accel based data
-    new.args$x.breaks <- if(is.null(extra.args$x.breaks))
-         pretty(c(0, max(lattice.like$x, na.rm=T)), 20) else new.args$x.breaks 
-    new.args$y.breaks <- if(is.null(extra.args$y.breaks))
-         pretty(lattice.like$y, 20) else new.args$y.breaks
+#new bit
+#to think about
+###############
+    #(breaks being set should override this)
+    if(!is.null(extra.args$breaks)){
+        if(is.null(extra.args$x.breaks)) extra.args$x.breaks <- extra.args$breaks
+        if(is.null(extra.args$y.breaks)) extra.args$y.breaks <- extra.args$breaks
+    }
+    new.args$x.breaks <- if (is.null(extra.args$x.breaks)) 
+        pretty(c(0, max(lattice.like$x, na.rm = T)), 20) else 
+            if(length(extra.args$x.breaks<2))
+                pretty(c(0, max(lattice.like$x, na.rm = T)), extra.args$x.breaks) else 
+                     extra.args$x.breaks
+    new.args$y.breaks <- if (is.null(extra.args$y.breaks)) 
+        pretty(lattice.like$y, 20) else if(length(extra.args$y.breaks<2))
+            pretty(lattice.like$y, extra.args$y.breaks) else 
+                extra.args$y.breaks
+##############
+#replaces 
+##############
+#    new.args$x.breaks <- if(is.null(extra.args$x.breaks))
+#        pretty(c(0, max(lattice.like$x, na.rm=T)), 20) else extra.args$x.breaks 
+#    new.args$y.breaks <- if(is.null(extra.args$y.breaks))
+#        pretty(lattice.like$y, 20) else extra.args$y.breaks
 
+    
     #stopped handling
     omit.stopped <- if("omit.stopped" %in% names(extra.args))
                         extra.args$omit.stopped else "none"
@@ -427,14 +463,20 @@ panel.WatsonBinPlot <- function(..., ref.line = TRUE,
         temp$common.args <- unique(c(temp$common.args, "units", "omit.stopped", 
                                      "stopped.speed.accel", "settings"))
         temp$default.settings <- listUpdate(temp$default.settings, 
-                                     list(loa.preprocess = preprocess.WatsonPlot, aspect = 0.5,
-                                          statistic = function(x) length(na.omit(x))))
+                                     list(loa.preprocess = preprocess.WatsonPlot, 
+                                          grid = TRUE, aspect = 0.5))
         return(temp)
     }
 
     if(process){
-        if(!"z" %in% names(extra.args))
+        if(!"z" %in% names(extra.args)){
             extra.args$z <- rep(1, length(extra.args$x))
+            if(!"statistic" %in% names(extra.args))
+                extra.args$statistic <- function(x) length(na.omit(x))
+        } else {
+            if(!"statistic" %in% names(extra.args))
+                extra.args$statistic <- function(x) mean(na.omit(x))
+        }
         ans <- do.call(process.panel, 
                        listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
         if(!plot) return(ans)
@@ -447,8 +489,16 @@ panel.WatsonBinPlot <- function(..., ref.line = TRUE,
         if(col=="transparent") col <- "white" 
         if(!"col" %in% names(extra.args))
             extra.args$col <- col
-                        
 
+#will need to remove this 
+#if grid goes into panel.binPlot
+#or switch it off here after it is called
+
+        #grid
+        if (isGood4LOA(extra.args$grid)) 
+            panel.loaGrid(panel.scales = extra.args$panel.scales, 
+                grid = extra.args$grid)
+                        
         #plot bins and ref.line
         do.call(plot.panel, 
             listUpdate(extra.args, list(plot=TRUE, process=FALSE)))
@@ -457,6 +507,15 @@ panel.WatsonBinPlot <- function(..., ref.line = TRUE,
     }
 }
 
+
+
+###################################
+#another panel
+
+#think about making all of these standalone
+
+#don't know if I can do test
+#maybe drop cases outside rather than add in max/min???
 
 panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,          
          process = TRUE, plot = TRUE, loa.settings = FALSE){
@@ -467,7 +526,9 @@ panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,
 
     if(loa.settings){
         temp <- loaHandler(panel.WatsonBinPlot)
-        temp$default.settings <- listUpdate(temp$default.settings, list(key=FALSE))
+        temp$default.settings <- listUpdate(temp$default.settings, 
+                                            list(key.fun=draw.loaColorRegionsKey, 
+                                                 alpha.regions = 0.5))
         return(temp)
     }
 
@@ -475,8 +536,14 @@ panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,
 
         if(!"at" %in% names(extra.args)){
             temp <- pretty(extra.args$zlim, 10)
-            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
-            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
+######################
+#test
+######################
+#might come back to bite me
+#
+#            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
+#            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
+######################
             temp <- unique(temp)
             extra.args$at <- temp
         }
@@ -486,18 +553,108 @@ panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,
         extra.args$col <- getPlotArgs()$col
     
     #other tweaks
-
     if(!"labels" %in% names(extra.args))
         extra.args$labels <- TRUE
-    if(!"alpha" %in% names(extra.args))
-        extra.args$alpha <- 0.5
-
+   
     }
                      
     do.call(panel.WatsonBinPlot, extra.args)
 }
 
 
+
+##################################
+#another panel
+
+#not in package yet...
+#not namespace, import, or documented
+#
+
+#see above about test
+
+#edges do not go out far enough
+#x1, y2, y1, y2????
+#see what xlim and ylim are??? 
+#I think surfaceSmooth uses them if there...
+#might be a shortcut
+
+#lim.borders
+
+panel.WatsonSmoothContourPlot <- function(..., plot.panel=panel.surfaceSmooth,          
+         process = TRUE, plot = TRUE, loa.settings = FALSE){
+
+    extra.args <- listUpdate(list(...), list(plot.panel=plot.panel, 
+                                             process=process, plot=plot, 
+                                             loa.settings=loa.settings))
+
+    if(loa.settings){
+        temp <- loaHandler(panel.WatsonBinPlot)
+        temp$default.settings <- listUpdate(temp$default.settings, 
+                                            list(#key.fun=draw.loaColorRegionsKey, 
+                                                 contour = TRUE, regions = TRUE,
+                                                 alpha.regions = 0.5))
+        return(temp)
+    }
+
+    if(process){
+        if(!"z" %in% names(extra.args)){
+            extra.args$z <- rep(1, length(extra.args$x))
+            if(!"statistic" %in% names(extra.args))
+                extra.args$statistic <- function(x) length(na.omit(x))
+        } else {
+            if(!"statistic" %in% names(extra.args))
+                extra.args$statistic <- function(x) mean(na.omit(x))
+        }
+        ans <- do.call(panel.binPlot, 
+                       listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
+
+        extra.args <- listUpdate(extra.args, ans)
+
+######################
+#stop surface smooth using x/ylims 
+#might move this to panel.surfaceSmooth
+#or refine the modelling
+#currently just nas between x/ys and borders
+#        extra.args <- listUpdate(extra.args, list(x.breaks=200, y.breaks=200))
+
+        extra.args <- listUpdate(extra.args, list(x.breaks=200, y.breaks=200), ignore=c("xlim", "ylim"))
+
+        ans <- do.call(panel.surfaceSmooth, extra.args)
+
+        if(!plot) return(ans)
+    }
+
+
+    if(plot & !process){
+
+#currently does contours and regions
+#want it to just do at
+
+#        if(!"at" %in% names(extra.args)){
+#            temp <- pretty(extra.args$zlim, 10)
+######################
+#test
+######################
+#might come back to bite me
+#
+#            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
+#            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
+######################
+#            temp <- unique(temp)
+#            extra.args$at <- temp
+#        }
+
+    #contout cols
+    if(!"col" %in% names(extra.args))
+        extra.args$col <- getPlotArgs()$col
+    
+    #other tweaks
+#    if(!"labels" %in% names(extra.args))
+#        extra.args$labels <- TRUE
+                     
+    do.call(panel.WatsonBinPlot, extra.args)
+    }
+}
 
 
 
@@ -522,12 +679,18 @@ panel.WatsonContourPlot <- function(..., plot.panel=panel.kernelDensity,
 #what it does
 ###########################################
 #allows users to work directly with ggplot2
-#
+
 
 #to do
-######################
+############################
 #decide if we are keeping it
 
+#if keeping it 
+
+#like to
+#########################################
+#would like to pass pems units to ggplot2 
+#via fortify
 
 fortify.pems <- function (model, data, ...) as.data.frame(model)
 

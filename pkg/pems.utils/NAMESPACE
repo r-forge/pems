@@ -11,6 +11,7 @@
 import(grid)
 import(RColorBrewer)
 import(latticeExtra)
+#import(ggplot2) #just importing fortify
 import(plyr)
 
 
@@ -52,7 +53,7 @@ export(tAlign)
 #bindPEMS
 
 #export
-export(exportData)
+export(exportPEMSData)
 
 
 #generic.pems.handlers
@@ -113,6 +114,8 @@ export(WatsonPlot)
 export(preprocess.WatsonPlot)
 export(panel.WatsonBinPlot)
 export(panel.WatsonContourPlot)
+export(panel.WatsonSmoothContourPlot)
+
 
 #need for ggplot2 add-in
 S3method(fortify, pems)

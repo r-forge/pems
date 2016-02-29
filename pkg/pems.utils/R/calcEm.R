@@ -145,9 +145,9 @@ calcEm <- function(conc = NULL, time = NULL,
 #various error catchers needed
 
 
-calcEmHoribaPitot <- function(conc = NULL, time = local.time,
-                    exflow = exh.flow.rate, extemp = exh.temp, 
-                    express = exh.press, analyte = NULL, delay = NULL, mm = NULL,  
+calcEmHoribaPitot <- function(conc = NULL, time = "local.time",
+                    exflow = "exh.flow.rate", extemp = "exh.temp", 
+                    express = "exh.press", analyte = NULL, delay = NULL, mm = NULL,  
                     ..., force = force, data = NULL, fun.name = "calcEmHoribaPitot", 
                     this.call = NULL, hijack= FALSE){
   
@@ -226,10 +226,10 @@ tempGet <- function(..., id=NULL, data=NULL, default=NULL){
     #units of all inputs
     conc <- convertUnits(conc, to = "vol%", hijack = TRUE, 
                          if.missing = settings$if.missing, 
-                         unit.convesions = setting$unit.conversions)
+                         unit.convesions = settings$unit.conversions)
     exflow <- convertUnits(exflow, to = "L/min", hijack = TRUE, 
                            if.missing = settings$if.missing, 
-                           unit.convesions = setting$unit.conversions)
+                           unit.convesions = settings$unit.conversions)
 
     if(delay[1]>=1){
         conc <- c(conc[(floor(delay[1])+1): length(conc)], rep(NA, floor(delay[1])))

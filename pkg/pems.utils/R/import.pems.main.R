@@ -195,6 +195,9 @@ importCSV2PEMS <- function(..., file.reader = read.csv) import2PEMS(..., file.re
 #this could be done better now
 ###################
 #foo tidy
+##v1 renamed as rename and tidy
+##could do a version two and 
+##put unnamed functions in sapply calls
 ###################
 #
 
@@ -241,18 +244,18 @@ importOBS2PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
     data.names[1] <- "local.time"
 
     #rename analytes conc.x
-    f00 <- function(ans, analyte) #make analyte identifier conc.analyte so emission names are unique 
+    rename <- function(ans, analyte) #make analyte identifier conc.analyte so emission names are unique 
                {if(ans==analyte) ans <- paste("conc.",ans,sep="") else ans}
-    for(i in 1:length(analytes)){ data.names <- sapply(data.names, f00, USE.NAMES=FALSE, analyte=analytes[i]) }
+    for(i in 1:length(analytes)){ data.names <- sapply(data.names, rename, USE.NAMES=FALSE, analyte=analytes[i]) }
 
     #read units
     data.units <- scan(file.name, skip=2, what = character(), nlines = 1, quiet=TRUE, sep="\t")
     data.units <- c("Y-M-D H:M:S GMT",data.units)
-    f00<- function(ans) #strip brackets from strings
+    tidy<- function(ans) #strip brackets from strings
               {if(!ans=="")  
                   {if(substr(ans,1,1)=="(" & substr(ans,nchar(ans),nchar(ans))==")" ) (substr(ans,2,(nchar(ans)-1))) else ans} 
               else ans}
-    data.units <- sapply(data.units, f00, USE.NAMES=FALSE)
+    data.units <- sapply(data.units, tidy, USE.NAMES=FALSE)
 
 ################
 #currently gps not handled

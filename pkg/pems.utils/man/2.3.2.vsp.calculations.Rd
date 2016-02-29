@@ -193,12 +193,9 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
 #basic usage
 
-ans <- calcVSP(velocity, time = local.time, data = pems.1)
+vsp <- calcVSP(velocity, time = local.time, data = pems.1)
 
-#ans <- pems.1 + calculated vsp
-
-
-
+#where vsp, the returned object, is supplied as a pems.element
 
 }
 

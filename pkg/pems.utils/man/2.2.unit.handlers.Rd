@@ -23,12 +23,12 @@ getUnits(input = NULL, data = NULL, ...,
 
 setUnits(input = NULL, units = NULL, data = NULL, ..., 
          if.missing = c("stop", "warning", "return"), 
-         output = c("special", "input", "data.frame", "pems"),
+         output = c("input", "data.frame", "pems", "special"),
          force = FALSE, overwrite = FALSE, hijack = FALSE)
 
 convertUnits(input = NULL, to = NULL, from = NULL, data = NULL, ..., 
          if.missing = c("stop", "warning", "return"), 
-         output = c("special", "input", "data.frame", "pems"), 
+         output = c("input", "data.frame", "pems", "special"), 
          unit.conversions = NULL, force = FALSE, overwrite = FALSE, 
          hijack = FALSE)
 
@@ -192,12 +192,12 @@ listUnitConversions(unit.conversions = ref.unit.conversions, ...,
  
 }
 
-\section{Warning }{
-  None currently
-}
+%\section{Warning }{
+%  None currently
+%}
 
 \seealso{
-  None currently
+  \code{\link{pems.element}}
 }
 \examples{
 
@@ -213,14 +213,18 @@ getUnits(velocity, pems.1) #km/h
 
 #setting units
 a <- 1:10
-a <- setUnits(a, "km/h")
+a <- setUnits(a, "km/h") #add unit 
+
+#alternaltive 
+#using pems.element
+#a <- pems.element(a, units="km/h", name = "a") 
 
 #changing units
 convertUnits(a, "mi/h")
 
 # [1] 0.6213712 1.2427424 1.8641136 2.4854848 3.1068560 3.7282272 4.3495983
 # [8] 4.9709695 5.5923407 6.2137119
-# units: "mi/h"
+# pems.element; [unnamed] [mi/h] [n = 10]
 
 ###########
 ##example 2

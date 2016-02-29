@@ -78,7 +78,20 @@ checkInput <- function(input = NULL, data = NULL,
                               "if.missing", "allowed if.missings", 
                               fun.name = "checkInput")
 
-    if(is.null(try(input, silent=TRUE))){
+#######################
+#does not seem to like
+#try in if loop anymore
+#hence test <- ... below
+#test used in both
+#######################
+#later stuff might now 
+#redundant....
+#######################
+#need to look into both
+#######################
+
+    test <- try(input, silent=TRUE)
+    if(is.null(test)){
          if(if.missing == "stop")
               stop(paste("\t In ", fun.name,"(...) no ", input.name, " set", sep=""), 
                   call. = FALSE, domain = NA)
@@ -87,6 +100,20 @@ checkInput <- function(input = NULL, data = NULL,
                      "\n\t [returning NULL]", 
                      call. = FALSE, domain = NA)
          return(NULL)
+    }
+
+###############
+#real bit 
+#to supercede hijack
+###############
+
+    if(is(test)[1] != "try-error"){
+        if(is.character(input) && length(input)==1 && !is.null(data)){
+            test2 <- try(data[input], silent=TRUE)
+            if(is(test2)[1] != "try-error") 
+                if(output=="test.result") return(TRUE) else return(test2)
+        }
+        if(output=="test.result") return(TRUE) else return(test)
     }
 
     ###########################

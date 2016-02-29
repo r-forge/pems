@@ -64,7 +64,7 @@
 
 calcChecks <- function(fun.name = "calcChecks", ..., data = NULL,
                    if.missing = c("stop", "warning", "return"), 
-                   output = c("special", "input", "data.frame", "pems"),
+                   output = c("input", "data.frame", "pems", "special"),
                    unit.conversions = NULL, overwrite = FALSE){
 
     #output handling

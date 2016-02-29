@@ -292,7 +292,8 @@ importRoyalTek2PEMS(file.name = file.choose(),
 %}
 
 \seealso{
-  See \code{\link{ref.unit.conversions}} and \code{\link{convertUnits}} for general unit handling. 
+  See \code{\link{ref.unit.conversions}} and \code{\link{convertUnits}} for general unit handling; 
+  \code{\link{merge.pems}} for pems data merging and alignment. 
 }
 \examples{
 
@@ -301,6 +302,7 @@ importRoyalTek2PEMS(file.name = file.choose(),
 ###########
 
 #make little pems
+
 data <- data.frame(speed=1:10, emissions=1:10)
 units <- c("m/s", "g/s")
 pems <- pems(x = data, units=units, example="my record") 
@@ -308,6 +310,11 @@ pems <- pems(x = data, units=units, example="my record")
 pems                       #the pems object
 summary(pems)              #summary of held data
 pems$speed                 #the speed pems.element
+
+#import data file as pems using import... functions
+
+#For example, to import CSV file as pems object 
+#pems <- importCSV2PEMS() 
 
 }
 

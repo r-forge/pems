@@ -43,10 +43,12 @@
   None at present
 }
 
-\examples{
-
-#to be confirmed
-
+\seealso{
+  See examples in \code{\link{pems.structure}}. 
 }
+
+%\examples{
+%#to be confirmed
+%}
 
 \keyword{datasets}

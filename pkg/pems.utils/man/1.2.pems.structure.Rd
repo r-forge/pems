@@ -129,6 +129,13 @@ pemsHistory(pems=NULL, ...,
 
 #basic usage
 
+#using example data pems.1
+#(supplied as part of pems.utils pacakage)
+
+#pems structure
+pems.1
+
+#the pems.1 element velocity
 pemsElement(velocity, pems.1)
 
 #check... equivalent

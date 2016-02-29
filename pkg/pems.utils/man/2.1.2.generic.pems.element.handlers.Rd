@@ -91,12 +91,8 @@
 
 \examples{
 
-\dontrun{
-
 #the velocity pems.element in pems.1
 pems.1$velocity
-
-} 
 
 }
 

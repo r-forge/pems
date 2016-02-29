@@ -12,6 +12,7 @@
 \alias{preprocess.WatsonPlot}
 \alias{panel.WatsonBinPlot}
 \alias{panel.WatsonContourPlot}
+\alias{panel.WatsonSmoothContourPlot}
 
 
 \title{
@@ -44,8 +45,8 @@ panel.pemsPlot(..., loa.settings = FALSE)
 
 #WatsonPlot
 
-WatsonPlot(x, y = NULL, ..., data = NULL, z = NULL, cond = NULL, 
-         plot.type=1, fun.name = "WatsonPlot", scheme = pems.scheme)
+WatsonPlot(speed, accel = NULL, z = NULL, cond = NULL, ..., data = NULL, 
+         plot.type=2, fun.name = "WatsonPlot", scheme = pems.scheme)
 
 #WatsonPlot elements
 
@@ -57,6 +58,9 @@ panel.WatsonBinPlot(..., ref.line = TRUE, process.panel = panel.binPlot,
 
 panel.WatsonContourPlot(..., plot.panel=panel.kernelDensity, process = TRUE, 
          plot = TRUE, loa.settings = FALSE)
+
+panel.WatsonSmoothContourPlot(..., plot.panel=panel.surfaceSmooth,          
+         process = TRUE, plot = TRUE, loa.settings = FALSE)
 
 
 
@@ -94,19 +98,13 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
   For old plots, these must be formulae.         
 
-  For \code{latticePlot} the basic formula structure is \code{y ~ x | cond}, where 
-  \code{y} is the data series to use as the y-axis, \code{x} is the data series to 
-  as the x-axis and \code{cond} is an addition 'conditioning' data series which is 
-  used to separate the data into different subplots. 
+  For \code{latticePlot} the basic formula structure is \code{y ~ x | cond}. 
 
-  For \code{XYZPlot} the basic formula structure is \code{z ~ y * x | cond}, 
-  \code{z} is the data series to use as the z-axis or z element of the plot,  
-  \code{y} is the data series to use as the y-axis, \code{x} is the data series to 
-  as the x-axis and \code{cond} is an addition 'conditioning' data series which is 
-  used to separate the data into different subplots. \code{z} is optional, but When 
-  it is not supplied \code{z} it is treated as the bin count. 
+  For \code{XYZPlot} the basic formula structure is \code{z ~ y * x | cond}. 
+  \code{z} is optional, but when it is not supplied \code{z} it is treated 
+  as the bin count. 
   
-  See Notes, Warnings and Examples.  
+  See Notes and Examples.  
 } 
 
   \item{data}{
@@ -149,6 +147,12 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   allow plot developers to fine-tune plots. See Details below.
   }
 
+  \item{speed, accel}{
+  (Various) For \code{WatsonPlot}. The \code{x} and \code{y} terms, speed and acceleration, 
+  respectively, for a Watson plot. As with \code{x} above, the first term can be either the 
+  \code{x} data-series, or a plot formula in form \code{z~x*y|cond}.
+  }
+
   \item{ref.line}{
   (Logical or list) For \code{WatsonPlot}. This argument manages the speed = 0 reference 
   added to WatsonPlots. It can be either a logical (\code{TRUE}/\code{FALSE}), to turn the 
@@ -162,8 +166,9 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   } 
 
   \item{plot.type}{
-  (numeric) For {WatsonPlot}. Pre-set plot types: \code{1} bin plot of frequencies; 
-  \code{2} contour plot of frequencies.     
+  (numeric) For {WatsonPlot}. Pre-set plot types: \code{1} scatter plot; 
+  \code{2} bin plot; \code{3} contour plot of binned data; \code{4} smoothed 
+  surface of binned data. See also \code{statistic}     
   } 
 
   \item{greyscale}{
@@ -180,8 +185,10 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 }
 
   \item{statistic}{
-   (Function) when binning data with \code{XYZPlot}, the function to use when evaluation the 
-   elements of each data bin.
+   (Function) when binning data with \code{XYZPlot} and \code{WatsonPlot}, the function to use when 
+   evaluating the elements of each data bin. By default, \code{length} is used if \code{z} is 
+   not supplied to generate a frequency plot and \code{mean} is used if \code{z} is supplied to 
+   generate a bin average plot. 
 }
 
   \item{x.res, y.res}{
@@ -221,7 +228,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   of plot generation. These use the \code{\link{loa}} modification of the \code{\link{lattice}} 
   plotting framework.    
 
-  See Examples, Notes and Warnings. 
+  See Notes and Examples. 
  
 }
 
@@ -254,7 +261,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   http://CRAN.R-project.org/package=latticeExtra
 
   \code{\link{lattice}} is one of number of really nice graphical tools in \code{R}. 
-  Others, like \code{ggplot2}, \code{hexplot} and \code{iplot}, help you to very 
+  Others, like \code{ggplot2} and \code{iplot}, help you to very 
   quickly explore your data. But, for me the trellis framework of \code{\link{lattice}} 
   has always been the most flexible.
 
@@ -312,7 +319,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
 }
 
-\section{Warning }{
+\section{Warning}{
   
   IMPORTANT: Conditioning is currently disabled on \code{XYZPlot}.
 
@@ -320,30 +327,49 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   be replaced when \code{pems.utils.0.3} is released.
   
   With all these functions I have tried to make the default plotting options as robust as possible. 
-  However, it is impossible to test all the plot combines that users might try. So, please let me know 
-  if anything is not working nicely for you. Thanks.
+  However, it is not always possible to test all the plot combines that users might try. So, please 
+  let me know if anything is not working nicely for you. Thanks.
 
 }
 
 
 \seealso{
   See \code{\link{lattice}}, \code{latticeExtra}, \code{\link{loa}}.
-  
 }
 \examples{
 
 ###########
-##example 1 
+##example 1
+###########
+
+#plotting pems with other packages
+
+#base 
+##plot(pems.1)
+##plot(pems.1$velocity)
+
+##in lattice, xyplot(velocity~local.time, data = pemsData(pems.1), type = "l")
+#Note: to use lattice functions directly with pems objects
+#      just pass data component with data = pemsData(pems) 
+#      (NOT data = pems)
+#Note: See also latticePlot as an alternative to data = pemsData(pems) 
+
+#in ggplot2
+
+#Note: Suggests only so you need to load this...
+##require(ggplot2)
+##qplot(time.stamp, velocity, data=pems.1)
+##ggplot(pems.1, aes(x = time.stamp, y = velocity)) + geom_line() 
+#etc
+
+
+###########
+##example 2 
 ###########
 
 #basic usage of latticePlot
 
 latticePlot(velocity~local.time, data = pems.1, type = "l")
-
-#in lattice, xyplot(velocity~local.time, data = getData(pems.1), type = "l")
-#Note: to use lattice functions directly with pems objects
-#      just pass data component with data = getData(pems) 
-#      (NOT data = pems)
 
 latticePlot(velocity~local.time, data = pems.1, col = "red", 
             pch = 20, panel = panel.PEMSXYPlot, 
@@ -351,12 +377,12 @@ latticePlot(velocity~local.time, data = pems.1, col = "red",
 
 
 ###########
-##example 2 
+##example 3 
 ###########
 
 #basic usage of XYZPlot
 
-a <- calcAccel(velocity, local.time, data = pems.1)
+a <- calcAccel(velocity, local.time, data = pems.1, output="pems")
 
 XYZPlot(~accel*velocity, data=a)
 
@@ -364,7 +390,7 @@ XYZPlot(~accel*velocity, data=a, plot = wireframe, shade=TRUE)
 
 
 ###########
-##example 3 
+##example 4 
 ###########
 
 #basic usage of pemsPlot
@@ -378,7 +404,24 @@ pemsPlot(~local.time*velocity, data=pems.1, type="l")
 #pemsPlot(local.time, velocity, data=pems.1, type="l")
 
 
+###########
+##example 5 
+###########
 
+#basic usage of WatsonPlot
+
+#use object generated in example 3 
+WatsonPlot(velocity, accel, data=a)
+
+#omit.stopped for different handling of idling data
+##WatsonPlot(velocity, accel, data=a, omit.stopped="points")
+##WatsonPlot(velocity, accel, data=a, omit.stopped="cells")
+
+#plot.type for different plot methods
+##WatsonPlot(velocity, accel, data=a, plot.type=1)
+##WatsonPlot(velocity, accel, data=a, plot.type=2)
+##WatsonPlot(velocity, accel, data=a, plot.type=3)
+##WatsonPlot(velocity, accel, data=a, plot.type=4)
 
 
 }

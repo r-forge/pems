@@ -887,7 +887,11 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
     if(check.value=="vector"){
         if("units" %in% names(attributes(value))){
             for(jj in j){
-               if(check.op || is.null(x$units[1,jj]) || is.na(x$units[1,jj]) || x$units[1,jj]=="")
+######################
+#update units of input 
+#replaces units of pems
+#######################
+##               if(check.op || is.null(x$units[1,jj]) || is.na(x$units[1,jj]) || x$units[1,jj]=="")
                   x$units[1,jj] <- attributes(value)$units
 ##                  attributes(x$data[,jj]) <- attributes(value)
                }
@@ -897,10 +901,14 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 #might need an error catcher for 
 #not pems.units
          for(jj in 1:length(j))
-             if(is.null(x$units[1,j[jj]]) || is.na(x$units[1,j[jj]]) || x$units[1,j[jj]]==""){
+######################
+#update units of input 
+#replaces units of pems
+#######################
+##             if(is.null(x$units[1,j[jj]]) || is.na(x$units[1,j[jj]]) || x$units[1,j[jj]]==""){
                  x$units[1,j[jj]] <- pems.units[1,jj]
 ##                 attributes(x$data[,j[jj]]) <- attributes(value[,jj])
-             }
+##             }
     }    
 
     #####################

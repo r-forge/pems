@@ -79,7 +79,7 @@ getUnits <- function(input = NULL, data = NULL, ...,
 
 setUnits <- function(input = NULL, units = NULL, data = NULL, ..., 
                      if.missing = c("stop", "warning", "return"), 
-                     output = c("special", "input", "data.frame", "pems"),
+                     output = c("input", "data.frame", "pems", "special"),
                      force = FALSE, overwrite = FALSE, hijack = FALSE){
 
     fun.name <- "setUnits"
@@ -135,6 +135,8 @@ setUnits <- function(input = NULL, units = NULL, data = NULL, ...,
                     paste("\n\t [or setUnits(..., force = TRUE) if reset really wanted]", sep=""), 
                     call. = FALSE, domain = NA)
     }
+    if(output=="input")
+        attr(ans, "class") <- unique(c("pems.element", attr(ans, "class")))
 
     checkOutput(input = ans, data = data, if.missing = if.missing, 
                 fun.name = "setUnits", output = output, overwrite = overwrite) 
@@ -161,7 +163,7 @@ setUnits <- function(input = NULL, units = NULL, data = NULL, ...,
 
 convertUnits <- function(input = NULL, to = NULL, from = NULL, data = NULL, ..., 
                          if.missing = c("stop", "warning", "return"), 
-                         output = c("special", "input", "data.frame", "pems"),
+                         output = c("input", "data.frame", "pems", "special"),
                          unit.conversions = NULL, force = FALSE, overwrite = FALSE,
                          hijack = FALSE){
 

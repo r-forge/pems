@@ -1,12 +1,12 @@
 \name{1.4.export.data}
 \alias{1.4.export.data}
 \alias{export.data}
-\alias{exportData}
+\alias{exportPEMSData}
 
 
 
 \title{
-  exporting data data
+  exporting PEMS data
 }
 
 \description{
@@ -16,7 +16,7 @@
 \usage{
 
  
-exportData(data, file="tempfile.txt", ..., 
+exportPEMSData(data, file="tempfile", ..., 
           sep="\t", file.writer = write.table,
           row.names = FALSE)
 
@@ -30,7 +30,7 @@ exportData(data, file="tempfile.txt", ...,
 \arguments{
 
   \item{data}{
-  (A required object) The object to export or export data from. For \code{ExportData}.   
+  (A required object) The object to export or export data from.   
 } 
 
   \item{file}{
@@ -54,14 +54,14 @@ exportData(data, file="tempfile.txt", ...,
 
 \details{
 
-  \code{exportData} exports the data component of a \code{pems} object.  
+  \code{exportPEMSData} exports the data component of a \code{pems} object.  
 }
 
 
 \value{
 
-  \code{exportData} generates a tab-delimited file using the supplied data. If a file name is 
-  not set using \code{file}, it is called \code{tempfile.txt}.  
+  By default, \code{exportPEMSData} generates a tab-delimited file using the supplied data. 
+  If a file name is not set using the \code{file} argument, it is named \code{tempfile}.  
   
 
 }
@@ -98,9 +98,8 @@ exportData(data, file="tempfile.txt", ...,
 
 #making a tab-delimited copy of pems.1
 
-##exportData(pems.1, "pems.example.txt")
+##exportPEMSData(pems.1, "pems.example.txt")
 ##dir()
-
 
 }
 

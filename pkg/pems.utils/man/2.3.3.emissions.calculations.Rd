@@ -21,8 +21,8 @@ calcEm(conc = NULL, time = NULL, calc.method = calcEmHoribaPitot,
           analyte = NULL, ..., data = NULL, fun.name = "calcEm", 
           force = FALSE, this.call = NULL, hijack= FALSE)
 
-calcEmHoribaPitot(conc = NULL, time = local.time, exflow = exh.flow.rate, 
-          extemp = exh.temp, express = exh.press, analyte = NULL, 
+calcEmHoribaPitot(conc = NULL, time = "local.time", exflow = "exh.flow.rate", 
+          extemp = "exh.temp", express = "exh.press", analyte = NULL, 
           delay = NULL, mm = NULL, ..., force = force, data = NULL, 
           fun.name = "calcEmHoribaPitot", this.call = NULL, hijack= FALSE)
 
@@ -159,9 +159,9 @@ calcEmHoribaPitot(conc = NULL, time = local.time, exflow = exh.flow.rate,
 
 #basic usage
 
-ans <- calcEm(conc.co, data = pems.1)
+em.co <- calcEm(conc.co, data = pems.1)
 
-#ans <- pems.1 + calculated co emissions
+#em.co pems.elements
 
 
 

@@ -138,6 +138,7 @@ calcPack2(input, ..., settings = NULL, data = NULL)
 
 #basic usage
 
+zeroNegatives(-10:10) #etc
 
 
 

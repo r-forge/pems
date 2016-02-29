@@ -40,7 +40,7 @@ calcJerk(accel = NULL, time = NULL, data = NULL,
 
 calcChecks(fun.name = "calcChecks", ..., data = NULL,
           if.missing = c("stop", "warning", "return"), 
-          output = c("special", "input", "data.frame", "pems"),
+          output = c("input", "data.frame", "pems", "special"),
           unit.conversions = NULL, overwrite = FALSE)
 
 calcPack(output = NULL, data = NULL, settings = NULL, 
@@ -101,10 +101,13 @@ calcPack(output = NULL, data = NULL, settings = NULL,
   \code{calcJerk} calculates jerk (rate of change of acceleration in m/s/s/s) using 
   acceleration and time.
 
-  By default results are returned in the supplied format. So: If inputs are supplied 
-  as vectors, the answer is returned as a vector; If inputs are supplied in a 
-  \code{pems} object, that \code{pems} object is returned with the answer added in. 
-  This behaviour is enabled by the default \code{output = "special"}. 
+  By default results are returned as \code{pems.elements}. Other options include 
+  returning as the original data plus the results as either a \code{data.frame} or a 
+  \code{pems} object. One final option is to return the results in the supplied 
+  format. So, for example, uf: inputs are supplied as vectors, the answer is returned 
+  as a vector; If inputs are supplied in a \code{pems} object, that \code{pems} object 
+  is returned with the answer added in. This behaviour is enabled by the default 
+  \code{output = "special"}. 
 
   Unit management is by \code{\link{convertUnits}}. See Note below. 
 
@@ -167,13 +170,17 @@ calcPack(output = NULL, data = NULL, settings = NULL,
 
 #basic usage
 
-ans <- calcAccel(velocity, local.time, pems.1)
+#calculated accel as pems.element
 
-#ans = pems.1 + calculated accel
+calcAccel(velocity, local.time, pems.1)
 
-ans <- calcAccel(velocity, local.time, pems.1, output = "input")
+#answer returned as suppied pems + calculated accel
 
-#ans = calculated accel
+calcAccel(velocity, local.time, pems.1, output = "pems")
+
+#or, if you would rather... 
+#ans <- pems.1
+#ans$accel <- calcAccel(velocity, local.time, pems.1)
 
 
 ###########
@@ -185,7 +192,7 @@ ans <- calcAccel(velocity, local.time, pems.1, output = "input")
 my.pems <- list(pems.1, pems.1)
 
 sapply(my.pems, function(x) 
-                  calcAccel(velocity, local.time, data=x, output="input"))
+                  calcAccel(velocity, local.time, data=x))
 
 #ans = accel data series for each pems in my.pems list
 
@@ -200,11 +207,11 @@ sapply(my.pems, function(x)
 
 #or
 #lapply(my.pems, function(x) 
-#                  calcAccel(velocity, local.time, data=x))
+#                  calcAccel(velocity, local.time, data=x, output="pems"))
 #for output as a list of pems objects with accel added to each
 
 #note:
-#sapply if you can/want to simiplify output to data.frame
+#sapply if you can/want to simiplify outputs
 #lapply if you want to keep output as a list of answers
 
 
@@ -265,7 +272,7 @@ my.fun <- function(speed, time, data = NULL, hijack = FALSE,
 
 }
 
-ans <- my.fun(velocity, local.time, pems.1)
+ans <- my.fun(velocity, local.time, pems.1, output="pems")
 
 #seems long winded but gives you control of 
 ##the error handling, unit management, and output type
@@ -274,12 +281,11 @@ ans <- my.fun(velocity, local.time, pems.1)
 ##and lets you do this
 
 ans <- lapply(my.pems, function(x) 
-                  my.fun(velocity, local.time, data=x))
+                  my.fun(velocity, local.time, data=x, output="pems"))
 
 #which will not always work if you are running 
 #functions in functions, especially if those functions
 #are also running functions in functions...
-
 
 
 }

@@ -91,6 +91,11 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
 
         #check for attributes 
         #if not give it some
+
+#new addition
+#as part non-special behaviour...
+        attr(cut, "class") <- unique(c("pems.element", attr(cut, "class")))
+#
         if(is.null(attributes(cut)$name))
             attr(cut, "name") <- "cut"
         if(is.null(attributes(cut)$units))
