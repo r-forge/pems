@@ -1,7 +1,7 @@
 Package: pems.utils
 Type: Package
-Title: ‘functions for the routine handling and analysis of data collected by portable emissions measurement systems (PEMS) and other similar mobile monitoring systems’
-‘Functions for the Routine Handling and Analysis of Data Collected by Portable Emissions Measurement Systems (PEMS) and Other Similar Mobile Monitoring Systems’
+Title: 'functions for the routine handling and analysis of data collected by portable emissions measurement systems (PEMS) and other similar mobile monitoring systems'
+   'Functions for the Routine Handling and Analysis of Data Collected by Portable Emissions Measurement Systems (PEMS) and Other Similar Mobile Monitoring Systems'
 Version: 0.2.17.3
 Date: 2016-02-29
 Author: Karl Ropkins
