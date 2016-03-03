@@ -1,3 +1,20 @@
+##########################
+##########################
+##above all else code 
+##(hidden here because 
+## first .r code file 
+## alphabetically)
+##########################
+##########################
+
+#example
+#utils::globalVariables(c("a", "othervar"))
+
+globalVariables(c("pems.scheme", "ref.unit.conversions", "ref.chem", "ref.diesel", "ref.petrol",
+                  "panel.surfaceSmooth"))
+
+#panel.surfaceSmooth only needed until new version of loa gets on CRAN...
+
 
 ##########################
 ##########################

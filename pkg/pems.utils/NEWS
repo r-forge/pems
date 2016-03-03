@@ -1,13 +1,15 @@
-Changes in pems.utils 0.2.17 [2016-02-29]
+Changes in pems.utils 0.2.17 [2016-02-02]
 ========================================
 
-*       expanded description, tidy re 
-        pems.utils2CRAN.
+*       redrafted title and description 
+        (tidy re pems.utils2CRAN)
 *       changed calcEmHoribaPitot formals 
         (catch check note; re pems.utils2CRAN)
 *       documentation tidy re pems.utils2CRAN
 *       pemsPlot zlab tidy re pems.utils2CRAN
-*
+*       added up-front code (in calcEm, to 
+        catch check note on data object object
+        names; re pems.utils2CRAN 
 
 
 Changes in pems.utils 0.2.16 [2015-12-28]

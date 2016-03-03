@@ -10,6 +10,15 @@
 import(lattice)
 import(loa)
 
+#requested by CRAN
+importFrom("grDevices", "colorRampPalette", "gray")
+importFrom("graphics", "abline", "arrows", "plot")
+importFrom("methods", "is")
+importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
+           "na.omit", "na.pass")
+importFrom("utils", "read.csv", "read.delim", "write.table")
+
+
 #imported packages 
 #import(utils) #just importing head and tail methods
 import(grid)
