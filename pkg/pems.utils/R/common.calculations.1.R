@@ -190,7 +190,7 @@ calcSpeed <- function(distance = NULL, time = NULL, data = NULL,
         distance <- checkInput(distance, data=data)
     if(is.null(distance))
          checkIfMissing(settings$if.missing, reply = "argument 'distance' not supplied or null")
-    distance <- convertUnits(speed, to = "m", fun.name = fun.name, 
+    distance <- convertUnits(distance, to = "m", fun.name = fun.name, 
                        unit.conversions = settings$unit.conversions, hijack = TRUE)
 
     #time

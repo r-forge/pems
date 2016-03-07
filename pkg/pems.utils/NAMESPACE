@@ -50,7 +50,8 @@ export(importOBS2PEMS)
 export(importOB12PEMS) 
 export(importParSYNC2PEMS)
 export(importCAGE2PEMS)
-export(importRoyalTek2PEMS) 
+export(importRoyalTek2PEMS)
+export(importKML2PEMS) 
 
 #structure
 export(pemsElement)

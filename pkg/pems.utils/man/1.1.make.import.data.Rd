@@ -18,6 +18,7 @@
 \alias{importParSYNC2PEMS}
 \alias{importCAGE2PEMS}
 \alias{importRoyalTek2PEMS}
+\alias{importKML2PEMS}
 
 
 
@@ -93,6 +94,14 @@ importRoyalTek2PEMS(file.name = file.choose(),
           file.type = c("special", "txt", "nmea"),
           vbox = "RoyalTEk", history = NULL, constants = NULL, ...) 
 
+
+#KML files
+
+
+importKML2PEMS(file.name = file.choose(), history = NULL, 
+    constants = NULL, source = "Unknown", ...) 
+
+
 }
 
 
@@ -158,7 +167,7 @@ importRoyalTek2PEMS(file.name = file.choose(),
   respectively.   
 }
 
-  \item{pems, vbox, pm.analyzer, calibrator}{
+  \item{pems, vbox, pm.analyzer, calibrator, source}{
   (Character vectors) For some \code{import...} functions, data source descriptions may be automatically 
   added to the \code{pems} object. \code{pems} and \code{vbox} are two examples, but others, such as 
   vehicle and fuel descritpions can also be added in a similar fashion. Note: These are for user-reference, 
@@ -222,6 +231,9 @@ importRoyalTek2PEMS(file.name = file.choose(),
 
   \code{importRoyalTek2PEMS} imports \code{.txt} and \code{.nmea} format Royal Tek GPS files and 
   converts them to \code{pems} objects. See Notes below. 
+
+  \code{importKML2PEMS} imports \code{.kml} format KML files and 
+  converts them to \code{pems} objects. See Notes below. 
  
 }
 
@@ -282,7 +294,13 @@ importRoyalTek2PEMS(file.name = file.choose(),
 
   With \code{importCAGE2PEMS}, handling is similar to that with \code{importParSYNC2PEMS}. 
 
-  With \code{importRoyalTek2PEMS}, the Royal Tek data modifications are currently being documented.   
+  With \code{importRoyalTek2PEMS}, the Royal Tek data modifications are currently being documented.  
+
+  With \code{importKML2PEMS}, the function attempts to import and time.stamp, latitude, longtiude and altitude data 
+  in the suppled KML file. This function in in-development and has so far only been used with KML files from one 
+  source, so handle with care.  
+
+ 
  
 }
 
