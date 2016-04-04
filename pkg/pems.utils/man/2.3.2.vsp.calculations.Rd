@@ -168,6 +168,9 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
  \code{vsp = speed * (a * accel + (g * slope) + b) + (c * speed^3)}
 
+ In all cases, by default b = 0.132, g = 9.81, and if not supplied \code{slope} is assumed to be 
+ zero and \code{m} is assumed to 1.5 metric tons.
+
  For vehicles < 3.855 metric tons; a = 1.1, and c = 0.000302 (as of Jimenez-Palacios, 1999).
 
  For vehicles 3.855 to 6.350 metric tone; a = 0.0996m/2204.6, c = 1.47 + 5.22e-5m/2205 (as of 
@@ -178,9 +181,6 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
  For vehicles > 14.968 metric tone; a = 0.0661m/2204.6, c = 2.89 + 4.21e-5m/2205 (as of 
  Giannelli et al, 2005).
-
- In all cases, by default b = 0.132, g = 9.81, and if not supplied \code{slope} is assumed to be 
- zero and \code{m} is assumed to 1.5 metric tons.
 
 }
 
