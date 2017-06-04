@@ -5,36 +5,36 @@
 ##########################
 
 
-#additional (1)
+#additional (4)
 
 #work in progress
 
 
 #############################
 #############################
-##importKML2PEMS
+##importSEMTECH2PEMS
 #############################
 #############################
 
-#quick importer for KML data
-#started 07-03-2016
-#kr v0.0.1 (07-03-2016)
+#quick importer for Sensors Inc SEMTECH data
+#started 03/03/2016
+#kr v0.0.2 (17-02-2017)
 
 
 #?? functions (see note)
 ###################
-#importKML2PEMS
+#importSEMTECH2PEMS
 #
 
-#currently very crude because kml may be very variable
+#currently very crude I have very few examples to work on
+#from [client053] and 3DATX [and sent to them by non-client018] 
 
 
 ###################
 #to do
 ###################
 #tidy
-#add distance and speed
-#see addSpeed2KML in working in pems.tsc
+#
 
 
 ###################
@@ -43,147 +43,123 @@
 #
 
 ###################
-#importKML2PEMS
+#importSEMTECH2PEMS
 ###################
 
 
-importKML2PEMS <- function (file.name = file.choose(), history = NULL, 
-    constants = NULL, source = "Unknown", ...) 
+importSEMTECH2PEMS <- function (file.name = file.choose(), history = NULL, 
+    constants = NULL, pems = "SEMTECH", ...) 
 {
 
-    #importer for KML for an outknown source
-    #version one and we know there are lots of versions
-    #so test = TRUE, and reject if does not recognise it
-
-#example > head(ans, 20)
-# [1] "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"                                                                                                                                           
-# [2] "<kml xmlns=\"http://www.opengis.net/kml/2.2\" xmlns:gx=\"http://www.google.com/kml/ext/2.2\" xmlns:kml=\"http://www.opengis.net/kml/2.2\" xmlns:atom=\"http://www.w3.org/2005/Atom\">"
-# [3] "  <Document>"                                                                                                                                                                         
-# [4] "    <description>Van run for battery</description>"                                                                                                                                   
-# [5] "    <TimeSpan>"                                                                                                                                                                       
-# [6] "      <begin>2016-02-05T11:58:14.000Z</begin>"                                                                                                                                        
-# [7] "      <end>2016-02-05T13:33:30.000Z</end>"                                                                                                                                            
-# [8] "    </TimeSpan>"                                                                                                                                                                      
-# [9] "    <Placemark>"                                                                                                                                                                      
-#[10] "      <name>Motorbiking</name>"                                                                                                                                                       
-#[11] "      <Style>"                                                                                                                                                                        
-#[12] "        <LineStyle>"                                                                                                                                                                  
-#[13] "          <color>ffff0000</color>"                                                                                                                                                    
-#[14] "          <width>5</width>"                                                                                                                                                           
-#[15] "        </LineStyle>"                                                                                                                                                                 
-#[16] "      </Style>"                                                                                                                                                                       
-#[17] "      <LineString>"                                                                                                                                                                   
-#[18] "        <tessellate>1</tessellate>"                                                                                                                                                   
-#[19] "        <coordinates>-1.8313721418380737,53.9264297485351562,109.0000000000000000"                                                                                                    
-#[20] "-1.8313690423965454,53.9264373779296875,110.0000000000000000"     
-#> tail(ans)
-#[1] "-1.8314907550811768,53.9267654418945312,142.0000000000000000"
-#[2] "</coordinates>"                                              
-#[3] "      </LineString>"                                         
-#[4] "    </Placemark>"                                            
-#[5] "  </Document>"                                               
-#[6] "</kml>"                                                      
- 
+    #setup
     this.call <- match.call()
-    fun.name <- "importKML2PEMS"
+    fun.name <- "importSEMTECH2PEMS"
     extra.args <- list(...)
 
+    #lower case names 
+    #current default is not to
+########################
+#follow *** lead on this
+########################
     to.lower <- if ("to.lower" %in% names(extra.args)) 
         extra.args$to.lower
-    else TRUE
+    else FALSE
     extra.args <- extra.args[!names(extra.args) %in% "to.lower"]
 
-    test <- if ("test" %in% names(extra.args)) 
-        extra.args$test else TRUE
-    extra.args <- extra.args[!names(extra.args) %in% "test"]
+    time.format <- if ("time.format" %in% names(extra.args)) 
+        extra.args$time.format
+    else "%m/%d/%Y %H:%M:%OS"
+    extra.args <- extra.args[!names(extra.args) %in% "time.format"]
 
-#this is currently only for KML files
-#kmz would need unzipping first
+    #drop.source.date.time 
+    #current default is not to
+########################
+#follow *** lead on this
+########################
+    drop.source.date.time <- if ("drop.source.date.time" %in% names(extra.args)) 
+        extra.args$drop.source.date.time
+    else FALSE
+    extra.args <- extra.args[!names(extra.args) %in% "drop.source.date.time"] 
 
-#    extra.args <- listUpdate(list(header = TRUE), extra.args)
-#    extra.args$file <- file.name
-#see readLines help 
-#it does not want any extra args it does not know
-#formals check/update? 
+    #make.names.unique 
+    #current default is not to
+########################
+#follow *** lead on this
+########################
+    make.names.unique <- if ("make.names.unique" %in% names(extra.args)) 
+        extra.args$make.names.unique
+    else TRUE
+    extra.args <- extra.args[!names(extra.args) %in% "make.names.unique"] 
 
-    ans <- readLines(file.name)
 
-    if(test){
-        if(length(grep("</kml>", ans))<1) 
-             stop("Sure this is KML? test=FALSE if so.")
-        temp <- FALSE
+    #get headers and units from data source
+    extra.args <- listUpdate(list(header = FALSE, stringsAsFactors=FALSE, nrow=3), extra.args)
+    extra.args$file <- file.name
+    headers <- do.call(read.csv, extra.args)
 
-        #tests for known structures
-        if(length(grep("<tessellate>1</tessellate>", ans))>0)
-              temp <- TRUE
-#possible alternative to tessellate
-# [8] "    </TimeSpan>"                                                                                                                                                                      
-# [9] "    <Placemark>" 
+    #exatract units
+    units <- as.character(headers[3,])
+    units <- gsub("n/a", "", units)
 
-        if(!temp)
-             stop("Not a KML format I know. test=FALSE to try to import anway...")
-    }
+    #get data from data source
+    extra.args <- extra.args[!names(extra.args) %in% "nrow"]
+    extra.args <- listUpdate(list(skip=3, na.strings=c("NA", "", "n/a")), extra.args)
+    data <- do.call(read.csv, extra.args)
 
-    #get begin and end
-    begin <- ans[grep("<begin>", ans)][1]
-    begin <- gsub(" ", "", begin)
-    begin <- gsub("<begin>", "", begin)
-    begin <- gsub("Z</begin>", "", begin)
-    begin <- as.POSIXct(strptime(begin, format = "%Y-%m-%dT%H:%M:%OS"))
+    #name data
+    #have to come back to this later
+    names(data) <- as.character(headers[2,])    
+    
+    #add in time.stamp and local.time
+    time.stamp <- paste(data$sDATE, data$sTIME, sep = " ")
+    temp <- time.stamp[1]
+    time.stamp <- as.POSIXct(strptime(time.stamp, format = time.format))
+    #check nothing appears to have gone wrong
+    if(all(is.na(time.stamp)))
+         warning("time.format [", time.format, "] data [", temp, "] mismatch", call. = FALSE)
+    local.time <- as.numeric(time.stamp - time.stamp[1])
+    units <- c("Y-M-D H:M:S", "s", units)
 
-    end <- ans[grep("<end>", ans)][1]
-    end <- gsub(" ", "", end)
-    end <- gsub("<end>", "", end)
-    end <- gsub("Z</end>", "", end)
-    end <- as.POSIXct(strptime(end, format = "%Y-%m-%dT%H:%M:%OS"))
+    #if asked to, remove source date and time record 
+    if(drop.source.date.time)
+        data <- data[names(data)[!names(data) %in% c("sDATE", "sTIME")]]
 
-#for later
-#because it is tesselate
-#return(seq(begin, end, length.out=10))
+    #check for evidence of different time formatting
+    if (any(is.na(local.time)) || any(diff(local.time) < 0)) 
+        warning("possible clocking issue with time stamp")
+    data <- cbind(data.frame(time.stamp=time.stamp, local.time=local.time), data)
 
-    ##kml documentation
-    #https://developers.google.com/kml/documentation/kml_tut#placemarks
-    #says this is lat, lon, alt
+    #name and unit resets
+    #do these before to.lower, make.names, etc 
+    #so names are what we expect, etc.
+    
+    #name resets
+    ##names[names(ans) == "old.name"] <- "new.name"
 
-    #get coord range
+    #unit resets
+    ##units <- rep("", length(names(ans)))
+    ##units[names(ans) == "time.stamp"] <- "Y-M-D H:M:S"
+    
+    #make names uniques 
+    #because some replication of names/info...
+    names(data) <- make.names(names(data), make.names.unique)    
 
-    temp <- grep("<coordinates>", ans)
-    ans <- ans[temp[length(temp)]:length(ans)]
-    temp <- grep("</coordinates>", ans)
-    ans <- ans[1:temp[length(temp)]]
-    ans <- gsub(" ", "", ans)
-    ans <- gsub("<coordinates>", "", ans)
-    ans <- gsub("</coordinates>", "", ans)
+    #convert names to lower case if required
+    if (to.lower) 
+        names(data) <- tolower(names(data))
 
-    ans <- unlist(strsplit(ans, ","))
-
-    lon <- as.numeric(ans[seq(1, length(ans), by=3)])
-    lat <- as.numeric(ans[seq(2, length(ans), by=3)])
-    alt <- as.numeric(ans[seq(3, length(ans), by=3)])
-
-    temp <- min(c(length(lat), length(lon), length(alt)), na.rm=TRUE) 
-    lat <- lat[1:temp]
-    lon <- lon[1:temp]
-    alt <- alt[1:temp]
-    ans <- data.frame(lat=lat, lon=lon, alt=alt)
-    temp <- seq(begin, end, length.out=temp)
-    temp <- data.frame(time.stamp = temp, 
-                       local.time = as.numeric(temp - temp[1]))
-    ans <- cbind(temp, ans)
-
-    #units
-    units <- c("Y-M-D H:M:S", "s", "d.degLat", "d.degLon", "m")
+#########################
+#could drop empty colums?
+#########################
 
     #output
-    if (to.lower) 
-        names(ans) <- tolower(names(ans))
-    output <- makePEMS(x = ans, units = units, constants = constants, 
-        history = history, source = source, ...)
-    class(output) <- "not.pems"
-    output$history[length(output$history)] <- this.call
-    class(output) <- "pems"
+################
+#could be tider
+################
+#this is tider than previous 
+#but still needs work
+    output <- makePEMS(x = data, units = units, constants = constants, 
+        history = this.call, pems = pems, ...)
+    output[["history"]] <- list(output[["history"]][[1]])
     return(output)
 }
-
-
-

@@ -263,6 +263,17 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
     
     #otherwise it is pems[i,j], etc
 
+#####################
+#new fix/testing
+#####################
+
+    #fix for logicals
+    if(is.logical(i))
+        i <- c(1:length(i))[i]
+    if(is.logical(j)) 
+        j <- c(1:length(j))[j]
+
+
     #negative handling 
 
     #at this stage we err out on negs
@@ -580,7 +591,9 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 
     #previous attempts to standardise value did not work
     check.value <- NULL
-    if(is.vector(value) | is(value)[1]=="pems.element" | is.factor(value)){
+#testing grepl("POSIX*", is(value)[1])
+#to insert time stamp into pems object
+    if(is.vector(value) | is(value)[1]=="pems.element" | is.factor(value) | grepl("POSIX*", is(value)[1])){
         check.value <- "vector"
         value.dim <- c(length(value),1)
     }

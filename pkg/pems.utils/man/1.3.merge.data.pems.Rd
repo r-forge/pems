@@ -238,10 +238,10 @@ ans <- cAlign(~conc.co, p1, p2)
 
 #this aligns by pairing elements in p1$time.stamp 
 #and p2$time.stamp
-#(NOTE: if time stamps have different names, as in 
+#(NOTE: if time stamps have different names 
 # tAlign(time1~time2, p1, p2), the time stamp name 
-# from p1, would be retained when merging time1$p1 
-# and time2$p2, generating ans$time1)  
+# from p1 would be retained when merging p1$time1 
+# and p2$time2, generating ans$time1)  
 
 }
 

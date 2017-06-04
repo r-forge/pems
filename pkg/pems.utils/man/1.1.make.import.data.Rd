@@ -19,6 +19,7 @@
 \alias{importCAGE2PEMS}
 \alias{importRoyalTek2PEMS}
 \alias{importKML2PEMS}
+\alias{importSEMTECH2PEMS}
 
 
 
@@ -83,9 +84,14 @@ importParSYNC2PEMS(file.name = file.choose(), reset.signals = TRUE,
          history = NULL, constants = NULL, pm.analyzer = "parSYNC",
          ... )
 
-
 #3DATX CAGE
 importCAGE2PEMS(..., calibrator = "CAGE")
+
+
+#Sensors Inc SEMTECH
+
+importSEMTECH2PEMS(file.name = file.choose(), history = NULL, 
+          constants = NULL, pems = "SEMTECH", ...)
 
 
 #RoyalTek GPS
@@ -229,6 +235,9 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   \code{importCAGE2PEMS} imports standard CAGE files and converts them to \code{pems} objects. 
   See \code{importParSYNC2PEMS} Notes below.
 
+  \code{importSEMTECH2PEMS} imports Sensors Inc. SEMTECH ECOSTAR files and converts them to \code{pems} 
+  objects. See Notes below. 
+
   \code{importRoyalTek2PEMS} imports \code{.txt} and \code{.nmea} format Royal Tek GPS files and 
   converts them to \code{pems} objects. See Notes below. 
 
@@ -294,13 +303,17 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
 
   With \code{importCAGE2PEMS}, handling is similar to that with \code{importParSYNC2PEMS}. 
 
+  With \code{importSEMTECH2PEMS}, SEMTECH data is imported and modified as follows: data series names are simplified and 
+  converted to lower case to simplify use in R; the data series \code{time.stamp} and \code{local.time} 
+  are added (generated using the file time stamp). Defaults constants are assigned according to \code{fuel} (default 
+  \code{'petrol'}). This function in in-development and has so far only been used with files from two 
+  sources, so handle with care, and \code{time.format} has varied so may need resetting for some files.
+
   With \code{importRoyalTek2PEMS}, the Royal Tek data modifications are currently being documented.  
 
   With \code{importKML2PEMS}, the function attempts to import and time.stamp, latitude, longtiude and altitude data 
   in the suppled KML file. This function in in-development and has so far only been used with KML files from one 
   source, so handle with care.  
-
- 
  
 }
 

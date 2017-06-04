@@ -49,6 +49,7 @@ export(importCSV2PEMS)
 export(importOBS2PEMS) 
 export(importOB12PEMS) 
 export(importParSYNC2PEMS)
+export(importSEMTECH2PEMS)
 export(importCAGE2PEMS)
 export(importRoyalTek2PEMS)
 export(importKML2PEMS) 
@@ -68,6 +69,7 @@ export(tAlign)
 
 #export
 export(exportPEMSData)
+export(exportPEMS2CSV)
 
 
 #generic.pems.handlers

@@ -175,7 +175,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   (Logical) For older plots. Should the plot be greyscale by default? This option resets 
   the \code{lattice} color themes to greyscale while the plot is beging generated. So: (1) 
   This only effects the plot itself, not subsequent plots; and, (2) any user resets overwrite 
-  this, e.g. \code{latticePlot(..., greyscale=TRUE, col="red"} will place red symbols on an 
+  this, e.g. \code{latticePlot(..., greyscale=TRUE, col="red")} will place red symbols on an 
   overwise greyscale plot. Newer plots use the alternative \code{plot(..., scheme = "greyscale")}.
 }
 

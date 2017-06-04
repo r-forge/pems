@@ -590,7 +590,7 @@ panel.WatsonSmoothContourPlot <- function(..., plot.panel=panel.surfaceSmooth,
     if(loa.settings){
         temp <- loaHandler(panel.WatsonBinPlot)
         temp$default.settings <- listUpdate(temp$default.settings, 
-                                            list(#key.fun=draw.loaColorRegionsKey, 
+                                            list(key.raster = TRUE,  
                                                  contour = TRUE, regions = TRUE,
                                                  alpha.regions = 0.5))
         return(temp)
