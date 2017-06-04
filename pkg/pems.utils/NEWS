@@ -1,6 +1,7 @@
 Changes in pems.utils 0.2.22 [2017-06-02]
 ========================================
 
+*       updated to rforge
 *       rebuilt pems.1 example data (previous 
         version not tracking new units)
 
