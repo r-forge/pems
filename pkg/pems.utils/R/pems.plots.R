@@ -17,7 +17,7 @@
 #(plot, preprocess, panel)
 #WatsonPlot
 #(plot, preprocess, panels for different plot.types)
-#fortify.pems to work with ggplot2
+
 #
 
 #old plots
@@ -663,36 +663,6 @@ panel.WatsonSmoothContourPlot <- function(..., plot.panel=panel.surfaceSmooth,
 
 
 
-###########################
-###########################
-##fortify.pems
-###########################
-###########################
-
-####################
-#fortify.pems
-####################
-
-#kr 13/08/2015
-#version 0.0.1
-
-#what it does
-###########################################
-#allows users to work directly with ggplot2
-
-
-#to do
-############################
-#decide if we are keeping it
-
-#if keeping it 
-
-#like to
-#########################################
-#would like to pass pems units to ggplot2 
-#via fortify
-
-fortify.pems <- function (model, data, ...) as.data.frame(model)
 
 
 

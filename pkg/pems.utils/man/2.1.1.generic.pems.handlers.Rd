@@ -3,6 +3,7 @@
 \alias{generic.pems.handlers}
 \alias{pems.generics}
 \alias{as.data.frame.pems}
+\alias{as.data.frame}
 \alias{dim.pems}
 %\alias{nrow.pems}
 %\alias{ncol.pems}
@@ -23,7 +24,6 @@
 \alias{summary.pems}
 \alias{units.pems}
 \alias{units<-.pems}
-\alias{fortify.pems}
 
 
 \title{ Generic handling of pems objects }
@@ -72,10 +72,6 @@
 \method{units}{pems}(x)
 
 \method{units}{pems}(x) <- value
-
-#misc
-
-\method{fortify}{pems}(model, data, ...)
 
 }
 
@@ -148,12 +144,6 @@
   \code{id} to the function. For \code{head} or \code{tail}, sets the number of rows. 
 }
 
-  \item{model}{
-   (various). With data, \code{fortify} inputs for \code{ggplot2} plots. 
-   See below.
-}
-
-
 }
 
 \value{
@@ -208,10 +198,6 @@
   when used in the form \code{units(pems)} or sets/resets units when used in the form 
   \code{units(pems) <- new.units}. 
 
-  \code{fortify} methods are used by \code{ggplot2} functions to convert specialist 
-   object classes into a form that can be used directly with \code{ggplot2} functions. 
-   See below.   
-
 }
 
 \author{ Karl Ropkins }
@@ -237,10 +223,6 @@
    e.g. \code{pems[["data"]]} extracts the \code{data.frame} component of the \code{pems} 
    object, \code{pems[["units"]]} extracts the \code{units} component, etc. See also 
    \code{\link{pems.structure}}.
-
-  The \code{fortify} method was developed by Hadley Wickham to simplify the integration of 
-  \code{ggplot2} functions and special object classes. It is a really nice idea for multiple 
-  reasons, the main one being that package users will probably never have to worry about it. 
  
 }
 
@@ -252,13 +234,6 @@
   H. Wickham. Advanced R. CRC Press, 2014.
 
   (Not yet fully implemented within this package.)
-
-  ggplot2:
-
-  H. Wickham. ggplot2: elegant graphics for data analysis. Springer New
-  York, 2009.
-
-  (See Chapter 9, section 9.3, pages 169-175, for discussion of fortify)
 
 }
 

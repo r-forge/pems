@@ -25,8 +25,8 @@ import(grid)
 import(RColorBrewer)
 import(latticeExtra)
 #import(ggplot2) #just importing fortify
-import(plyr)
-
+#import(plyr) #replacing with dplyr
+import(dplyr)
 
 #front.of.house
 
@@ -34,7 +34,8 @@ import(plyr)
 export(is.pems)
 export(pems)
 export(pems.element)
-export(isPEMS) 
+export(isPEMS)
+export(rebuildPEMS) 
 export(makePEMS)
 export(makePEMSElement)
 export(as.pems)
@@ -72,13 +73,91 @@ export(exportPEMSData)
 export(exportPEMS2CSV)
 
 
+#tidyverse
+
+#rlang
+#might want to just import all of package?
+
+importFrom(rlang, caller_env, have_name, exprs_auto_name)
+#import(rlang)
+
+#not sure why I need to do this
+#but it make the methods work without
+#the dplyr loaded
+importFrom(dplyr, select)
+importFrom(dplyr, rename)
+importFrom(dplyr, filter)
+importFrom(dplyr, arrange)
+importFrom(dplyr, slice)
+importFrom(dplyr, mutate)
+importFrom(dplyr, group_by)
+importFrom(dplyr, summarise)
+
+importFrom(dplyr, groups)
+importFrom(dplyr, ungroup)
+importFrom(dplyr, group_size)
+importFrom(dplyr, n_groups)
+
+
+export(select)
+export(rename)
+export(filter)
+export(arrange)
+export(slice)
+export(mutate)
+export(group_by)
+export(summarise)
+
+export(groups)
+export(ungroup)
+export(group_size)
+export(n_groups)
+
+
+
+S3method(select, pems)
+S3method(rename, pems)
+S3method(filter, pems)
+S3method(arrange, pems)
+S3method(slice, pems)
+S3method(mutate, pems)
+S3method(group_by, pems)
+S3method(summarise, pems)
+
+S3method(groups, pems)
+S3method(ungroup, pems)
+S3method(group_size, pems)
+S3method(n_groups, pems)
+
+S3method(select_, pems)
+S3method(rename_, pems)
+S3method(filter_, pems)
+S3method(arrange_, pems)
+S3method(slice_, pems)
+S3method(mutate_, pems)
+S3method(group_by_, pems)
+S3method(summarise_, pems)
+
+
+#need for ggplot2 add-in
+importFrom(ggplot2, fortify)
+export(fortify)
+S3method(fortify, pems)
+
+
 #generic.pems.handlers
 
 #imports for non-base
 importFrom(utils,head)
 importFrom(utils,tail)
 
+
+
 S3method(as.data.frame, pems)
+export(as.data.frame)
+
+
+
 S3method(dim, pems)
 ###### dim does these
 #S3method(nrow, pems)
@@ -111,6 +190,10 @@ S3method(units, pems.element)
 S3method("units<-", pems.element)
 S3method(summary, pems.element)
 
+
+
+
+
 ###########################
 #imported whole thing above
 #need for head and tail
@@ -133,9 +216,7 @@ export(panel.WatsonContourPlot)
 export(panel.WatsonSmoothContourPlot)
 
 
-#need for ggplot2 add-in
-S3method(fortify, pems)
-importFrom(ggplot2, fortify)
+
 
 #calcs
 export(calcDistance)
@@ -180,3 +261,6 @@ export(checkPEMS)
 export(checkUnits) 
 export(checkOutput)
 export(checkIfMissing)
+
+
+

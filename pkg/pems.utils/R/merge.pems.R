@@ -50,7 +50,7 @@
 
 #aligns data in two objects
 ##uses 
-##join in plyr
+##full_join in dplyr
 ##pems.utils structure
 
 
@@ -85,7 +85,7 @@ align <- function(data1, data2, n=0, ...){
    data2$align.temp.ref <- (1:nrow(data2)) + n
 
    #merge data 
-   new.data <- join(pemsData(data1), pemsData(data2), by="align.temp.ref", type="full")
+   new.data <- full_join(pemsData(data1), pemsData(data2), by="align.temp.ref")
    new.data <- new.data[order(new.data$align.temp.ref),]
    row.names(new.data) <- 1:nrow(new.data)
 
@@ -301,7 +301,7 @@ tAlign <- function(form, data1, data2 = NULL, order = TRUE, ...){
 #not sure this makes sense
 
 #uses 
-#join in plyr
+#full_join in dplyr
 
 #urgent to do
 #order does not seem to be working
@@ -343,7 +343,7 @@ tAlign <- function(form, data1, data2 = NULL, order = TRUE, ...){
 #pass data to join
     temp1 <- pemsData(data1)
     temp2 <- pemsData(data2)
-    temp <- join(temp1, temp2, by=t1, type="full")
+    temp <- full_join(temp1, temp2, by=t1)
 
     #names in new case
     temp.names <- names(temp)

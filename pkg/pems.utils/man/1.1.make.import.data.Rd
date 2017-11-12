@@ -5,6 +5,7 @@
 \alias{isPEMS}
 \alias{pems}
 \alias{makePEMS}
+\alias{rebuildPEMS}
 \alias{pems.element}
 \alias{as.pems}
 \alias{as.pems.default}
@@ -48,6 +49,7 @@ pems.element(x, name = NULL, units = NULL,
 isPEMS(...)
 makePEMS(...)
 makePEMSElement(...)
+rebuildPEMS(x, ...)
 
 \method{as.pems}{data.frame}(x, ...)
 
@@ -116,7 +118,9 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   \item{x}{
   (A required object) For \code{is.pems}, any object to be tested as a \code{pems} object. 
   For \code{pems}, an object to be used as the starting point to make a \code{pems} 
-  object, so typically a \code{data.frame} or another \code{pems} object. 
+  object, so typically a \code{data.frame} or another \code{pems} object. For 
+  \code{pems.element}, an object to be used as the starting point to make a 
+  \code{pems.element}. For \code{rebuildPEMS}, a \code{pems} object to be rebuilt.
 } 
 
   \item{full.test}{
@@ -215,6 +219,8 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   \code{isPEMS}, \code{makePEMS} and \code{makePEMSElement} are historical code, retained for 
   backward compatibility.
 
+  \code{rebuildPEMS} rebuilds \code{pems} object as a different build version. 
+
   Crude \code{import...} functions import simple file structures, and are useful for getting 
   data quickly into \code{R:pems.utils}. \code{importTAB2PEMS} imports tab delimited files and 
   clipboard content. \code{importCSV2PEMS} imports comma delimited files. Both assume a simple 
@@ -256,6 +262,9 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   \code{pems} and \code{pems.element} functions return \code{pems} and \code{pems.element} 
   objects, respectively, made using the supplied file and any additional information also 
   supplied in the same call.
+
+  \code{rebuildPEMS} rebuilts the supplied \code{pems} object. The default rebuilds as the lastest 
+  build structure.
 
   \code{import...} functions return a \code{pems} object, made using the supplied file and any 
   additional information also supplied in the same call. 

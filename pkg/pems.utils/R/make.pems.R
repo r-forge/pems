@@ -230,3 +230,92 @@ as.pems.data.frame <- function(x,...) pems(x,...)
 
 
 
+
+
+
+
+#######################
+#######################
+##rebuildPEMS
+#######################
+#######################
+
+##rebuild old/new pems object
+
+rebuildPEMS <- function(x, ...){ 
+
+#need to think about a robust version check 
+#    or people could be turning olds into olds...
+#    which will do weird things...
+
+#need to tidy this when it catches all bad stuff... 
+
+    #get arg2 in form rebuildPEMS(pems, new) ..."new", etc...
+    #might drop this...
+
+    m.var <- exprs_auto_name(quos(...)) 
+    m.var <- gsub("~", "", as.character(m.var))[1]
+    m.var <- gsub("\"", "", as.character(m.var))[1]
+
+    if(is.na(m.var)) m.var <- "new"
+
+#    grpd <- "grouped_df" %in% class(x)
+#    class(x) <- class(x)[class(x) != "grouped_df"]
+
+    test <- attributes(x)$pems.tags$pems.build
+
+    if (m.var == "new") {
+
+        #quick if new checks
+        if (!is.null(test) && test >= 3) 
+            return(x)
+
+        #assume old rebuild old as new
+        class(x) <- "broken"
+        out <- x$data
+        attributes(out)$units <- x$units
+        attributes(out)$pems.tags <- x[names(x)[!names(x) %in% 
+            c("data", "units")]]
+        attributes(out)$pems.tags$history <- list()
+        attributes(out)$pems.tags$pems.build <- 3
+        class(out) <- c("pems")
+
+        #this assumes grouped object never output as old
+        if("grouped_df.tags" %in% names(x)){
+              attributes(out)[names(x$grouped_df.tags)] <- x$grouped_df.tags
+              class(out) <- c("grouped_df", "pems")
+        }      
+        return(out)
+    }
+    if (m.var == "old") {
+
+        #quick check if is old
+        if (!is.null(test) && test < 3) 
+            return(x)
+        if (is.null(test)) 
+            return(x)
+
+        #assume new and rebuild as old
+        bare.bones <- attributes(x)[names(attributes(x)) %in% 
+            c("units", "pems.tags")]
+        attributes(x)$units <- NULL
+        attributes(x)$pems.tags <- NULL
+        class(x) <- class(x)[class(x) != "pems"]
+        if (length(class(x)) == 0) 
+            class(x) <- "data.frame"
+        if (length(class(x)) == 1 && class(x) == "list") 
+            class(x) <- "data.frame"
+        out <- listUpdate(list(data = x, units = bare.bones$units), 
+            bare.bones$pems.tags)
+
+        #handling if grouped_df
+        if ("grouped_df" %in% class(x)){
+             class(out$data)[class(x) == "grouped_df"] <- "data.frame"
+             out$grouped_df.tags <- attributes(x)
+        }
+        out$pems.build <- 2
+        class(out) <- c("pems")
+        return(out)
+    }
+
+}

@@ -75,10 +75,22 @@
 #think about this
 #can we get a vector out rather than a data.frame?
 
+
 as.data.frame.pems <- function(x, ...){
 
-    class(x) <- "not.pems"
-    x$data    
+#think this is killing ggplot2 qplot, gglot.. data=new.pems.object
+#     if I make class c("pems", "data.frame")
+#     can't work out why however....
+
+#    class(x) <- "not.pems"
+#    x$data 
+
+#testing   
+# in whatever, makes/uses new, exports df
+ 
+     x <- rebuildPEMS(x, "new")
+     class(x) <- "data.frame"
+     x
 
 }
 
@@ -1105,6 +1117,8 @@ subset.pems <- function(x,...){
 
 print.pems <- function (x, verbose = FALSE, n=6, ...) {
 
+    x <- rebuildPEMS(x, "old")
+
     temp <- x
     class(temp) <- "not.pems"
 
@@ -1384,7 +1398,7 @@ units.pems <- function(x) {
 
 #######################
 
-#way units methods works this is only every a data.frame and what you have to send it have to work
+#way units methods works this is only ever a data.frame and what you have to send it have to work
 #so thinking what follows is a waste of time
 #could just be x$units <- value
 

@@ -1,6 +1,26 @@
-Changes in pems.utils 0.2.22 [2017-06-02]
+Changes in pems.utils 0.2.23 [2017-11-09]
 ========================================
 
+*       replaced plyr with dplyr in imports, 
+*       added select methods: .pems, _.pems 
+*       updated fortify.pems (simplifies 
+        object for ggplot2 use)
+*       added rename methods: .pems, _.pems
+*       added filter methods: .pems, _.pems 
+*       added arrange methods: .pems, _.pems
+*       added slice methods: .pems, _.pems 
+*       added mutate methods: .pems, _.pems 
+*       added rebuildPEMS (for version 0.3)
+*       added group_by methods: .pems, _.pems
+*       added summarise methods: .pems, _.pems
+
+
+Changes in pems.utils 0.2.22 [2017-07-21]
+========================================
+
+*       updated plot.pems.element re attr.name
+*       updated [.pems.element re attr.names 
+*       updated plot.pems.element
 *       updated to rforge
 *       rebuilt pems.1 example data (previous 
         version not tracking new units)

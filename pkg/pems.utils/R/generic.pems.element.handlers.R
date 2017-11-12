@@ -133,6 +133,13 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
 #previous
 #    class(x) <- "default"
 #############
+#recent added 
+#lx0 as early creation of deparse(substitute(x))
+#limited deparse(substitute(x)) and deparse(substitute(y)) to ...[1]
+#may need to go to 
+#############
+
+    lx0 <- deparse(substitute(x))[1]
     if(length(class(x))>1) class(x) <- class(x)[-1] else
         class(x)[1] <- if("levels" %in% names(attributes(x)))
                              "factor" else mode(x)
@@ -146,9 +153,9 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
     #get x name
     if(is.null(y)){ 
         if(is.null(ylab)){
-            ylab <- if(is.null(attributes(x)$name))
-                        deparse(substitute(x)) else 
-                            attributes(x)$name
+            ylab <- if ("name" %in% names(attributes(x))) 
+                attributes(x)$name else lx0
+        
             if(!is.null(attributes(x)$units)){
                 temp <- paste(" [", attributes(x)$units, "]", sep="")
                 if(!temp %in% c(" []", " [NA]")) ylab <- paste(ylab, temp, sep = "")
@@ -156,18 +163,18 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
         }
     } else {
         if(is.null(xlab)){
-            xlab <- if(is.null(attributes(x)$name))
-                        deparse(substitute(x)) else 
-                            attributes(x)$name
+            xlab <- if ("name" %in% names(attributes(x))) 
+                attributes(x)$name else lx0
+        
             if(!is.null(attributes(x)$units)){
                 temp <- paste(" [", attributes(x)$units, "]", sep="")
                 if(!temp %in% c(" []", " [NA]"))xlab <- paste(xlab, temp, sep = "")
             }
         }
         if(is.null(ylab)){
-            ylab <- if(is.null(attributes(y)$name))
-                        deparse(substitute(y)) else 
-                            attributes(y)$name
+            ylab <- if ("name" %in% names(attributes(y))) 
+                attributes(y)$name else deparse(substitute(y))[1]
+
             if(!is.null(attributes(y)$units)){
                 temp <- paste(" [", attributes(y)$units, "]", sep="")
                 if(!temp %in% c(" []", " [NA]")) ylab <- paste(ylab, temp, sep = "")
@@ -271,6 +278,18 @@ summary.pems.element <- function(object, ...){
     if(is(x)[1] == "try-error") 
       stop("In pems.element[i] 'i' unknown/unfound", 
           call. = FALSE)
+
+#################
+#new 
+#this handles pems.element if attribute()$names have been added
+#happens in summary(lm())
+
+    if("names" %in% names(att))
+          att$names <- att$names[i]
+
+#might need to refine this
+#################
+
     attributes(x) <- att
 ################
 #new

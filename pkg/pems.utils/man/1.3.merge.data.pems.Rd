@@ -127,11 +127,11 @@
 
 \references{
 
-   \code{align} uses the \code{plyr} function \code{join}.         
+   \code{align} uses the \code{dplyr} function \code{full_join}.         
 
    \code{cAlign} function uses the \code{stats} function \code{ccf}.         
 
-   \code{tAlign} uses the \code{plyr} function \code{join}.         
+   \code{tAlign} uses the \code{dplyr} function \code{full_join}.         
 
 }
 
@@ -151,7 +151,7 @@
   also allows several hidden arguments to refine outputs, the 
   logicals \code{plot}, \code{offset} and \code{pems}, which turn 
   off/on plot, offset and pems reporting individually, and  
-  code{output = c("plot", "offset", "pems")} or combinations thereof 
+  \code{output = c("plot", "offset", "pems")} or combinations thereof 
   also provides a single argument alternative.     
 
   \code{bindPEMS}: The historical function \code{bindPEMS} has 
@@ -172,7 +172,7 @@
 
 \seealso{
   See also: \code{\link{cbind}} for standard column binding in \code{R}; 
-  \code{\link{plyr}} for \code{\link{join}}. 
+  \code{\link{dplyr}} for \code{\link{full_join}}. 
 }
 \examples{
 
