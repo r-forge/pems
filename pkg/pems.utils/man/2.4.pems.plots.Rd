@@ -14,6 +14,9 @@
 \alias{panel.WatsonContourPlot}
 \alias{panel.WatsonSmoothContourPlot}
 
+\alias{fortify.pems}
+\alias{fortify}
+
 
 \title{
   Various plots for pems.utils
@@ -61,6 +64,11 @@ panel.WatsonContourPlot(..., plot.panel=panel.kernelDensity, process = TRUE,
 
 panel.WatsonSmoothContourPlot(..., plot.panel=panel.surfaceSmooth,          
          process = TRUE, plot = TRUE, loa.settings = FALSE)
+ 
+
+#ggplot2 (tidyverse)
+
+\method{fortify}{pems}(model, data, ...)
 
 
 
@@ -108,8 +116,9 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 } 
 
   \item{data}{
-  (Optional \code{data.frame} or \code{pems} object) The data source elements in \code{x} 
-  if not the current environment or a parent.
+  (Optional \code{data.frame} or \code{pems} object) For most plots, the data source 
+  for plot elements, e.g \code{x}, \code{y}, \code{z}, etc, if not the current environment 
+  or a parent.
 } 
 
   \item{units}{
@@ -191,6 +200,11 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
    generate a bin average plot. 
 }
 
+  \item{model}{
+  (pems.object) The pems object to be used as a data source when plotting using ggplot2 code. See 
+  below.
+}
+
   \item{x.res, y.res}{
    (Numerics) when binning data with \code{XYZPlot}, the number of x- and y-axis bins to 
    generate. 
@@ -229,6 +243,12 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   plotting framework.    
 
   See Notes and Examples. 
+
+  The \code{fortify} method was developed by Hadley Wickham to simplify the integration 
+  of \code{ggplot2} functions and special object classes. It is a really nice idea for 
+  multiple reasons, the main one being that package users will probably never have to 
+  worry about it. However, having it means you can use a \code{pems} object directly 
+  as the data argument with \code{ggplot2} code.  
  
 }
 
@@ -244,6 +264,9 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
    
   \code{latticePlot} and \code{XYZPlot} are general purpose 'xy' and 'xyz' data 
   plotting functions.  
+
+  \code{fortify} is intended for used with ggplot2 code when both pems.utils and 
+  ggplot2 are loaded.
 
 }
 
@@ -264,6 +287,13 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   Others, like \code{ggplot2} and \code{iplot}, help you to very 
   quickly explore your data. But, for me the trellis framework of \code{\link{lattice}} 
   has always been the most flexible.
+
+  ggplot2:
+
+  H. Wickham. ggplot2: elegant graphics for data analysis. Springer New
+  York, 2009. 
+
+  (See Chapter 9, section 9.3, pages 169-175, for discussion of fortify.)
 
 }
 \author{

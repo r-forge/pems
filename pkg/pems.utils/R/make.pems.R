@@ -16,11 +16,17 @@
 #pems (nee makePEMS)
 #is.pems (nee isPEMS)
 #pems.element (nee makePEMSElement)
+
+
+#to think about
+##########################
 #as.pems...
 
 
 #to do
 ##########################
+
+
 
 #comments
 ##########################
@@ -49,10 +55,22 @@
 ##########################
 #
 
-#comments
 ##########################
+#comments
+###########
 #widely used. 
 #think carefully before changing name or argument ordering
+###########
+#did it anyway...
+###########
+#
+
+#############################
+#to think about 
+##########
+#currently uses rebuild cheat
+###########
+#
 
 
 pems <- function(x, units = NULL, constants = NULL,  
@@ -69,7 +87,7 @@ pems <- function(x, units = NULL, constants = NULL,
 #might want to unpack and repack?
 #################
 
-                 if(is(x)[1]=="pems") return(x)
+                 if(is(x)[1]=="pems") return(rebuildPEMS(x))
 
 ##################
 #testing 
@@ -106,7 +124,8 @@ pems <- function(x, units = NULL, constants = NULL,
 ####################
 #update constants
 
-    if(is.null(history)) history <- list()
+#droping history
+    history <- list()
     extra.args <- list(...)
 
     #update silently?
@@ -128,9 +147,7 @@ pems <- function(x, units = NULL, constants = NULL,
 
     class(output) <- "pems"
 
-#do I want this to be invisible?
-
-    invisible(output)
+    rebuildPEMS(output)
 }
 
 
@@ -164,6 +181,10 @@ makePEMS <- function(...) pems(...)
 #widely used. 
 #think carefully before changing name or argument ordering
 
+
+#this needs thinking about
+##############
+#
 
 is.pems <- function(x, full.test = TRUE, ...){
 
@@ -279,11 +300,17 @@ rebuildPEMS <- function(x, ...){
         attributes(out)$pems.tags$history <- list()
         attributes(out)$pems.tags$pems.build <- 3
         class(out) <- c("pems")
+#testing
+#    class(.data) <- unique(c(class(.data)[class(.data)!="pems"], c("tbl_df", "tbl", "data.frame"))) 
+        class(out) <- c("pems", "tbl_df", "tbl", "data.frame")
 
         #this assumes grouped object never output as old
         if("grouped_df.tags" %in% names(x)){
               attributes(out)[names(x$grouped_df.tags)] <- x$grouped_df.tags
               class(out) <- c("grouped_df", "pems")
+#testing
+# 
+        class(out) <- c("grouped_df", "pems", "tbl_df", "tbl", "data.frame")       
         }      
         return(out)
     }
@@ -305,6 +332,7 @@ rebuildPEMS <- function(x, ...){
             class(x) <- "data.frame"
         if (length(class(x)) == 1 && class(x) == "list") 
             class(x) <- "data.frame"
+
         out <- listUpdate(list(data = x, units = bare.bones$units), 
             bare.bones$pems.tags)
 
@@ -313,6 +341,10 @@ rebuildPEMS <- function(x, ...){
              class(out$data)[class(x) == "grouped_df"] <- "data.frame"
              out$grouped_df.tags <- attributes(x)
         }
+
+#test
+        class(out$data) <- "data.frame"
+
         out$pems.build <- 2
         class(out) <- c("pems")
         return(out)

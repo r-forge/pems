@@ -1,7 +1,26 @@
+Changes in pems.utils 0.2.24 [2017-12-06]
+========================================
+
+*       temp update of old structuring 
+        functions, pemsData, etc...
+*       rolled back pems generics for new 
+        pems structure
+*       started phasing out pems history 
+        tracking
+*       added rebuildPEMS to provide 
+        catch any old pems structures
+*       reset pems dplyr function outputs 
+        to new pems structure
+*       updated print.pems 
+*       reinstated pems.elements methods
+*       added ...join methods for pems objects
+        (left_join,)
+
+
 Changes in pems.utils 0.2.23 [2017-11-09]
 ========================================
 
-*       replaced plyr with dplyr in imports, 
+*       replaced plyr with dplyr in imports 
 *       added select methods: .pems, _.pems 
 *       updated fortify.pems (simplifies 
         object for ggplot2 use)

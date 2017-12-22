@@ -65,7 +65,7 @@ pemsElement <- function(element, pems=NULL, ...,
        return(ans)   
     }
 
-    pems <- checkPEMS(pems)
+    pems <- checkPEMS(rebuildPEMS(pems, "old"))
     class(pems) <- "not.pems"
 
     ans <- try(pems$data[,element.name], silent = TRUE)
@@ -117,8 +117,14 @@ pemsData <- function(pems=NULL, ...,
                if.warning = NULL, 
                fun.name = fun.name)
     }
-    class(pems) <- "not.pems"
-    pems$data
+    #class(pems) <- "not.pems"
+    #pems$data
+
+#new build
+#might want to strip out units, etc...?
+
+    pems <- rebuildPEMS(pems)
+    as.data.frame(pems)
 
 }
 
@@ -143,6 +149,7 @@ pemsConstants <- function(pems=NULL, ...,
                if.warning = NULL, 
                fun.name = fun.name)
     }
+    pems <- rebuildPEMS(pems, "old")
     class(pems) <- "not.pems"
     pems$constants
 
@@ -170,6 +177,7 @@ pemsHistory <- function(pems=NULL, ...,
                if.warning = NULL, 
                fun.name = fun.name)
     }
+    pems <- rebuildPEMS(pems, "old")
     class(pems) <- "not.pems"
     pems$history
 
@@ -184,7 +192,7 @@ pemsHistory <- function(pems=NULL, ...,
 
 ##############################
 ##############################
-##pemsDim
+##pemsDim   
 ##############################
 ##############################
 
@@ -200,6 +208,7 @@ pemsDim <- function(pems=NULL, ...,
                if.warning = NULL, 
                fun.name = fun.name)
     }
+    pems <- rebuildPEMS(pems, "old")
     class(pems) <- "not.pems"
     dim(pems$data)
 

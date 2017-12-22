@@ -4,9 +4,11 @@
 \alias{pems.element.generics}
 \alias{print.pems.element}
 \alias{plot.pems.element}
+\alias{plot}
 \alias{units.pems.element}
 \alias{units<-.pems.element}
 \alias{summary.pems.element}
+\alias{summary}
 \alias{[.pems.element}
 \alias{[<-.pems.element}
 

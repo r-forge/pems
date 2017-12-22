@@ -8,6 +8,403 @@
 #might to archive a copy of this and then tidy
 #because it is a real mess at the moment
 
+##rebuild 11/2017
+
+#exporting
+
+#print.pems
+#names.pems, names<-.pems
+#as.data.frame.pems
+#dim.pems
+
+#cheated old code
+
+#[.pems, [<-.pems using cheat code
+#$.pems, $<- works if above works
+#summary, head, tail, 
+
+###############################
+#to fix 
+#########
+#pems[ breaking on example(pems)
+#########
+#tail not giving actual numbers...
+#  tail(pems) should be row 995 not 1
+#########
+#all needs tidying
+#########
+#
+
+
+
+###############################
+#to think about
+##########
+#
+
+
+
+
+##########################
+##########################
+##print.pems
+##########################
+##########################
+
+#kr 06/06/2013 v 0.3.0
+#kr 14/11/2017 v 0.4.0
+
+#what it does
+##########################
+#handles pems console appearance 
+#
+
+
+###################################
+#too fix
+###################################
+#
+
+
+#to think about
+##########################
+# group labelling that includes number of cases
+# paste(names(attributes(x)$labels), "[", lapply(attributes(x)$labels, function(x) length(unique(x))),"]", sep="", collapse="; ")
+#####
+#hide width?
+#####
+#option to show class 
+# instead of units?
+#####
+#col=-1, rows=-1 as a 
+# show full data range?
+#####
+#
+
+print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
+
+    ##################################
+    #new print.pems for new structure
+    #based 
+
+#this could be simplified/tidied...
+
+    x <- rebuildPEMS(x) 
+    #test structure
+    has.units <- !is.null(attributes(x)$units)
+    grpd <- "grouped_df" %in% class(x)
+
+#plot setup
+#to tidy using rows not n....    
+
+    n <- if(is.null(rows)) 6 else rows
+    if(n > nrow(x)) n <- nrow(x)
+    if(is.null(width)) width <- getOption("width") * 0.9
+
+    #make all columns characters
+########################
+#a lot of this can go when 
+#pems[works again...
+#for example here
+    b <- x
+    class(b) <- class(b)[class(b)!="pems"]
+    if(length(class(b))==1) class(b) <- "data.frame"
+#this can go if 2nd b 
+#in next line becomes x
+########################
+    b <- data.frame(lapply(b[1:n,], as.character), stringsAsFactors=FALSE, 
+                                                   check.names=FALSE)      
+                                                   #or it corrects names likevelocity<5
+    if(n==0) b[] <- "<empty>"   #to catch empty frames
+    b[is.na(b)] <- "NA"   #to catch NAs
+    
+    #unit labels extensions
+    if(has.units){
+         #note the leading space on temp
+         attributes(x)$units[] <- gsub("[[][]]", "", paste("[", attributes(x)$units, "]", sep=""))
+         b <- rbind(attributes(x)$units, b)
+    }
+    temp <- data.frame(t(names(b)))
+    names(temp) <- names(b)
+    b <- rbind(temp, b)
+######################
+#replacing
+##    b <- if(has.units) cbind(data.frame(..rows=c("", "", 1:n), b)) else
+##               cbind(data.frame(..rows=c("", 1:n), b))
+#to catch empty data frames
+#also to use row.names if there...
+    temp <- if (has.units) c("", "") else c("")
+    temp <- if(n>0) c(temp, if(!is.null(row.names(x))) row.names(x)[1:n] else 1:n) else 
+                    c(temp, " ")
+    b <- cbind(data.frame(..rows = temp, b))
+######################
+    b.n <- apply(b, 2, function(x) nchar(x))
+    b.max <- apply(b.n, 2, function(x) max(x))+1  
+                   #NAs might be an issue
+    b.n <- data.frame(t(b.max-t(b.n)))
+    b.n <- apply(b.n, c(1,2), function(x) paste(rep(" ", x), collapse=""))
+    for(i in 1:ncol(b))
+         b[,i] <- paste(b.n[,i], b[,i], sep=" ")
+    test <- if(is.null(cols)) max(which(cumsum(b.max)<width)) else
+                 cols + 1 #because we add ..row column
+    if(test>ncol(b)) test <- ncol(b)
+    b <- b[,1:test]
+
+    #############################
+    #the header
+    header <- paste("\npems (", nrow(x), "x", ncol(x), ")", sep="")
+    if(grpd) header <- paste(header, "\n<grp>: ", paste(attributes(x)$vars, collapse="; "), sep="", collapse="")
+
+    #############################
+    #the shown data grid
+    out <- apply(b, 1, function(x) paste(x, collapse=""))          
+    out <- paste(paste(out, collaspe="\n", sep=""), collapse="")
+    out <- paste(header, out, sep="\n", collapse="\n")
+ 
+    h.row <- nrow(x)-nrow(b)+2 #+2 for header
+    h.col <- ncol(x)-ncol(b)+1 #+1 for row.number
+
+    #################################
+    #first footer rows and rows not plotted
+    footer <-""
+    if(h.row > 0 | h.col>0){
+        temp <- " ... not showing: "
+        if(h.row>0) temp <- paste(temp, h.row, " rows", sep="")
+        if(h.row>0 & h.col>0) temp <- paste(temp, "; ", sep="")
+        if(h.col>0) temp <- paste(temp, h.col, " cols (elements)", sep="")
+        footer <- paste(temp, footer, collapse="\n")
+        footer <- paste(footer, "\n", sep="")
+    } 
+
+#this needs tidying
+
+    ################################
+    #second footer other columns 
+    #if range reduced
+    footer2 <- ""
+    if(h.col>0){
+         #note: not test+1 because I added column to b
+         footer2 <- names(x)[(test):ncol(x)]
+         if(has.units){
+             footer2 <- paste(footer2, attributes(x)$units[(test):ncol(x)], sep="")
+         }
+         footer2[1:(length(footer2)-1)] <- paste(footer2[1:(length(footer2)-1)], "; ", sep="")
+         footer2[1] <- paste("other cols: ", footer2[1], sep="")
+         footer2 <- strwrap(paste(footer2, collapse=""), width=width)
+         footer2[1] <- paste(" ... ", footer2[1], sep="")
+         if(length(footer2)>1)
+               footer2[2:length(footer2)] <- paste("      ", footer2[2:length(footer2)], sep="")
+         footer2 <- paste(footer2, "\n", collapse="", sep="") 
+         #footer2 <- paste(footer2, "\n", sep="")
+    } 
+            
+    #out
+    cat(out, footer, footer2, "\n", collapse="", sep="")
+    invisible(x)
+
+}
+
+
+
+
+
+
+
+##########################
+##########################
+##names.pems
+##########################
+##########################
+
+#kr 07/12/2011 v 0.2.0
+#kr 14/11/2017 v 0.3.0
+
+#what it does
+##########################
+#names()
+#returns data series names from pems
+############
+#names()<- 
+#as above 
+
+#these do names()[] and names()[]<- 
+#by passing lot....
+
+###########################
+#to fix
+##########
+#
+
+###########################
+#to think about
+###########
+#
+
+
+##' @S3method print pems
+
+names.pems <- function(x, ...) {
+
+    x <- rebuildPEMS(x)
+    class(x) <- class(x)[class(x)!="pems"]
+    if(length(class(x))==1) class(x) <- "data.frame"
+
+    if(is.null(attributes(x)$pems.tags)){
+       message("\npems object [suspect]")
+       #not of enough of a reason not to try
+       ##return(invisible(NULL))
+    }
+    names(x)
+}
+
+
+## @S3method names<-.pems
+
+`names<-.pems` <- function(x, ..., value) {
+
+    #variation on units<-
+    #very crude handling of names$ and names[]
+
+    x <- rebuildPEMS(x)
+    old.class <- class(x)
+    x <- as.data.frame(x) #need data.frame to get at 
+                          #element attributes 
+
+    #check for duplication
+    #currently corrects names without saying anything....
+    if(any(duplicated(value))){
+         value <- make.names(value, unique=TRUE)
+    }
+
+#    if(***************){
+#       warning("In units(pems): [suspect units]", call.=FALSE)
+#       units <- data.frame(matrix(NA, nrow = 1, ncol = ncol(x$data)))
+#       names(units) <- names(x$data)
+#    }
+
+#might also think about adding units if not there
+#see above
+#error check on state of value?
+
+#this sets all of x and all names even for names[]<-
+
+    names(x) <- value
+    names(attributes(x)$units) <- value
+
+    for(i in value)
+         attributes(x[,i])$name <- i
+
+    class(x) <- old.class
+    return(x)
+
+}
+
+
+
+
+##########################
+##########################
+##as.data.frame.pems
+##########################
+##########################
+
+#############################
+#what it does
+#############
+#pull data.frame out of pems
+#for lattice, lm, etc.
+
+############################
+#to fix
+############
+#
+
+############################
+#to think about
+############
+#could make a more aggressive
+#  clean clean-up like 
+#  fortify 
+
+
+as.data.frame.pems <- function(x, ...){
+
+#in whatever, makes/uses new, exports df
+ 
+     x <- rebuildPEMS(x, "new")
+     class(x) <- "data.frame"
+     x
+
+}
+
+
+
+
+##########################
+##########################
+##dim
+##ncol
+##nrow
+##########################
+##########################
+
+#############################
+#what it does
+#############
+#get pems dimensions
+#
+
+############################
+#to fix
+############
+#
+
+############################
+#to think about
+############
+#don't need ncol and nrow 
+#  because the use dim...
+#  and only need dim to 
+#  catch any older pems
+#  objects...
+############
+#
+
+################################
+#doh
+#############
+#using dim(rebuildPEMS(x)) causes issue
+# because it tries to dim.pems inside 
+# dim.pems... 
+#############
+#
+
+dim.pems <- function(x, ...) dim(as.data.frame(x))
+
+
+
+
+
+
+
+
+
+
+
+
+##########################################################
+#older code
+##########################################################
+
+
+#any of that not deactivated as ...pems.old..., 
+#   works in form 
+#      rebuildPEMS(x, "old")
+#      old code
+#      rebuildPEMS(x)
+
+#[, [<- (these enable $ and $<-)
+
 
 #kr 01/02/2012 v 0.3.1
 
@@ -37,81 +434,9 @@
 #units<-.pems
 #
 
-#to do
-##########################
-#so much
-#see individual methods 
-#all need work
-
-# verbose printing? 
-# but needs to be hidden when dumped 
-# to object
-#
-# head.pems <- function(x, n =6,...) x[1:n,]
-# tail
-
-#as.list.pems <- function(x, ...) unclass(x)
-#as.pems.list <- function(x, ...) do.call(makePEMS, x)
-#but latter would need a method make
-
-#
-
-
-#comments
-##########################
-#
 
 
 
-##########################
-##########################
-##as.data.frame.pems
-##########################
-##########################
-
-#pull data.frame out of pems
-#for lattice, lm, etc.
-
-#think about this
-#can we get a vector out rather than a data.frame?
-
-
-as.data.frame.pems <- function(x, ...){
-
-#think this is killing ggplot2 qplot, gglot.. data=new.pems.object
-#     if I make class c("pems", "data.frame")
-#     can't work out why however....
-
-#    class(x) <- "not.pems"
-#    x$data 
-
-#testing   
-# in whatever, makes/uses new, exports df
- 
-     x <- rebuildPEMS(x, "new")
-     class(x) <- "data.frame"
-     x
-
-}
-
-
-
-
-##########################
-##########################
-##dim.pems
-##nrow.pems
-##ncol.pems
-##########################
-##########################
-
-#get pems dimensions
-
-dim.pems <- function(x, ...) dim(as.data.frame(x))
-
-#not needs because dim.pems gives you these
-#nrow.pems <- function(x, ...) nrow(as.data.frame(x))
-#ncol.pems <- function(x, ...) ncol(as.data.frame(x)) 
 
 
 
@@ -142,6 +467,7 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 
 `[[.pems` <- function(x, k, ...){
 
+    x <- rebuildPEMS(x, "old")
     #break pems
     class(x) <- "list"
 
@@ -154,7 +480,8 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
         if(class(ans)[1] == "try-error") NULL else ans
     }
     if(length(k)==1) return(temp.fun(k))
-    lapply(k, temp.fun)
+    x <- lapply(k, temp.fun)
+    rebuildPEMS(x)
 
 }
 
@@ -169,6 +496,7 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 
 `[[<-.pems` <- function(x, k, ..., value){
 
+    x <-rebuildPEMS(x, "old")
     #break pems
     old.class <- class(x)
     class(x) <- "list"
@@ -181,7 +509,7 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 
     x[[k]] <- value 
     class(x) <- old.class
-    x
+    rebuildPEMS(x)
 
 }
 
@@ -208,7 +536,14 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 #tidy
 #think about force, simplify
 
+
+
+
 `[.pems` <- function(x, i, j, ..., force = FALSE, simplify = TRUE){
+
+
+    #quick cheat
+    x <- rebuildPEMS(x, "old")
 
     ########################
     #generic pems handling
@@ -428,7 +763,10 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
     #if simplify can be done return pems.element
     if(simplify & ncol(ans)==1){
 
-        out <- ans[,1] 
+############
+#testing as.data.frame because I think tbl_df is stopping this
+        out <- as.data.frame(ans)[,1]  
+############
         attr(out, "row.names") <- NULL
         attr(out, "name") <- names(ans)
         attr(out, "units") <- as.character(x$units[1,j])
@@ -445,8 +783,9 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
     if("history" %in% names(x))
          x$history <- c(x$history, call2)
       
-    class(x) <- old.class
-    x
+#    class(x) <- old.class
+    class(x) <- "pems"
+    rebuildPEMS(x)
 
 }
 
@@ -460,6 +799,10 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 #########################
 
 `[<-.pems` <- function(x, i, j, ..., force = FALSE, value){
+
+
+    #cheat
+    x <- rebuildPEMS(x, "old")
 
     ########################
     #generic pems handling
@@ -952,12 +1295,19 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 #does it have meaning here?
 ################################
 
+    #check for broken time.stamps
+    test <- names(x$data)[sapply(x$data, function(x) any(grep("POSIX", class(x))))]
+    if(length(test)>0)
+        for(t in test)
+             class(x$data[,t]) <- unique(c(class(x$data[,t]), "POSIXct", "POSIXt"))
+
     ####################################
     # send back data
     ####################################
 
-    class(x) <- old.class
-    return(x)
+#    class(x) <- old.class
+    class(x) <- "pems"
+    return(rebuildPEMS(x))
 
 }
 
@@ -1086,89 +1436,17 @@ with.pems <- function(data, expr, ...) {
 
 subset.pems <- function(x,...){
 
-    x[["data"]] <- subset(x[["data"]], ...)
-    x
-
-}
-
-
-
-
-
-
-##########################
-##########################
-##print.pems
-##########################
-##########################
-
-#kr 06/06/2013 v 0.3.0
-
-#what it does
-##########################
-#handles pems console appearance 
-#etc
-#
-
-#to do
-##########################
-#remove temp?
-
-
-print.pems <- function (x, verbose = FALSE, n=6, ...) {
-
     x <- rebuildPEMS(x, "old")
-
-    temp <- x
-    class(temp) <- "not.pems"
-
-    #show data frame
-
-###########################
-#think about this and head
-###########################
-
-    if(verbose){
-        print.data.frame(temp$data)
-    } else {
-
-
-        if(is.null(nrow(temp$data)) || nrow(temp$data)<=n) 
-           print.data.frame(temp$data) else {
-           print.data.frame(temp$data[1:n, , drop=FALSE])
-           message("...")
-        } 
-    }
-
-    #pems report line 1
-
-    reply <- names(temp$data)
-    if (is.null(reply)) 
-        message("\npems object: no named data [suspect]")
-    else message("\npems object: ", ncol(temp$data), " data series (each ", 
-        nrow(temp$data), " cases)")
-
-    #pems report line 2 structure
-
-    reply <- names(temp)[names(temp) %in% c("units", "constants", 
-        "history")]
-    if (length(reply) < 1) 
-        message("\twith no supporting structure [suspect]")
-    else message("\twith supporting structures: ", paste(reply, 
-        collapse = ", ", sep = ""))
-
-    #pems report line 3 extra tags
-
-    reply <- names(temp)[!names(temp) %in% c("data", "units", 
-        "constants", "history", "dem")]
-    if (length(reply) > 0) 
-        message("\t[and unique tags: ", paste(reply, collapse = ", ", 
-            sep = ""), "]\n")
-
-    #output
-    invisible(x)
+    x[["data"]] <- subset(x[["data"]], ...)
+    rebuildPEMS(x)
 
 }
+
+
+
+
+
+
 
 
 
@@ -1194,7 +1472,7 @@ print.pems <- function (x, verbose = FALSE, n=6, ...) {
 ##' @S3method plot pems
 plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
 
-   temp <- x
+   temp <- rebuildPEMS(x, "old")
    class(temp) <- "no.class"
 
    reply <- temp$data
@@ -1218,73 +1496,6 @@ plot.pems <- function(x, id = NULL, ignore = "time.stamp", n = 3, ...) {
 
 }
 
-
-
-##########################
-##########################
-##names.pems
-##########################
-##########################
-
-#kr 07/12/2011 v 0.2.0
-
-#what it does
-##########################
-#returns data series names from pems
-
-#to do
-##########################
-#names<- handling
-#
-
-
-
-##' @S3method print pems
-names.pems <- function(x, ...) {
-
-    class(x) <- "no.class"
-    x <- x$data
-
-    if(is.null(x)){
-       message("\npems object [suspect]")
-       return(invisible(NULL))
-    }
-
-    names(x)
-}
-
-
-## @S3method names<-.pems
-
-`names<-.pems` <- function(x, ..., value) {
-
-    #variation on units<-
-    #very crude handling of names$ and names[]
-
-    call2 <- match.call()
-    class(x)[1] <- "no.class"
-
-#    if(***************){
-#       warning("In units(pems): [suspect units]", call.=FALSE)
-#       units <- data.frame(matrix(NA, nrow = 1, ncol = ncol(x$data)))
-#       names(units) <- names(x$data)
-#    }
-
-#might also think about adding units if not there
-#see above
-
-#error check on state of value?
-
-    names(x$data) <- value
-    names(x$units) <- value
-
-    if ("history" %in% names(x)) 
-        x$history <- c(x$history, call2)
-    
-    class(x)[1] <- "pems"
-    return(x)
-
-}
 
 
 
@@ -1320,6 +1531,7 @@ names.pems <- function(x, ...) {
 ##' @S3method print pems
 summary.pems <- function(object, ...) {
 
+   object <- rebuildPEMS(object, "old")
    class(object) <- "no.class"
 
    object <- object$data
@@ -1361,12 +1573,17 @@ summary.pems <- function(object, ...) {
 ##########################
 #to tidy
 
+#units uses new structure
+#units<- uses old structure
 
 ##' @S3method units.pems
 units.pems <- function(x) {
 
-    class(x) <- "no.class"
-    x <- x$units
+    x <- attributes(rebuildPEMS(x))$units
+
+#old
+#    class(x) <- "no.class"
+#    x <- x$units
 
     if(is.null(x)){
        warning("In units(pems): pems unitless [suspect]", call.=FALSE)
@@ -1378,9 +1595,13 @@ units.pems <- function(x) {
 }
 
 
+
 ## @S3method unit<-.pems
 
 `units<-.pems` <- function(x, value) {
+
+
+    x <- rebuildPEMS(x, "old")
 
     call2 <- match.call()
     class(x)[1] <- "no.class"
@@ -1420,7 +1641,7 @@ units.pems <- function(x) {
     
     x$units <- units
     class(x)[1] <- "pems"
-    return(x)
+    return(rebuildPEMS(x))
 
 }
 
@@ -1441,18 +1662,20 @@ units.pems <- function(x) {
 
 
 head.pems <- function(x, n=6, ...){
+    x <- rebuildPEMS(x)
     out <- x[1:n,,force=T,simplify=F]
-    print(out, verbose=TRUE)
+    print(out, rows=n)
     invisible(out)
 }
 
 
 tail.pems <- function(x, n=6, ...) {
+    x <- rebuildPEMS(x)
     out <- dim(as.data.frame(x))[1]
     out <- (out-n+1):(out)
     out <- out[out>0]
     out <- x[out,,force=TRUE,simplify=F]
-    print(out, verbose=TRUE)
+    print(out, rows=n)
     invisible(out)
 }
 

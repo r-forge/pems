@@ -73,8 +73,8 @@ align <- function(data1, data2, n=0, ...){
    this.call <- if("this.call" %in% names(extra.args))
                      extra.args$this.call else match.call()
 
-   data1 <- makePEMS(data1)
-   data2 <- makePEMS(data2)
+   data1 <- rebuildPEMS(makePEMS(data1), "old")
+   data2 <- rebuildPEMS(makePEMS(data2), "old")
 
    new.names <- make.names(c(names(data1), names(data2)), unique=TRUE)
    names(data1) <- new.names[1:ncol(data1)]
@@ -110,7 +110,7 @@ align <- function(data1, data2, n=0, ...){
    data1$history <- this.call
    class(data1) <- "pems" 
 
-   return(data1)
+   return(rebuildPEMS(data1))
 }
 
 

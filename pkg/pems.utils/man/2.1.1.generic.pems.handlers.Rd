@@ -5,26 +5,41 @@
 \alias{as.data.frame.pems}
 \alias{as.data.frame}
 \alias{dim.pems}
+\alias{dim}
 %\alias{nrow.pems}
 %\alias{ncol.pems}
 \alias{$.pems}
+\alias{$}
 \alias{$<-.pems}
+\alias{$<-}
 \alias{[.pems}
+\alias{[}
 \alias{[<-.pems}
+\alias{[<-}
 \alias{[[.pems}
+\alias{[[}
 \alias{[[<-.pems}
+\alias{[[<-}
 \alias{with.pems}
+\alias{with}
 \alias{subset.pems}
+\alias{subset}
 \alias{head.pems}
+\alias{head}
 \alias{tail.pems}
+\alias{tail}
 \alias{names.pems}
+\alias{names}
 \alias{names<-.pems}
+\alias{names<-}
 \alias{print.pems}
+\alias{print}
 \alias{plot.pems}
 \alias{summary.pems}
 \alias{units.pems}
+\alias{units}
 \alias{units<-.pems}
-
+\alias{units<-}
 
 \title{ Generic handling of pems objects }
 
@@ -59,7 +74,7 @@
 
 \method{names}{pems}(x, ...) <- value
 
-\method{print}{pems}(x, verbose = FALSE, n = 6, ...)
+\method{print}{pems}(x,..., rows=NULL, cols=NULL, width=NULL)
 
 \method{plot}{pems}(x, id = NULL, ignore = "time.stamp", n = 3, ...)
 
@@ -89,7 +104,7 @@
 }
 
   \item{i, j}{ 
-  Column (elements) and row indices, which operate in a stricter version of 
+  Row and column (elements) indices, which operate as a stricter version of 
   \code{data.frame} indices. See Note below.
 }
 
@@ -127,18 +142,16 @@
   (Logical) \code{simplify} returns a \code{pems.element} rather than a \code{pems} object 
   if possible. 
 }
-
-  \item{verbose}{ 
-  (Logical, TRUE/FALSE). Should the longer form of the output be returned? By default, most 
-  functions with short and long output versions return the shorter form.
-}
    
   \item{id, ignore}{ 
   (local plot parameters). \code{id} identifies which data series to plot; \code{ignore} identifies 
   which data series to ignore when leaving the choice of \code{id} to the function; and, \code{n} gives 
   the maximum number of data series to plot when leaving the choice of \code{id} to the function.
 }
-
+  \item{rows, cols, width}{
+  (numerics, optional). For \code{print}, if supplied, these reset the number of rows and columns 
+  to table when printing a \code{pems} object, and character width to print across.   
+}
   \item{n}{ 
   (various). For \code{plot}, sets the maximum number of data series to plot when leaving the choice of 
   \code{id} to the function. For \code{head} or \code{tail}, sets the number of rows. 
@@ -182,7 +195,7 @@
   \code{subset(data.frame, expression)}.
 
   \code{print(pems.object)} provides a (to console) description of a \code{pems} 
-  object. 
+  object. This forshortens large datasets in a similar fashion to a tibble. 
 
   \code{plot(pems.object)} generates a standard R plot using selected data series in 
   a \code{pems} object.

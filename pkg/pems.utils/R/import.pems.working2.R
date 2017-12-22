@@ -169,10 +169,12 @@ importParSYNC2PEMS <- function(file.name = file.choose(), reset.signals = TRUE,
 
     #make pems
     output <- makePEMS(x = ans, units = units, constants = constants, history = history, pm.analyzer=pm.analyzer, ...)
- 
-    class(output) <- "not.pems"
-    output$history[length(output$history)] <- this.call 
-    class(output) <- "pems"
+
+#################
+#rediscarding history 
+#    class(output) <- "not.pems"
+#    output$history[length(output$history)] <- this.call 
+#    class(output) <- "pems"
    
     #return output
     return(output)

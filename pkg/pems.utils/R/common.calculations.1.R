@@ -103,7 +103,6 @@ calcPack <- function(output = NULL, data = NULL, settings = NULL,
         class(output) <- old.class 
     }
 
-
     output
     
 }

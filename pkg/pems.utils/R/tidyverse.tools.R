@@ -4,6 +4,28 @@
 ##########################
 ##########################
 
+
+##########################
+# to fix
+##########################
+#mutate warning wrong if 
+#  units are wrong
+#########
+#ungroup returns a tibble 
+#  not pems
+#  might want to work though that
+#  slowly
+#########
+#
+
+
+
+##########################
+# to think about
+##########################
+#summarise 
+
+
 #package
 #(new/old structure)
 #(old in, code, out)
@@ -17,12 +39,14 @@
 #        - fortify.pems
 
 #dplyr   
-#(in either, rebuild old->new, code new, rebuil new->old, out old)
+#(in either, rebuild old->new, code new, out new)
 #        - select, select_.pems
 #        - rename, rename_.pems
 #        - filter, filter_.pems
 #        - arrange, arrange_.pems
 #        - slice, slice_.pems        
+#        - inner_join, left_join, right_join, full_join, semi_join, anti_join
+#(in either, rebuild old->new, code new, new -> old, out old)
 #(in either, rebuild new->old, code old, out old)
 #        - mutate.pems, mutate_.pems
 #(in development)
@@ -68,8 +92,6 @@
 
 fortify.pems <- function (model, data, ...) {
 
-#problem with this and group_by
-
     #transistioning pems build.type
     model <- rebuildPEMS(model, "new")
 
@@ -87,6 +109,7 @@ fortify.pems <- function (model, data, ...) {
     if(length(class(x))==1) class(x) <- "data.frame"
     for(i in names(x)) class(x[,i]) <- class(x[,i])[class(x[,i])!="pems.element"]
     x
+
 }
 
 
@@ -204,10 +227,8 @@ select.pems <- function (.data, ...){
 #       could change names
 #select(pems, speed=velocity)
 
-   #for new build only
-   .data <- rebuildPEMS(.data, "new")
-
-
+    #for new build only
+    .data <- rebuildPEMS(.data, "new")
 
     bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
     attributes(.data)$units <- NULL
@@ -232,9 +253,11 @@ select.pems <- function (.data, ...){
     class(.data) <- if(length(class(.data))==1) 
           "pems" else
               unique(c("pems", class(.data)))
+    if("grouped_df" %in% class(.data))
+          class(.data) <- unique("grouped_df", class(.data))
 
-#  return as old pems
-   rebuildPEMS(.data, "old")
+#  return as is (new pems)
+   .data
 
 }
 
@@ -271,7 +294,9 @@ select_.pems <- function (.data, ..., warn=TRUE){
     class(.data) <- if(length(class(.data))==1) 
           "pems" else
               unique(c("pems", class(.data)))
-   rebuildPEMS(.data, "old")
+    if("grouped_df" %in% class(.data))
+          class(.data) <- unique("grouped_df", class(.data))
+   .data
 
 }
 
@@ -341,7 +366,9 @@ rename.pems <- function (.data, ...){
     class(.data) <- if(length(class(.data))==1) 
           "pems" else
               unique(c("pems", class(.data)))
-   rebuildPEMS(.data, "old")
+    if("grouped_df" %in% class(.data))
+          class(.data) <- unique("grouped_df", class(.data))
+   .data
 
 }
 
@@ -372,7 +399,9 @@ rename_.pems <- function (.data, ..., warn = TRUE){
     class(.data) <- if(length(class(.data))==1) 
           "pems" else
               unique(c("pems", class(.data)))
-   rebuildPEMS(.data, "old")
+    if("grouped_df" %in% class(.data))
+          class(.data) <- unique("grouped_df", class(.data))
+   .data
 
 }
 
@@ -418,7 +447,7 @@ filter.pems <- function(.data, ...){
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags", "class")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -432,11 +461,8 @@ filter.pems <- function(.data, ...){
     #rebuild
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    #######################
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -449,19 +475,18 @@ filter_.pems <- function(.data, ..., warn=TRUE){
         "see rlang `quo()` documentation", sep=" "), call. = FALSE)
 
     .data <- rebuildPEMS(.data, "new")
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags", "class")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
           "data.frame" else
                class(.data)[class(.data) != "pems"] 
-    .data <- as.data.frame(filter(tbl_df(.data), ...)) 
+    .data <- as.data.frame(filter(tbl_df(.data), ...))
+    #rebuild
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-   rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -498,7 +523,7 @@ arrange.pems <- function(.data, ...){
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -512,11 +537,8 @@ arrange.pems <- function(.data, ...){
     #rebuild
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    #######################
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -530,7 +552,7 @@ arrange_.pems <- function(.data, ..., warn=TRUE){
         "see rlang `quo()` documentation", sep=" "), call. = FALSE)
     
     .data <- rebuildPEMS(.data, "new")
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -539,10 +561,8 @@ arrange_.pems <- function(.data, ..., warn=TRUE){
     .data <- as.data.frame(arrange(tbl_df(.data), ...))
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -581,7 +601,7 @@ slice.pems <- function(.data, ...) {
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -595,13 +615,8 @@ slice.pems <- function(.data, ...) {
     #rebuild
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    #######################
-    rebuildPEMS(.data, "old")
-
-
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -615,7 +630,7 @@ slice_.pems <- function(.data, ..., warn=TRUE) {
         "see rlang `quo()` documentation", sep=" "), call. = FALSE)
 
     .data <- rebuildPEMS(.data, "new")
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -624,10 +639,8 @@ slice_.pems <- function(.data, ..., warn=TRUE) {
     .data <- as.data.frame(slice(tbl_df(.data), ...))
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -669,7 +682,7 @@ mutate.pems <- function(.data, ..., units=NULL, warn=TRUE) {
     ######################################
     #break pems like in other functions
 
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -719,12 +732,8 @@ mutate.pems <- function(.data, ..., units=NULL, warn=TRUE) {
     #rebuild
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    #######################
-    #return .data as old pems structure
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -741,7 +750,7 @@ mutate_.pems <- function(.data, ..., units=NULL, warn=TRUE) {
 
     m.vars <- exprs_auto_name(quos(...)) 
     m.vars <- gsub("~", "", names(m.vars))
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -775,10 +784,8 @@ mutate_.pems <- function(.data, ..., units=NULL, warn=TRUE) {
           "see `mutate.pems()` documentation", sep=" "), call. = FALSE)
     attributes(.data)$units <- bare.bones$units
     attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    rebuildPEMS(.data, "old")
+    class(.data) <- bare.bones$class
+   .data
 
 }
 
@@ -820,7 +827,7 @@ summarise.pems <- function(.data, ...) {
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -865,7 +872,7 @@ summarise_.pems <- function(.data, ..., warn=TRUE) {
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -935,7 +942,7 @@ group_by.pems <- function(.data, ..., add = FALSE) {
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -956,14 +963,8 @@ group_by.pems <- function(.data, ..., add = FALSE) {
     #rebuild
     attributes(out)$units <- bare.bones$units
     attributes(out)$pems.tags <- bare.bones$pems.tags
-#    class(out) <- unique(c(c("grouped_df", "pems"), class(out)))
-
-#testing
-    class(out) <- c("grouped_df", "pems")
-#    return(out)
-
-    #######################
-    rebuildPEMS(out, "old")
+    class(out) <- unique(c("grouped_df", bare.bones$class))
+    out
 
 }
 
@@ -980,7 +981,7 @@ group_by_.pems <- function(.data, ..., add = FALSE, warn = TRUE) {
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
     attributes(.data)$units <- NULL
     attributes(.data)$pems.tags <- NULL
     class(.data) <- if(length(class(.data))==1) 
@@ -1001,14 +1002,8 @@ group_by_.pems <- function(.data, ..., add = FALSE, warn = TRUE) {
     #rebuild
     attributes(out)$units <- bare.bones$units
     attributes(out)$pems.tags <- bare.bones$pems.tags
-#    class(out) <- unique(c(c("grouped_df", "pems"), class(out)))
-
-#testing
-    class(out) <- c("grouped_df", "pems")
-    return(out)
-
-    #######################
-    rebuildPEMS(out, "old")
+    class(out) <- unique(c("grouped_df", bare.bones$class))
+    out
 
 }
 
@@ -1019,22 +1014,21 @@ group_by_.pems <- function(.data, ..., add = FALSE, warn = TRUE) {
 
 
 
+#exported
 
 #I think ...data.frame runs through ungroup_grouped_df
 #regardless of how I think methods work...
 
 ungroup.pems <- function(x, ...){
 
-#this will need fixing if it works...
+#this may need fixing even if it works...
    
-    x <- rebuildPEMS(x, "old")
-    x[["grouped_df.tags"]] <- NULL
-    x <- rebuildPEMS(x, "new")
-    class(x) <- c("grouped_df", "data.frame")
-    x <- ungroup(x)
-    class(x) <- "pems"
-    return(x)
-    
+    class(x) <- c("pems", "tbl_df", "tbl", "data.frame")
+    if(!"pems.tags" %in% names(attributes(x)))
+        warning(paste("ungroup.pems: tidyverse broke me;", 
+        "Oh well", sep=" "), call. = FALSE)
+    x
+        
 }
 
 
@@ -1052,6 +1046,161 @@ group_size.pems <- function(x) nrow(x)
 
 #' @export
 n_groups.pems <- function(x) 1L
+
+
+
+
+############################################################
+############################################################
+##join functions
+############################################################
+############################################################
+
+#local function not exporting
+
+joinPEMSPreOp <- function (x, y, by){
+
+    #retains pems settings
+    ref <- list(
+       out.class = unique(c(class(x), class(y))),
+       out.pems.tags = listUpdate(attributes(y)$pems.tags, attributes(x)$pems.tags),
+       x.units = attributes(x)$units,
+       y.units = attributes(y)$units
+    )
+    #units(y)[by] must equal units(x)[by] to join by...
+    ref$y.units[by] <- ref$x.units[by]
+    ref
+}
+
+
+
+
+#export functions
+
+#test using internal function    
+#could simplify this a lot?
+
+#suffix = c(".x", ".y") default set latter via ...
+    
+#left_join code
+#left_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+#left_join.pems <- edit(dplyr:::left_join.data.frame)
+#as.data.frame(left_join(tbl_df(x), y, by = by, copy = copy, ...))
+
+left_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+
+    #operation
+    out <- left_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    #units update
+    attributes(out)$units <- left_join(as.data.frame(ref$x.units), as.data.frame(ref$y.units), 
+                                        by=by, copy=copy,...)
+    #repair
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    #export 
+    out   
+
+}
+
+#inner_join(x, y, by = NULL, copy = FALSE, suffix = c(".x", ".y"), ...)
+#as.data.frame(inner_join(tbl_df(x), y, by = by, copy = copy, ...))
+#code as left_join.pems
+
+inner_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+    out <- inner_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    attributes(out)$units <- inner_join(as.data.frame(ref$x.units), as.data.frame(ref$y.units), 
+                                        by=by, copy=copy,...)
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    out   
+
+}
+
+
+#right_join(x, y, by = NULL, copy = FALSE, ...) 
+#as.data.frame(right_join(tbl_df(x), y, by = by, copy = copy, ...))
+#code as left_join.pems
+
+right_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+    out <- right_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    attributes(out)$units <- right_join(as.data.frame(ref$x.units), as.data.frame(ref$y.units), 
+                                        by=by, copy=copy,...)
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    out   
+
+}
+
+#full_join(x, y, by = NULL, copy = FALSE, ...) 
+#as.data.frame(full_join(tbl_df(x), y, by = by, copy = copy, ...))
+#code as left_join.pems
+
+full_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+    out <- full_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    attributes(out)$units <- full_join(as.data.frame(ref$x.units), as.data.frame(ref$y.units), 
+                                        by=by, copy=copy,...)
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    out   
+
+}
+
+
+
+#semi_join(x, y, by = NULL, copy = FALSE, ...) 
+#as.data.frame(semi_join(tbl_df(x), y, by = by, copy = copy, ...))
+#code as left_join.pems
+#but units are just x units... because this only returns related bits of x
+
+semi_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+    out <- semi_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    attributes(out)$units <- as.data.frame(ref$x.units)
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    out   
+
+}
+
+
+
+#anti_join(x, y, by = NULL, copy = FALSE, ...) 
+#as.data.frame(anti_join(tbl_df(x), y, by = by, copy = copy, ...))
+#code as left_join.pems
+#but units are just x units... because this only returns related bits of x
+
+anti_join.pems<- function (x, y, by = NULL, copy = FALSE, ...){
+    
+    x <- rebuildPEMS(x)            #in case old
+    y <- rebuildPEMS(as.pems(y))   #in case not pems, old or new...
+    ref <- joinPEMSPreOp(x,y,by)
+    out <- anti_join(as.data.frame(x), as.data.frame(y), by=by, copy=copy, ...)
+    attributes(out)$units <- as.data.frame(ref$x.units)
+    attributes(out)$pems.tags <- ref$out.pems.tags 
+    class(out) <- ref$out.class
+    out   
+
+}
+
 
 
 

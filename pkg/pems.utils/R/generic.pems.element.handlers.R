@@ -6,6 +6,10 @@
 
 #kr 01/02/2012 v 0.3.1
 
+#kr rebuild 11/2017 
+##print.pems.element reactivated
+
+
 #includes 
 #(functions/code below) 
 ##########################
@@ -13,16 +17,40 @@
 #print.pems.element
 #plot.pems.element
 #units.pems.element
-#summary.pems.element
 #<-.units.pems.element
+#summary.pems.element
 #[.pems.element
 #[<-.pems.element
 
 
-
+###############################
 #to do
-#########################
+#############
+#look at as.data.frame.pems.element
+#before reinstating these
+#############
 #export [<-.pems.element
+#############
+#need to look at plot and print etc.
+#Warning message:
+#In class(ans) <- class(ans)[class(ans) != "pems.element"] :
+#  NAs introduced by coercion
+#compare with other pems.element[] and pems.element[]<-
+#############
+#
+
+
+###############################
+#to think about
+################
+#print.pems could have earlier classes
+#so don't dump attributes when
+#pems.utils not installed
+################
+#cat or message???
+################
+#
+
 
 
 
@@ -47,7 +75,6 @@ as.data.frame.pems.element <- function(x, ...){
 
 
 print.pems.element <- function (x, ...){
-
 
 #to do
 ###################
@@ -386,17 +413,6 @@ summary.pems.element <- function(object, ...){
 
 
 
-
-#############################
-#working
-#############################
-
-
-#need to look at plot and print etc.
-#Warning message:
-#In class(ans) <- class(ans)[class(ans) != "pems.element"] :
-#  NAs introduced by coercion
-#compare with other pems.element[] and pems.element[]<-
 
 
 

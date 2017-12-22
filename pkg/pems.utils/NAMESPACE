@@ -1,34 +1,129 @@
-#NEED to work out how to compile
-#with imports
-
+#############################
 #imports
+#############################
 
-#currently library loaded
-#so user/examples accessible
+## import/depends
 
-#seems to need these imported as well as depends
 import(lattice)
 import(loa)
 
-#requested by CRAN
+#NEED to work out how to compile
+#with imports
+#currently library loaded
+#so user/examples accessible
+#seems to need these imported as well as depends
+
+## imports
+
+import(grid)
+import(RColorBrewer)
+import(latticeExtra)
+import(dplyr)
+
+## no longer importing all package
+
+#import(utils) #just importing head and tail methods
+#import(ggplot2) #just importing fortify
+
+## replaced depends/imports...
+
+#import(plyr) #replacing with dplyr
+
+## requested by CRAN
+
 importFrom("grDevices", "colorRampPalette", "gray")
 importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass")
-importFrom("utils", "read.csv", "read.delim", "write.table")
+importFrom(utils, read.csv, read.delim, write.table, head, tail)
 
 
-#imported packages 
-#import(utils) #just importing head and tail methods
-import(grid)
-import(RColorBrewer)
-import(latticeExtra)
-#import(ggplot2) #just importing fortify
-#import(plyr) #replacing with dplyr
-import(dplyr)
+##########################
+#pems.utils generics
+##########################
 
-#front.of.house
+##imported methods
+
+#in base/don't need to importFrom?
+#as.data.frame, print, units
+
+#primatives/don't need to importFrom
+#dim, names, 
+
+#already importFrom elsewhere
+#plot from graphics (above)
+#head, tail in utils (above)
+
+##generic.pems handlers
+
+S3method(as.data.frame, pems)
+S3method(dim, pems)
+S3method(print, pems)
+S3method(names, pems)
+S3method("names<-", pems)
+S3method("$", pems)
+S3method("$<-", pems)
+S3method("[", pems)
+S3method("[<-", pems)
+S3method(units, pems)
+S3method("units<-", pems)
+S3method(head, pems)
+S3method(tail, pems)
+S3method("[[", pems)
+S3method("[[<-", pems)
+S3method(plot, pems)
+S3method(summary, pems)
+S3method(with, pems)
+S3method(subset, pems)
+
+
+#don't need these?
+# nrow.pems -dim does it
+# ncol.pems -dim does it 
+
+
+##generic.pems.element handlers
+
+S3method(as.data.frame, pems.element)
+S3method(print, pems.element)
+S3method("[", pems.element)
+S3method("[<-", pems.element)
+S3method(plot, pems.element)
+S3method(units, pems.element)
+S3method("units<-", pems.element)
+S3method(summary, pems.element)
+
+
+
+
+##exports
+
+export(as.data.frame)
+export(dim)
+export(print)
+export(names)
+export("names<-")
+export("[")
+export("[<-")
+export("$")
+export("$<-")
+export(units)
+export("units<-")
+export(head)
+export(tail)
+export("[[")
+export("[[<-")
+export(plot)
+export(summary)
+export(with)
+export(subset)
+export(left_join)
+
+
+
+
+##front.of.house
 
 #make.pems
 export(is.pems)
@@ -39,7 +134,6 @@ export(rebuildPEMS)
 export(makePEMS)
 export(makePEMSElement)
 export(as.pems)
-
 S3method(as.pems, default)
 S3method(as.pems, data.frame)
 
@@ -73,123 +167,112 @@ export(exportPEMSData)
 export(exportPEMS2CSV)
 
 
+###############################
 #tidyverse
+###############################
 
+#####################
 #rlang
-#might want to just import all of package?
 
-importFrom(rlang, caller_env, have_name, exprs_auto_name)
+#might want to just import all of package?
 #import(rlang)
+importFrom(rlang, caller_env, have_name, exprs_auto_name)
+
+######################
+#dplyr
 
 #not sure why I need to do this
 #but it make the methods work without
-#the dplyr loaded
+
 importFrom(dplyr, select)
+export(select)
+S3method(select, pems)
+S3method(select_, pems)
+
 importFrom(dplyr, rename)
+export(rename)
+S3method(rename, pems)
+S3method(rename_, pems)
+
 importFrom(dplyr, filter)
+export(filter)
+S3method(filter, pems)
+S3method(filter_, pems)
+
 importFrom(dplyr, arrange)
+export(arrange)
+S3method(arrange, pems)
+S3method(arrange_, pems)
+
 importFrom(dplyr, slice)
+export(slice)
+S3method(slice, pems)
+S3method(slice_, pems)
+
 importFrom(dplyr, mutate)
-importFrom(dplyr, group_by)
+export(mutate)
+S3method(mutate, pems)
+S3method(mutate_, pems)
+
 importFrom(dplyr, summarise)
+export(summarise)
+#testing not export pems version...
+#S3method(summarise, pems)
+#S3method(summarise_, pems)
+
+importFrom(dplyr, group_by)
+export(group_by)
+S3method(group_by, pems)
+S3method(group_by_, pems)
+
+importFrom(dplyr, ungroup)
+export(ungroup)
+S3method(ungroup, pems)
 
 importFrom(dplyr, groups)
-importFrom(dplyr, ungroup)
-importFrom(dplyr, group_size)
-importFrom(dplyr, n_groups)
-
-
-export(select)
-export(rename)
-export(filter)
-export(arrange)
-export(slice)
-export(mutate)
-export(group_by)
-export(summarise)
-
 export(groups)
-export(ungroup)
-export(group_size)
-export(n_groups)
-
-
-
-S3method(select, pems)
-S3method(rename, pems)
-S3method(filter, pems)
-S3method(arrange, pems)
-S3method(slice, pems)
-S3method(mutate, pems)
-S3method(group_by, pems)
-S3method(summarise, pems)
-
 S3method(groups, pems)
-S3method(ungroup, pems)
+
+importFrom(dplyr, group_size)
+export(group_size)
 S3method(group_size, pems)
+
+importFrom(dplyr, n_groups)
+export(n_groups)
 S3method(n_groups, pems)
 
-S3method(select_, pems)
-S3method(rename_, pems)
-S3method(filter_, pems)
-S3method(arrange_, pems)
-S3method(slice_, pems)
-S3method(mutate_, pems)
-S3method(group_by_, pems)
-S3method(summarise_, pems)
 
+importFrom(dplyr, left_join)
+S3method(left_join, pems)
+export(left_join)
+
+importFrom(dplyr, inner_join)
+S3method(inner_join, pems)
+export(inner_join)
+
+importFrom(dplyr, right_join)
+S3method(right_join, pems)
+export(right_join)
+
+importFrom(dplyr, full_join)
+S3method(full_join, pems)
+export(full_join)
+
+importFrom(dplyr, semi_join)
+S3method(semi_join, pems)
+export(semi_join)
+
+importFrom(dplyr, anti_join)
+S3method(anti_join, pems)
+export(anti_join)
+
+#####################
+#ggplot2
 
 #need for ggplot2 add-in
 importFrom(ggplot2, fortify)
 export(fortify)
 S3method(fortify, pems)
-
-
-#generic.pems.handlers
-
-#imports for non-base
-importFrom(utils,head)
-importFrom(utils,tail)
-
-
-
-S3method(as.data.frame, pems)
-export(as.data.frame)
-
-
-
-S3method(dim, pems)
-###### dim does these
-#S3method(nrow, pems)
-#S3method(ncol, pems)
-######
-S3method("$", pems)
-S3method("$<-", pems)
-S3method("[", pems)
-S3method("[<-", pems)
-S3method("[[", pems)
-S3method("[[<-", pems)
-S3method(print, pems)
-S3method(plot, pems)
-S3method(names, pems)
-S3method("names<-", pems)
-S3method(head, pems)
-S3method(tail, pems)
-S3method(summary, pems)
-S3method(units, pems)
-S3method("units<-", pems)
-S3method(with, pems)
-S3method(subset, pems)
-
-S3method("[", pems.element)
-S3method("[<-", pems.element)
-S3method(as.data.frame, pems.element)
-S3method(print, pems.element)
-S3method(plot, pems.element)
-S3method(units, pems.element)
-S3method("units<-", pems.element)
-S3method(summary, pems.element)
-
 
 
 

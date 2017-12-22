@@ -34,9 +34,20 @@
 \alias{summarise.pems}
 \alias{summarise}
 
+\alias{left_join.pems}
+\alias{left_join}
+\alias{inner_join.pems}
+\alias{inner_join}
+\alias{right_join.pems}
+\alias{right_join}
+\alias{full_join.pems}
+\alias{full_join}
+\alias{semi_join.pems}
+\alias{semi_join}
+\alias{anti_join.pems}
+\alias{anti_join}
 
-\alias{fortify.pems}
-\alias{fortify}
+
 
 
 \title{
@@ -65,8 +76,7 @@ Various codes and methods.
 \method{n_groups}{pems}(x)
 \method{summarise}{pems}(.data, ...)
 
-
-#dplyr (2) underscore methods
+#dplyr (2) related underscore methods
 \method{select_}{pems}(.data, ..., warn=TRUE)
 \method{rename_}{pems}(.data, ..., warn=TRUE)
 \method{filter_}{pems}(.data, ..., warn=TRUE)
@@ -76,8 +86,13 @@ Various codes and methods.
 \method{group_by_}{pems}(.data, ..., add=FALSE, warn=TRUE)             
 \method{summarise_}{pems}(.data, ..., warn=TRUE)
 
-#ggplot
-\method{fortify}{pems}(model, data, ...)
+#dplyr (3) joining methods
+\method{inner_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
+\method{left_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
+\method{right_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
+\method{full_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
+\method{semi_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
+\method{anti_join}{pems}(x, y, by = NULL, copy = FALSE, ...)
 
 }
 
@@ -97,38 +112,38 @@ Various codes and methods.
   (Character) In mutate, the units to assign to new elements created by call. See Below.
 }
   \item{x}{
-   (grouped_df) Object class used by group_by and related dplyr grouping functions. 
+   (Various) For \code{group...} fucntions, an object of \code{grouped_df} class. For 
+   \code{...join} functions, the first of two datasets, typically a \code{pems} object or 
+   \code{data.frame}, to be joined together.
 }
   \item{add}{
    (Optional) Argument used by group_by and related dplyr grouping functions. 
 }
-  \item{model}{
-  (pems.object) The pems object to be used as a data source when plotting using ggplot2 code. See 
-  below.
+  \item{y, by, copy}{
+   (various) For \code{...join} functions, consistent with \code{dplyr}, \code{y} is the 
+   second of two datasets, typically a \code{pems} object or \code{data.frame}, to be 
+   joined together, the first being \code{x}, and \code{by} and \code{copy} are optional 
+   arguments. See below.   
 }
-  \item{data}{
-  (Optional) Currently ignored by fortify.pems. See below.
-}
-
 
 }
 
 \details{
 
   The pems object methods \code{select}, \code{rename}, \code{filter}, 
-  \code{arrange}, \code{slice}, \code{mutate}, \code{group_by}, 
-  \code{summarise} ...
-  are similar to data.frame methods in \code{dplyr}, but (hopefully) they 
-  also track units, etc, like a pems object. Work in progress. See below, 
-  especially Note. 
+  \code{arrange}, \code{slice}, \code{mutate}, \code{group_by} and  
+  \code{summarise} are similar to \code{data.frame} methods of the same 
+  names in \code{dplyr}, but (hopefully) they also track units, etc, like a pems object. Work 
+  in progress. See below, especially Note.
 
   Equivalent underscore methods (\code{select_}, etc) are also provided, although 
   it should be noted that their future in dplyr itself is not certain.
 
-  The \code{fortify} method was developed by Hadley Wickham to simplify the integration of 
-  \code{ggplot2} functions and special object classes. It is a really nice idea for multiple 
-  reasons, the main one being that package users will probably never have to worry about it. 
-
+  Data joining methods include \code{inner_join}, \code{left_join}, \code{right_join}, 
+  \code{full_join}, \code{semi_join} and \code{anti_join}. Like above these are similar 
+  \code{data.frame} equivalents in \code{dplyr}, but (hopefully) also track units, etc, 
+  like a pems object. Same 'work in progress' caveat. See below.
+   
 }
 
 
@@ -164,8 +179,9 @@ Various codes and methods.
 
   \code{summarise} [to document]  
 
-  \code{fortify} is intended for used with ggplot2 code when both pems.utils and 
-  ggplot2 are loaded.
+  The \code{..._join} joining methods, join to supplied datasets. The first, \code{x}, 
+  must be a \code{pems} to employ \code{..._join.pems} by the second, \code{y} can be 
+  e.g. a \code{data.frame}, etc. [rest to document... link to dplyr and vignette]
 
 }
 \references{
