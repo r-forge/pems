@@ -9,11 +9,17 @@
 #includes 
 #(functions/code below) 
 ##########################
+#import2PEMS
 #importTAB2PEMS
 #importCSV2PEMS
 #importOBS2PEMS
 #importOB12PEMS
 #
+
+#misc
+##########################
+# getUnitsFromNames
+
 
 #to do
 ##########################
@@ -35,7 +41,6 @@
 
 #comments
 ##########################
-
 
 
 
@@ -70,18 +75,28 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
                         ..., file.type = NULL, file.reader = read.delim){
 
     #setup
-    this.call <- match.call()
+    this.call <- match.call()   #for history, might not need this anymore...
+    file <- file.name           #in case we need to read the file several time...
+    extra.args <- list(...)     #for hidden args, might not need...
 
     #time.format
     if(is.null(time.format))
         time.format <- "%d/%m/%Y %H:%M:%OS"
 
+    #local tidies
+    names <- NULL
+    if(is.character(units) && length(units)==1){
+         if(units=="get.from.header"){
+              temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=1)
+              temp <- getUnitsFromNames(temp, output="all")
+              units <- temp$units
+              names <- temp$names
+         }
+    }
 
 ##################
 #file.type code to add
 ##################
-
-
 
 ##################
 #this needs better handling
@@ -96,8 +111,15 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
 #then strip those before going on
 #############
 
+    data <- file.reader(file, header=TRUE)
 
-    data <- file.reader(file.name, header=TRUE)
+###################
+#think about this 
+#unit and name handling
+###################
+
+    if(!is.null(names)) names(data) <- make.names(names, unique=TRUE)
+    if(!is.null(units)) units <- units
 
 ################
 #not always GMT!
@@ -548,3 +570,57 @@ importOB12PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
     
     output
     }
+
+
+
+
+
+
+###################################
+###################################
+##misc
+###################################
+###################################
+
+
+
+###################################
+###################################
+##getUnitsFromNames
+###################################
+###################################
+
+#kr 30/12/2017
+#unexported
+
+getUnitsFromNames <- function(names, ..., output="all"){
+
+    #recover units from a name suffix
+    #for names in form [name](units)
+
+    #outputs "units" units recovered
+    #        "names" [name] without units suffix
+    #        "all" list of both
+
+    #strip (units) if there
+    test <- lapply(names, function(x) substr(x,nchar(x), nchar(x))==")")
+    units <- rep(NA, length(test))
+    for(i in 1:length(test)){
+        if(test[[i]]){
+            #get units
+            temp <- gregexpr("[(]", names[[i]])[[1]]
+            temp <- temp[length(temp)]
+            units[i] <- substr(names[[i]], temp+1, nchar(names[[i]])-1)
+            names[[i]] <- gsub(" ", "", substr(names[[i]], 1, (temp-1)))
+        } else {
+            #no units
+            units[i] <- ""
+        }
+    }
+
+    #output
+    if(output=="units") return(units)
+    if(output=="names") return(names)
+    list(names=names, units=units)
+
+}

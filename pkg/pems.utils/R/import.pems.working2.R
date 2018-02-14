@@ -70,9 +70,16 @@ importParSYNC2PEMS <- function(file.name = file.choose(), reset.signals = TRUE,
     extra.args <- extra.args[!names(extra.args) %in% "to.lower"]
 
     #set up import
-    extra.args <- listUpdate(list(header=TRUE), extra.args)
-    extra.args$file <- file.name
-    ans <- do.call(read.csv, extra.args)
+
+    if(is.data.frame(file.name)){
+        #if data.frame treat as already imported data
+        ans <- file.name
+    } else {
+        #read file in
+        extra.args <- listUpdate(list(header=TRUE), extra.args)
+        extra.args$file <- file.name
+        ans <- do.call(read.csv, extra.args)
+    }
 
     #reset time stamps
     temp <- ans[c("Timestamp", "Date", "Time")]

@@ -101,6 +101,15 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
     if(n > nrow(x)) n <- nrow(x)
     if(is.null(width)) width <- getOption("width") * 0.9
 
+###
+#new bit
+#foreshortening shown other columns
+######################
+    extra.args <- list(...)
+    max.other.cols <- if("max.other.cols" %in% names(extra.args))
+                          extra.args$max.other.cols else 6
+########################
+
     #make all columns characters
 ########################
 #a lot of this can go when 
@@ -194,7 +203,21 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
          footer2[1] <- paste(" ... ", footer2[1], sep="")
          if(length(footer2)>1)
                footer2[2:length(footer2)] <- paste("      ", footer2[2:length(footer2)], sep="")
-         footer2 <- paste(footer2, "\n", collapse="", sep="") 
+         footer2 <- paste(footer2, "\n", collapse="", sep="")
+
+         test <- gregexpr("\n", footer2)[[1]]
+
+###########################################
+#new bit foreshortening other cols
+#might change
+         if(attributes(test)$match.length[1]>0){
+             if(length(test)>max.other.cols){
+                 test2 <- length(gregexpr(";", substr(footer2, test[max.other.cols], nchar(footer2)))[[1]])+1 
+                 footer2 <- substr(footer2, 1, test[max.other.cols])
+                 footer2 <- paste(footer2, "      ... and ", test2, " other unreported columns", sep="")
+             }
+         }
+############################################
          #footer2 <- paste(footer2, "\n", sep="")
     } 
             

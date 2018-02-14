@@ -12,6 +12,10 @@
 #pemsHistory
 #pemsDim
 
+#testing
+################
+#pemsin
+
 
 
 #TO DO
@@ -212,4 +216,46 @@ pemsDim <- function(pems=NULL, ...,
     class(pems) <- "not.pems"
     dim(pems$data)
 
+}
+
+
+
+
+
+##########################
+##########################
+##pemsin
+##########################
+##########################
+
+#kr v.0.1 07/06/2017 (from sleeper.service)
+
+#pemsin
+#pems.utils
+
+#inputCheck alternative based on lazyeval package
+##uses 
+##lazy and lazyeval
+
+#comments
+##this is a test
+##this needs work
+##needs care 
+
+#currently import all of lazy eval 
+#might only need lazyeval and lazy
+
+pemsin <- function(x, data=NULL){
+
+######################
+#to do
+######################
+
+#local error catcher
+
+    x <- lazyeval::lazy(x)
+    if(!is.null(data))
+         if(!is.data.frame(data)) data <- as.data.frame(data)
+    x <- lazyeval::lazy_eval(x, data=data)
+    x
 }

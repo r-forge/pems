@@ -1,6 +1,22 @@
-Changes in pems.utils 0.2.24 [2017-12-06]
+Changes in pems.utils 0.2.25 [2018-02-13]
 ========================================
 
+*       transferred pemsin from 
+        sleeper.service package
+*       transferred correctBaseline from
+        sleeper.service package; added 
+        basline package to imports
+*       cAlign update, now fitting from
+        align(data1, data2, middle)
+
+
+Changes in pems.utils 0.2.24 [2017-12-30]
+========================================
+
+*       exportPEMS2CSV update, suffix 
+        (units) not _units
+*       importParSYNC2PEMS now accepts 
+        data.frame as well as file path
 *       temp update of old structuring 
         functions, pemsData, etc...
 *       rolled back pems generics for new 

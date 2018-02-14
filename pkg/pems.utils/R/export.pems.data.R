@@ -62,12 +62,15 @@ exportPEMSData <- function(data, file="tempfile", ..., sep="\t", file.writer = w
 
 exportPEMS2CSV <- function(pems, file = "tempfile", ...){
 
-#this take a pems object, tidies it and saves it as file.name 
-#this is a file which you should be able to open in excel
+     #this take a pems object, tidies it and saves it as file.name 
+     #this is a file which you should be able to open in excel
+
+     #excel.headers = pems names + (units) if units set
+     #note: earlier versions used pems names _units
 
      #remove special columns
      if("..count" %in% names(pems))
-           pems <- data[names(pems)!="..count"]
+           pems <- pems[names(pems)!="..count"]
 
      #get units
      units <- unlist(c(as.vector(units(pems))))
@@ -76,9 +79,17 @@ exportPEMS2CSV <- function(pems, file = "tempfile", ...){
      col.names <- names(pems)
      #this might seem long-winded but it stops pems object
      #mucking up if element orders in pems[[data]] and pems[[units]] are different 
+
+###############
+#replacing
+##     for(i in col.names)
+##          col.names[col.names==i] <- if(!is.na(units(pems)[col.names==i]) && units(pems)[col.names==i]!= "")
+##                            paste(i, units(pems)[col.names==i], sep="_") else i
+#with
      for(i in col.names)
           col.names[col.names==i] <- if(!is.na(units(pems)[col.names==i]) && units(pems)[col.names==i]!= "")
-                            paste(i, units(pems)[col.names==i], sep="_") else i
+                            paste(i, "(", units(pems)[col.names==i], ")", sep="") else i
+###############
 
 ###################
 #this does not write units nicely to excel
@@ -104,7 +115,7 @@ exportPEMS2CSV <- function(pems, file = "tempfile", ...){
      ##pems <- as.data.frame(pems)
      ##names(pems) <- NULL
        
-     write.table(pems, file = file, col.names = col.names, row.names = FALSE, na = "", sep=",")
+     write.table(as.data.frame(pems), file = file, col.names = col.names, row.names = FALSE, na = "", sep=",")
 }
 
 

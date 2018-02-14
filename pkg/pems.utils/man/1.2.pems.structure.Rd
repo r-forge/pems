@@ -5,6 +5,7 @@
 \alias{pemsData}
 \alias{pemsConstants}
 \alias{pemsHistory}
+\alias{pemsin}
 
 
 
@@ -35,6 +36,8 @@ pemsHistory(pems=NULL, ...,
          fun.name = "pemsHistory", if.missing = "stop",
          pems.name = deparse(substitute(pems)))
 
+pemsin(x, data=NULL)
+
 }
 
 
@@ -59,6 +62,10 @@ pemsHistory(pems=NULL, ...,
   (Various) Other options using for \code{pems.utils} house-keeping. See \code{\link{check...}} for 
   definitions, although generally these can be ignored by users. See Note below.  
 } 
+
+  \item{x, data}{
+  \code{pemsin} arguments, like \code{element} and \code{pems} in \code{pemsElement}.
+}
     
 }
 
@@ -81,6 +88,8 @@ pemsHistory(pems=NULL, ...,
   \code{pemsConstants} gets all constants locally defined for the the supplied \code{pems} object. 
 
   \code{pemsHistory} gets the history of supplied \code{pems} object.
+
+  \code{pemsin} is like \code{pemsElement} but uses \code{lazyeval} to do all the hard work. 
 
 }
 

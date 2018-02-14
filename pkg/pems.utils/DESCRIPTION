@@ -1,12 +1,13 @@
 Package: pems.utils
 Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.2.24.4
-Date: 2017-12-06
+Version: 0.2.25.2
+Date: 2018-02-14
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
 Depends: R (>= 2.10.0), lattice, loa
-Imports: methods, utils, grid, RColorBrewer, latticeExtra, ggplot2, rlang, dplyr 
+Imports: methods, utils, grid, RColorBrewer, latticeExtra, baseline, ggplot2, 
+  lazyeval, rlang, dplyr 
 Description: Utility functions for the handling, analysis and visualisation 
   of data from portable emissions measurement systems ('PEMS') and other 
   similar mobile activity monitoring devices. The package includes a dedicated 

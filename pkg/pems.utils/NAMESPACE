@@ -22,6 +22,9 @@ import(dplyr)
 
 ## no longer importing all package
 
+#import(lazyeval) #just using lazy and leazy_eval
+#import(baseline) #just importing baseline 
+                  #because of plot conflict with graphics...
 #import(utils) #just importing head and tail methods
 #import(ggplot2) #just importing fortify
 
@@ -37,6 +40,8 @@ importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass")
 importFrom(utils, read.csv, read.delim, write.table, head, tail)
+importFrom(baseline, baseline, getBaseline, getCorrected)
+importFrom(lazyeval, lazy, lazy_eval)
 
 
 ##########################
@@ -154,6 +159,7 @@ export(pemsElement)
 export(pemsData)
 export(pemsConstants)
 export(pemsHistory)
+export(pemsin)
 
 #merge.pems
 export(align)
@@ -216,9 +222,8 @@ S3method(mutate_, pems)
 
 importFrom(dplyr, summarise)
 export(summarise)
-#testing not export pems version...
-#S3method(summarise, pems)
-#S3method(summarise_, pems)
+S3method(summarise, pems)
+S3method(summarise_, pems)
 
 importFrom(dplyr, group_by)
 export(group_by)
@@ -320,6 +325,7 @@ export(calcPack)
 export(calcPack2)
 export(correctInput)
 export(zeroNegatives)
+export(correctBaseline)
 
 #cutBy
 export(cutBy)
