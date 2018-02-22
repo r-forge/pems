@@ -160,6 +160,7 @@ importSEMTECH2PEMS <- function (file.name = file.choose(), history = NULL,
 #but still needs work
     output <- makePEMS(x = data, units = units, constants = constants, 
         history = this.call, pems = pems, ...)
-    output[["history"]] <- list(output[["history"]][[1]])
+#no longer tracking history
+#    output[["history"]] <- list(output[["history"]][[1]])
     return(output)
 }
