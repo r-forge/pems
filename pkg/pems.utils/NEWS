@@ -1,6 +1,8 @@
-Changes in pems.utils 0.2.25 [2018-02-21]
+Changes in pems.utils 0.2.25 [2018-04-11]
 ========================================
 
+*       update to import2PEMS, added option 
+        to get units from row 2         
 *       removed history tracking from 
         importSEMTECH2PEMS
 *       transferred pemsin from 

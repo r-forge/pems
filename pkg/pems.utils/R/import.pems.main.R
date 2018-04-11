@@ -83,8 +83,14 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
     if(is.null(time.format))
         time.format <- "%d/%m/%Y %H:%M:%OS"
 
+    ##################
+    #file.type code to add
+    ##################
+    
     #local tidies
     names <- NULL
+    skip <- 0
+    header <- TRUE
     if(is.character(units) && length(units)==1){
          if(units=="get.from.header"){
               temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=1)
@@ -92,11 +98,15 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
               units <- temp$units
               names <- temp$names
          }
+         if(units=="get.from.row.2"){
+              temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=2)
+              units <- as.character(temp[2,])
+              names <- as.character(temp[1,])
+              skip <- if("skip" %in% names(extra.args)) extra.args$skip else 2
+              header <- FALSE
+         }
     }
 
-##################
-#file.type code to add
-##################
 
 ##################
 #this needs better handling
@@ -111,7 +121,7 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
 #then strip those before going on
 #############
 
-    data <- file.reader(file, header=TRUE)
+    data <- file.reader(file, header=header, skip=skip)
 
 ###################
 #think about this 
@@ -162,10 +172,7 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
 
     output    
 
-
 }
-
-
 
 
 
