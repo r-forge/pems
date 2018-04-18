@@ -58,9 +58,8 @@ rebuildPEMS(x, ...)
 
 #general
 
-import2PEMS(file.name = file.choose(), time.stamp = NULL, local.time = NULL,
-          time.format = NULL, units = NULL, constants = NULL, history = NULL, 
-          ..., file.type = NULL, file.reader = read.delim)
+import2PEMS(file.name = file.choose(), ..., file.reader = read.delim, 
+          output="pems")
 
 importTAB2PEMS(..., file.reader = read.delim)
 
@@ -148,21 +147,19 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   generated for \code{pems.element} objects.    
 }
 
-
-
   \item{file.name}{
   (file connection, etc.) For \code{import...} functions, the file/source to be imported. Note: the 
   default, \code{file.name = file.choose()}, automatically opens a file browser if this argument is 
   not supplied.   
 }
 
-  \item{time.stamp, local.time, time.format}{
-   Relatively crude \code{import...} functions are useful for importing data from the clipboard or simple 
-   file types. However, these sometimes need careful handling of time data. If supplied, \code{time.stamp} 
-   and \code{local.time} are used as indices or ids (column numbers or names) for data series that the 
-   user would like to use as the data time stamp and local time records, respectively. If supplied, 
-   \code{time.format} sets the format in which the \code{time.stamp} should be imported if present/idenified.    
-}
+%  \item{time.stamp, local.time, time.format}{
+%   Relatively crude \code{import...} functions are useful for importing data from the clipboard or simple 
+%   file types. However, these sometimes need careful handling of time data. If supplied, \code{time.stamp} 
+%   and \code{local.time} are used as indices or ids (column numbers or names) for data series that the 
+%   user would like to use as the data time stamp and local time records, respectively. If supplied, 
+%   \code{time.format} sets the format in which the \code{time.stamp} should be imported if present/idenified.    
+%}
 
   \item{file.type, file.reader}{
   Data reader parameters for some \code{import...} functions. \code{file.type} is the type of file 
@@ -175,6 +172,10 @@ importKML2PEMS(file.name = file.choose(), history = NULL,
   file. For example, for \code{importTAB2PEMS} and \code{importCSV2PEMS}, by default, these are the 
   standard \code{R} \code{read...} functions \code{\link{read.delim}} and \code{\link{read.csv}}, 
   respectively.   
+}
+
+  \item{output}{
+  Where included in formal arguments, an option to control function output.
 }
 
   \item{pems, vbox, pm.analyzer, calibrator, source}{

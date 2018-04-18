@@ -10,6 +10,7 @@
 #(functions/code below) 
 ##########################
 #import2PEMS
+#  introducing new code (so have .old)
 #importTAB2PEMS
 #importCSV2PEMS
 #importOBS2PEMS
@@ -69,10 +70,96 @@
 #comments
 ##########################
 
+import2PEMS <- function(file.name = file.choose(), ..., 
+                        file.reader = read.delim, output="pems"){
 
-import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time = NULL,
-                        time.format = NULL, units = NULL, constants = NULL, history = NULL, 
+#think about this
+  
+  
+  # with get... functions => rationalisation of import2PEMS v0.1
+  file <- file.name
+  args <- list(file = file, ..., file.reader = file.reader)
+  
+  # to do 
+  # file.type reset
+  
+  #get data
+  #this will use any skips, etc in the import then strip them from args
+  # could simply but NOT sure if other terms will kill it..?
+  temp <- getFormalNames(file.reader, read.table)
+  data <- do.call(file.reader, args[names(args) %in% temp])
+  args <- args[!names(args) %in% temp]  #strip out the file.reader settings
+  
+  #if required get names from file
+  if("names" %in% names(args) && length(args$names)==1)
+    args$names <- getNamesFromFile(file, file.reader, args$names)
+  
+  #if required get units from file or names
+  if("units" %in% names(args) && length(args$units)==1){
+    if(is.numeric(args$units))
+      args$units <- getNamesFromFile(file, file.reader, args$units)
+    else if(is.character(args$units)){
+      if(tolower(args$units)=="get.from.names"){
+        temp <- getUnitsFromNames(args$names, args$prefix, 
+                                  args$suffix)
+        args$names <- temp$names
+        args$units <- temp$units
+      }
+    }
+  }
+  
+  #update names(data) and units 
+  if(!is.null(args$names))
+    names(data) <- make.names(args$names, unique=TRUE)
+  units <- args$units
+  args <- stripFormals(getNamesFromFile, getUnitsFromFile, getUnitsFromNames,
+                       args=args)
+
+#from this point forward we could have a pems.list  
+  
+  #if required get time.stamp info from data and fromat time.stamp
+  if(any(c("time.stamp", "date", "time") %in% names(args)))
+     data$time.stamp <- getTimeStampFromData(args$time.stamp, 
+                                             args$date, args$time,
+                                             data)
+  if("time.stamp" %in% names(data)){
+    data <- setDataTimeStamp(data, args$time.format, 
+                             args$tz, output="data")  
+    temp <- if(is.null(args$tz)) "Y-M-D H:M:S UTC" else paste("Y-M-D H:M:S", 
+                                                              args$tz, sep=" ")
+    #check this has worked NOT died..?
+    units[which(names(data)=="time.stamp")] <- temp
+  }
+  args <- stripFormals(getTimeStampFromData, setDataTimeStamp, args=args)
+
+  #if required get local.time info from data
+  # data[, local.time], get.from.time.stamp
+  if("local.time" %in% names(args))
+      data$local.time <- getLocalTimeFromData(args$local.time, data)
+  if("local.time" %in% names(data)){
+      #check units handled properly?
+      units[which(names(data)=="local.time")] <- "s"
+  }
+  args <- stripFormals(getLocalTimeFromData, args=args)  
+  
+  #if required tidy pems list
+  #think about this...
+  temp <- tidyPEMSList(listUpdate(list(x=data, units=units), args))
+                  
+  #output
+  if(output=="data") return(temp$x)
+  if(output=="list") return(temp)
+  do.call(pems, temp)
+}
+
+
+import2PEMS.old <- function(file.name = file.choose(), names = NULL, units = NULL,  
+                        time.stamp = NULL, local.time = NULL, time.format = NULL, 
+                        constants = NULL, history = NULL, 
                         ..., file.type = NULL, file.reader = read.delim){
+
+#could rationalise a lot of this
+#listload + formal stripping?
 
     #setup
     this.call <- match.call()   #for history, might not need this anymore...
@@ -88,24 +175,41 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
     ##################
     
     #local tidies
-    names <- NULL
     skip <- 0
     header <- TRUE
+
+    #get units (and names if null) in file 
     if(is.character(units) && length(units)==1){
-         if(units=="get.from.header"){
-              temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=1)
-              temp <- getUnitsFromNames(temp, output="all")
-              units <- temp$units
-              names <- temp$names
-         }
-         if(units=="get.from.row.2"){
-              temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=2)
-              units <- as.character(temp[2,])
-              names <- as.character(temp[1,])
-              skip <- if("skip" %in% names(extra.args)) extra.args$skip else 2
-              header <- FALSE
-         }
+        temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=4) #currently assuming into is in first 4 rows
+        if(units=="get.from.header"){
+            extra.args <- do.call(listLoad, listUpdate(extra.args, list(load="units")))
+            temp <- do.call(getUnitsFromNames, listUpdate(list(names=as.character(temp[1,]), output="all"), extra.args$units))
+            units <- temp$units
+            if(is.null(names)) names <- temp$names
+        } else if(units=="get.from.row.2"){
+            units <- as.character(temp[2,])
+            names <- as.character(temp[1,])
+            skip <- if("skip" %in% names(extra.args)) extra.args$skip else 2
+            header <- FALSE
+        }
+        extra.args <- extra.args[names(extra.args)!="units"]
     }
+
+#    if(is.character(units) && length(units)==1 && units=="get.from.header"){
+#        extra.args <- do.call(listLoad, extra.args, list(load="units"))
+#        temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=1)
+#        temp <- do.call(getUnitsFromNames, listUpdate(list(names=temp, output="all"), extra.args$units))
+#        extra.args <- extra.args[names(x=extra.args!="units"]
+#        units <- temp$units
+#        names <- temp$names
+#    }
+#    if(is.character(units) && length(units)==1 && units=="get.from.row.2"){
+#        temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=2)
+#        units <- as.character(temp[2,])
+#        names <- as.character(temp[1,])
+#        skip <- if("skip" %in% names(extra.args)) extra.args$skip else 2
+#        header <- FALSE
+#    }
 
 
 ##################
@@ -158,8 +262,8 @@ import2PEMS <- function(file.name = file.choose(), time.stamp = NULL, local.time
 #sensible unit handler
 ##################
 
-    output <- makePEMS(x = data, units = units, constants = constants, 
-                       history = history, ...) 
+    output <- do.call(pems, listUpdate(list(x = data, units = units, constants = constants, 
+                       history = history), extra.args)) 
     
     #reset history?
     if(is.null(output[["histroy"]])){
@@ -590,7 +694,6 @@ importOB12PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
 ###################################
 
 
-
 ###################################
 ###################################
 ##getUnitsFromNames
@@ -599,35 +702,126 @@ importOB12PEMS <- function(file.name = file.choose(), pems = "Horiba OBS",
 
 #kr 30/12/2017
 #unexported
+getNamesFromFile <- function(file, file.reader, names){
+    names <- file.reader(file, header=FALSE, as.is=TRUE, nrow=names)
+    return(as.character(names[nrow(names),]))
+}
+getUnitsFromFile <- function(file, file.reader, units){
+    units <- file.reader(file, header=FALSE, as.is=TRUE, nrow=units)
+    as.character(units[nrow(units),])
+}
 
-getUnitsFromNames <- function(names, ..., output="all"){
+getUnitsFromNames <- function (names, prefix="(", suffix=")", ..., 
+                               output = "all"){
 
-    #recover units from a name suffix
-    #for names in form [name](units)
+#####################
+  #to do
+  ###################
+  #tighten this up
+  #think about handling cases without prefix or suffix? 
+  #tidy suffix removal, current assumes it is there and is last character
+  # and has 1 character length
+  
+  if(is.null(prefix)) prefix="("
+  if(is.null(suffix)) suffix=")"
+  names <- as.character(names) #not sure about this
+                               #needed if using read.csv
+  test <- lapply(names, function(x) substr(x, nchar(x), nchar(x)) == 
+		suffix)
+	units <- rep(NA, length(test))
+	for (i in 1:length(test)) {
+		if (test[[i]]) {
+			temp <- gregexpr(paste("[", prefix, "]", sep=""), 
+			                 names[[i]])[[1]]
+			temp <- temp[length(temp)]
+			units[i] <- substr(names[[i]], temp + 1, nchar(names[[i]]) - 
+				1)
+			names[[i]] <- gsub(" ", "", substr(names[[i]], 1, 
+				(temp - 1)))
+		}
+		else {
+			units[i] <- ""
+		}
+	}
+	if (output == "units") 
+		return(units)
+	if (output == "names") 
+		return(names)
+	list(names = names, units = units)
+}
 
-    #outputs "units" units recovered
-    #        "names" [name] without units suffix
-    #        "all" list of both
+getFormalNames <- function(..., args=NULL){
+   temp <- lapply(list(...), function(x) names(formals(x)))
+   temp <- unique(do.call(c, temp))
+   temp[temp!="..."]
+} 
 
-    #strip (units) if there
-    test <- lapply(names, function(x) substr(x,nchar(x), nchar(x))==")")
-    units <- rep(NA, length(test))
-    for(i in 1:length(test)){
-        if(test[[i]]){
-            #get units
-            temp <- gregexpr("[(]", names[[i]])[[1]]
-            temp <- temp[length(temp)]
-            units[i] <- substr(names[[i]], temp+1, nchar(names[[i]])-1)
-            names[[i]] <- gsub(" ", "", substr(names[[i]], 1, (temp-1)))
-        } else {
-            #no units
-            units[i] <- ""
-        }
-    }
+stripFormals <- function(..., args=NULL){
+  temp <- getFormalNames(...)
+  args[!names(args) %in% temp]
+}
 
-    #output
-    if(output=="units") return(units)
-    if(output=="names") return(names)
-    list(names=names, units=units)
 
+
+setDataTimeStamp <- function(data, time.format="%d/%m/%Y %H:%M:%OS", 
+                             tz="UTC", output="time.stamp"){
+  #issues
+  ######################
+  #does not track time.stamp units
+  
+  if(is.null(time.format)) time.format <- formals(setDataTimeStamp)$time.format
+  if(is.null(tz)) tz <- formals(setDataTimeStamp)$tz
+  data$time.stamp <- as.POSIXct(strptime(data$time.stamp, format = time.format),
+                                tz=tz)
+  if(output=="data") return(data)
+  data$time.stamp
+}
+
+getTimeStampFromData <- function(time.stamp=NULL, date=NULL, 
+                                     time=NULL, data){
+  if(!is.null(time.stamp)){
+    if(length(time.stamp)==1){
+      if(is.character(time.stamp) && time.stamp %in% names(data)) 
+        time.stamp <- data[, time.stamp]
+    } else if(is.numeric(time.stamp)) time.stamp <- data[, time.stamp]
+  }
+  if(length(time.stamp)==nrow(data)) return(time.stamp)
+  if(!is.null(date)){
+    if(length(date)==1){
+      if(is.character(date) && date %in% names(data)) 
+        date <- data[, date]
+    } else if(is.numeric(date)) date <- data[, date]
+  }
+  if(is.null(time)) return(date)
+  if(!is.null(time)){
+    if(length(time)==1){
+      if(is.character(time) && time %in% names(data)) 
+        time <- data[, time]
+    } else if(is.numeric(time)) time <- data[, time]
+  }
+  if(is.null(date)) return(time)
+  paste(date, time, sep=" ")
+}
+
+getLocalTimeFromData <- function(local.time, data){
+  
+  local.time <- if(length(local.time)==1){
+      if(is.character(local.time)){
+        if(local.time=="get.from.time.stamp"){
+          if("time.stamp" %in% names(data)) as.numeric(data$time.stamp -
+                                                       min(data$time.stamp, 
+                                                       na.rm=TRUE))
+        } else if(local.time %in% names(data)) data[, local.time]
+      } else if(is.numeric(local.time)) data[, local.time]
+  } 
+  #warning if null?
+  local.time
+}
+
+tidyPEMSList <- function(pems.ls){
+  if("to.lower" %in% names(pems.ls))
+    if(is.logical(pems.ls$to.lower) && pems.ls$to.lower)
+        names(pems.ls$x) <- tolower(names(pems.ls$x))
+  #other tidies?
+  pems.ls[!names(pems.ls) %in% c("to.lower")]
 }

@@ -39,7 +39,7 @@ importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass")
-importFrom(utils, read.csv, read.delim, write.table, head, tail)
+importFrom(utils, read.table, read.csv, read.delim, write.table, head, tail)
 importFrom(baseline, baseline, getBaseline, getCorrected)
 importFrom(lazyeval, lazy, lazy_eval)
 

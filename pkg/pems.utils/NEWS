@@ -1,6 +1,9 @@
-Changes in pems.utils 0.2.25 [2018-04-11]
+Changes in pems.utils 0.2.25 [2018-04-17]
 ========================================
 
+*       rewrote import2PEMS
+*       update to local getUnits... code, 
+        user pre/suffix assignment 
 *       update to import2PEMS, added option 
         to get units from row 2         
 *       removed history tracking from 
