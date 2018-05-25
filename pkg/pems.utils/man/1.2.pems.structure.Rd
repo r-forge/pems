@@ -6,6 +6,7 @@
 \alias{pemsConstants}
 \alias{pemsHistory}
 \alias{pemsin}
+\alias{pemsin2}
 
 
 
@@ -38,6 +39,8 @@ pemsHistory(pems=NULL, ...,
 
 pemsin(x, data=NULL)
 
+pemsin2(x, data, units=NULL, .x=enquo(x))
+
 }
 
 
@@ -63,7 +66,7 @@ pemsin(x, data=NULL)
   definitions, although generally these can be ignored by users. See Note below.  
 } 
 
-  \item{x, data}{
+  \item{x, data, units, .x}{
   \code{pemsin} arguments, like \code{element} and \code{pems} in \code{pemsElement}.
 }
     
@@ -90,6 +93,8 @@ pemsin(x, data=NULL)
   \code{pemsHistory} gets the history of supplied \code{pems} object.
 
   \code{pemsin} is like \code{pemsElement} but uses \code{lazyeval} to do all the hard work. 
+
+  \code{pemsin2} is like \code{pemsElement} but uses \code{rlang} and \code{dplyr} to do all the hard work. 
 
 }
 
@@ -151,9 +156,11 @@ pemsElement(velocity, pems.1)
 #checkInput(velocity, pems.1)
 
 #generic equivalents
-#pems.1$velocity
-#pems.1["velocity"]
+\dontrun{
+pems.1$velocity
+pems.1["velocity"]
 #etc
+}
 
 }
 \keyword{ methods }

@@ -372,26 +372,29 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 ##example 1
 ###########
 
+\dontrun{
 #plotting pems with other packages
 
 #base 
-##plot(pems.1)
-##plot(pems.1$velocity)
+plot(pems.1)
+plot(pems.1$velocity)
 
-##in lattice, xyplot(velocity~local.time, data = pemsData(pems.1), type = "l")
+#lattice 
+xyplot(velocity~local.time, data = pemsData(pems.1), type = "l")
+
 #Note: to use lattice functions directly with pems objects
-#      just pass data component with data = pemsData(pems) 
-#      (NOT data = pems)
+#      data = pemsData(pems) NOT data = pems
 #Note: See also latticePlot as an alternative to data = pemsData(pems) 
 
 #in ggplot2
 
 #Note: Suggests only so you need to load this...
-##require(ggplot2)
-##qplot(time.stamp, velocity, data=pems.1)
-##ggplot(pems.1, aes(x = time.stamp, y = velocity)) + geom_line() 
+require(ggplot2)
+qplot(time.stamp, velocity, data=pems.1)
+ggplot(pems.1, aes(x = time.stamp, y = velocity)) + geom_line() 
 #etc
 
+}
 
 ###########
 ##example 2 
@@ -404,7 +407,6 @@ latticePlot(velocity~local.time, data = pems.1, type = "l")
 latticePlot(velocity~local.time, data = pems.1, col = "red", 
             pch = 20, panel = panel.PEMSXYPlot, 
             grid = list(col ="black", lty=2))
-
 
 ###########
 ##example 3 
@@ -426,13 +428,16 @@ XYZPlot(~accel*velocity, data=a, plot = wireframe, shade=TRUE)
 #basic usage of pemsPlot
 
 #like latticePlot example above 
+
 pemsPlot(~local.time*velocity, data=pems.1, type="l")
 
 #note formula format z~x*y, with z ignored for standard scatter plot
 
+\dontrun{
 #or in conventional plot(x, y, ...) format
-#pemsPlot(local.time, velocity, data=pems.1, type="l")
 
+pemsPlot(local.time, velocity, data=pems.1, type="l")
+}
 
 ###########
 ##example 5 
@@ -440,19 +445,20 @@ pemsPlot(~local.time*velocity, data=pems.1, type="l")
 
 #basic usage of WatsonPlot
 
-#use object generated in example 3 
+#Note: using a generated in example 3 
 WatsonPlot(velocity, accel, data=a)
 
+\dontrun{
 #omit.stopped for different handling of idling data
-##WatsonPlot(velocity, accel, data=a, omit.stopped="points")
-##WatsonPlot(velocity, accel, data=a, omit.stopped="cells")
+WatsonPlot(velocity, accel, data=a, omit.stopped="points")
+WatsonPlot(velocity, accel, data=a, omit.stopped="cells")
 
 #plot.type for different plot methods
-##WatsonPlot(velocity, accel, data=a, plot.type=1)
-##WatsonPlot(velocity, accel, data=a, plot.type=2)
-##WatsonPlot(velocity, accel, data=a, plot.type=3)
-##WatsonPlot(velocity, accel, data=a, plot.type=4)
-
+WatsonPlot(velocity, accel, data=a, plot.type=1)
+WatsonPlot(velocity, accel, data=a, plot.type=2)
+WatsonPlot(velocity, accel, data=a, plot.type=3)
+WatsonPlot(velocity, accel, data=a, plot.type=4)
+}
 
 }
 

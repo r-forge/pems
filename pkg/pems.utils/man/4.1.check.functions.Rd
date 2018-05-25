@@ -234,8 +234,10 @@ b <- data.frame(v=10, c=1)
 checkInput(a)           # 1  (attr name = "a")
 checkInput(v, data = b) # 10 (attr name = "v")
 
-#checkInput(v)
+\dontrun{
+checkInput(v)
 #Error:   In checkInput(...) input 'v' not found
+}
 
 ###########
 ##example 2

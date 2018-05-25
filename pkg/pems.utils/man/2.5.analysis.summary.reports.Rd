@@ -147,12 +147,12 @@ summaryReport(speed = NULL, time = NULL, accel = NULL,
 
 summaryReport(velocity, local.time, data=pems.1)
 
-##  distance.travelled.km time.total.s avg.speed.km.h avg.running.speed.km.h
-##1              6.186056         1000        22.2698               28.78538
-##  time.idle.s time.idle.pc avg.accel.m.s.s time.accel.s time.accel.pc
-##1          40            4       0.7921279          271          27.1
-##  avg.decel.m.s.s time.decel.s time.decel.pc
-##1      -0.9039449          238          23.8
+#   distance.travelled.km time.total.s avg.speed.km.h avg.running.speed.km.h
+# 1              6.186056         1000        22.2698               28.78538
+#   time.idle.s time.idle.pc avg.accel.m.s.s time.accel.s time.accel.pc
+# 1          40            4       0.7921279          271          27.1
+#   avg.decel.m.s.s time.decel.s time.decel.pc
+# 1      -0.9039449          238          23.8
 
 #apply to multiple cases
 

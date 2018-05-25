@@ -26,7 +26,7 @@
 
 \method{[}{pems.element} (x, i, ..., force = TRUE, wrap = FALSE) <- value
 
-\method{print}{pems.element}(x, ...)
+\method{print}{pems.element}(x, ..., n = NULL, rows = NULL)
 
 \method{plot}{pems.element}(x, y = NULL, xlab = NULL, ylab = NULL, ...)
 
@@ -50,7 +50,6 @@
   Element indices, which operate in a similar fashion to \code{vector} indices.
 }
 
-
   \item{...}{ 
   Addition options, typically passed to associated default method(s).
 }
@@ -63,6 +62,10 @@
   \item{value}{
    (Vector) For calls in \code{pems.element[1] <- value} or \code{units(pems.element) <- value}, 
    the value to be inserted.
+}
+
+  \item{n, rows}{
+   (Numerics) For \code{print(pems)}, number of elements or rows to foreshorten print output to. 
 }
 
   \item{y, xlab, ylab}{ 

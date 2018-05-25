@@ -21,18 +21,17 @@ globalVariables(c("pems.scheme", "ref.unit.conversions", "ref.chem", "ref.diesel
 #setup
 
 setup <- function(){
-             print("Setting up for pems.utils")
-             print("(this should run without errors, warnings)")
+             print("Set up for dev:pems.utils")
+             print("(this should run without errors)")
+
+             #replace this?
+             need.pack = c("lattice", "loa", "methods", "utils", "grid", "RColorBrewer", 
+                           "latticeExtra", "baseline", "ggplot2", "lazyeval", "rlang", 
+                           "dplyr") 
+             inst.pack <- need.pack %in% installed.packages()
+             if(length(need.pack[!inst.pack]) > 0) install.packages(need.pack[!inst.pack])
              
-             #do following for all packages unique to non-CRAN build
-
-#             if(length(find.package("segmented", quiet=TRUE))<1){
-#                 warning("adding missing package: segmented")
-#                 install.packages("segmented")
-#             }
-
              #then after installing package, if library or require fails 
-             #pems.utils:::setup()
-                 
+             #pems.utils:::setup()                 
          }
 

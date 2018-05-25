@@ -108,8 +108,10 @@ exportPEMS2CSV(pems, file="tempfile", ...)
 
 #making a tab-delimited copy of pems.1
 
-##exportPEMSData(pems.1, "pems.example.txt")
-##dir()
+\dontrun{
+exportPEMSData(pems.1, "pems.example.txt")
+dir()
+}
 
 }
 

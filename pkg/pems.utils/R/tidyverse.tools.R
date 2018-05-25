@@ -107,6 +107,9 @@ fortify.pems <- function (model, data, ...) {
     x <- model
     class(x) <- class(x) [class(x) != "pems"]
     if(length(class(x))==1) class(x) <- "data.frame"
+    #need this because 
+    #tribbles, etc don't let me remove pems.element from class this way... 
+    x <- as.data.frame(x) 
     for(i in names(x)) class(x[,i]) <- class(x[,i])[class(x[,i])!="pems.element"]
     x
 
@@ -835,8 +838,9 @@ summarise.pems <- function(.data, ...) {
                class(.data)[class(.data) != "pems"] 
     ######################
 
-    .data <- as.data.frame(summarise(tbl_df(.data), ...))
-    
+#    .data <- as.data.frame(summarise(tbl_df(.data), ...))
+    .data <- summarise(.data, ...) 
+   
     #######################
     #rebuild
     ##attributes(.data)$units <- bare.bones$units
@@ -880,8 +884,9 @@ summarise_.pems <- function(.data, ..., warn=TRUE) {
                class(.data)[class(.data) != "pems"] 
     ######################
 
-    .data <- as.data.frame(summarise(tbl_df(.data), ...))
-    
+#    .data <- as.data.frame(summarise(tbl_df(.data), ...))
+    .data <- summarise(.data, ...)     
+
     #######################
     #rebuild
     ##attributes(.data)$units <- bare.bones$units

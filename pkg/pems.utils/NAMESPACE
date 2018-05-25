@@ -23,7 +23,7 @@ import(dplyr)
 ## no longer importing all package
 
 #import(lazyeval) #just using lazy and leazy_eval
-#import(baseline) #just importing baseline 
+#import(baseline) #just importing used functions  
                   #because of plot conflict with graphics...
 #import(utils) #just importing head and tail methods
 #import(ggplot2) #just importing fortify
@@ -39,7 +39,9 @@ importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass")
-importFrom(utils, read.table, read.csv, read.delim, write.table, head, tail)
+importFrom(utils, read.table, read.csv, read.delim, write.table, 
+           head, tail, capture.output, install.packages, 
+           installed.packages)
 importFrom(baseline, baseline, getBaseline, getCorrected)
 importFrom(lazyeval, lazy, lazy_eval)
 
@@ -160,6 +162,7 @@ export(pemsData)
 export(pemsConstants)
 export(pemsHistory)
 export(pemsin)
+export(pemsin2)
 
 #merge.pems
 export(align)
@@ -316,6 +319,8 @@ export(calcVSP)
 export(calcVSPJimenezPalaciosCMEM)
 export(calcEm)
 export(calcEmHoribaPitot)
+export(calc.dist)
+export(calc.new)
 
 #calc handlers
 export(calcChecks)

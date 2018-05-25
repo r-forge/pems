@@ -355,7 +355,9 @@ pems$speed                 #the speed pems.element
 #import data file as pems using import... functions
 
 #For example, to import CSV file as pems object 
-#pems <- importCSV2PEMS() 
+\dontrun{
+pems <- importCSV2PEMS() 
+}
 
 }
 

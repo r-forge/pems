@@ -74,7 +74,93 @@ as.data.frame.pems.element <- function(x, ...){
 }
 
 
-print.pems.element <- function (x, ...){
+
+print.pems.element <- function (x, ..., n = NULL, rows = NULL){
+
+#to do
+###################
+#tidy code
+#
+
+#to think about
+###################
+#do print and cat statements need to be merged
+#as single output?
+###################
+#include width?
+
+    # 'pems (n=n)'
+    out.0 <- paste(class(x)[1], " [n=", length(x), "]", sep="")
+
+    out.2 <- ""
+
+    if(!is.null(n)){
+        #this assumes n is null or numeric
+        if(n<0) n <- length(x) #this assume any minus value means show all
+        if(n<length(x)) out.2 <- paste(" not showing: ", length(x)-n, " (of ", length(x), ") elements", sep="")
+        x <- x[1:n]
+    }
+
+    #data 
+    #print with default method and attributes stripped
+    ans <- x
+
+    if(length(class(ans))>1) class(ans) <- class(ans)[-1] else
+         class(ans)[1] <- if("levels" %in% names(attributes(ans)))
+                                "factor" else mode(ans)
+    attributes(ans) <- attributes(ans)[!names(attributes(ans))%in% c("name", "units")]
+
+    out.3 <- ""
+
+    if(length(class(ans))>0) 
+          out.3 <- paste(out.3, " <", paste(class(ans), collapse=","), ">", sep="")
+    if("name" %in% names(attributes(x)))
+          out.3 <- paste(out.3, " ", attributes(x)$name, sep="")
+    if("units" %in% names(attributes(x)))
+         if(!is.na(attributes(x)$units) && attributes(x)$units != "")
+             out.3 <- paste(out.3, " [", attributes(x)$units, "]", sep="")
+
+    out.1 <- capture.output(print(ans, ...))
+
+#this one makes nice ...
+    temp <- out.1[1] #all have same spacing
+    indent <- gregexpr("[]]", temp)[[1]]-3
+    indent <- if(indent>0) paste(rep(" ", indent), collapse="") else ""
+    indent <- paste(indent, "...", sep="")
+
+    if(is.null(n) & is.null(rows)){
+         rows <- 3
+    }
+    if(!is.null(rows)){
+         if(rows<0) rows <- length(out.1) #assumes any minus means show all
+         if(rows<length(out.1)){
+######################
+#this one gets next row name
+#              temp <- out.1[rows+1]
+#              temp <- substr(temp, gregexpr("[[]", temp)[[1]]+1,
+#                                   gregexpr("[]]", temp)[[1]]-1)
+######################              
+              out.2 <- paste(" not showing: ", length(out.1)-rows, " rows", sep="")
+              out.1 <- if(rows==0) "" else out.1[1:rows]
+         }
+    }
+    
+    if(!is.null(n) && n==0) out.1=""
+
+    if(length(out.1)>1 || out.1!="") out.1 <- paste(out.1, collapse="\n")
+    out.1 <- if(out.1 != "" & out.2 !="") paste(out.1, "\n", indent, out.2, "\n", sep="") else 
+                 if(out.1 != "") paste(out.1, "\n", sep="") else  paste(indent, out.2, "\n", sep="")
+    if("levels" %in% names(attributes(ans)))
+           out.1 <- paste(out.1, indent, " levels: ", paste(levels(ans), collapse="; "), "\n", sep="")
+    out.1 <- paste(out.0, "\n", out.1, sep="")
+    out.1 <- paste(out.1, indent, out.3, "\n", sep="")
+
+    #output 
+    cat(out.1)
+}
+
+
+print.pems.element.old <- function (x, ...){
 
 #to do
 ###################

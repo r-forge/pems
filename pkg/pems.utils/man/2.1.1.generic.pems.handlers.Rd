@@ -279,9 +279,8 @@ a
 
 #Note: by default pems objects subsetting and inserting is 
 #more rigorous than data.frame subsetting/insertion
-#for example, the following would generate an error 
-#a[1:2, "conc.hc"] <- 8
-#because the target, a[], and insert, value, dimensions do not 
+#for example, a[1:2, "conc.hc"] <- 8 would generate error
+#because the target, a[1:2], and insert, 8, dimensions do not 
 #match exactly: target 2 x 1; insert 1 x 1 
 
 #By default no wrapping is applied.  
@@ -306,8 +305,6 @@ a
 #pems[name, force=c("na.pad.target", "na.pad.insert")]
 a$new <- 1:4
 a
-
-
 
 }
 

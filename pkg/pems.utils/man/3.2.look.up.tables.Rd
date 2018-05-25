@@ -61,9 +61,9 @@
   \code{\link{addUnitConversion}}, etc.
 }
 
-\source{
-  TO BE COMPLETED
-}
+%\source{
+%  TO BE COMPLETED
+%}
 
 %\references{
 %%  ~~ possibly secondary sources and usages ~~

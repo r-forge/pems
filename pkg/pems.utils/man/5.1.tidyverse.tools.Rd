@@ -208,20 +208,19 @@ Various codes and methods.
 }
 
 \section{Warning }{
-  This currently work in progress - handle with care
+  This currently work in progress - handle with care.
 }
 
-\seealso{
-  [to do] 
-}
-\examples{
+%\seealso{
+%  [to do] 
+%}
 
-###########
-##example 1 
-###########
+%\examples{
 
-#TO DO
+%###########
+%##example 1 
+%###########
 
-}
+%}
 
 \keyword{ methods }

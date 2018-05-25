@@ -9,6 +9,9 @@
 \alias{calcChecks}
 \alias{calcPack}
 
+\alias{calc.dist}
+\alias{calc.new}
+
 
 \title{
   Common calculations
@@ -35,6 +38,10 @@ calcAcceleration(...)
 
 calcJerk(accel = NULL, time = NULL, data = NULL, 
           ..., fun.name = "calcJerk", hijack= FALSE)
+
+
+calc.dist(speed = NULL, time = NULL, data = NULL,
+           ...)
 
 #associated
 
@@ -179,9 +186,9 @@ calcAccel(velocity, local.time, pems.1)
 calcAccel(velocity, local.time, pems.1, output = "pems")
 
 #or, if you would rather... 
-#ans <- pems.1
-#ans$accel <- calcAccel(velocity, local.time, pems.1)
-
+\dontrun{
+pems.1$accel <- calcAccel(velocity, local.time, pems.1)
+}
 
 ###########
 #example 2
@@ -204,11 +211,6 @@ sapply(my.pems, function(x)
 # [5,] -0.02777778 -0.02777778
 # [6,]  0.05555556  0.05555556
 # ...
-
-#or
-#lapply(my.pems, function(x) 
-#                  calcAccel(velocity, local.time, data=x, output="pems"))
-#for output as a list of pems objects with accel added to each
 
 #note:
 #sapply if you can/want to simiplify outputs
@@ -275,8 +277,8 @@ my.fun <- function(speed, time, data = NULL, hijack = FALSE,
 ans <- my.fun(velocity, local.time, pems.1, output="pems")
 
 #seems long winded but gives you control of 
-##the error handling, unit management, and output type
-##and (if working in pems objects) history logging 
+#the error handling, unit management, and output type
+#and (if working in pems objects) history logging 
 
 ##and lets you do this
 
@@ -286,7 +288,6 @@ ans <- lapply(my.pems, function(x)
 #which will not always work if you are running 
 #functions in functions, especially if those functions
 #are also running functions in functions...
-
 
 }
 

@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.25.8\cr 
-Date: \tab 2018-04-17\cr
+Version: \tab 0.2.25.10\cr 
+Date: \tab 2018-05-25\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -73,9 +73,9 @@ follows:
 4.1. Common \code{\link{check...}} functions for the routine handling of function arguments/user 
 inputs.
 
-5. Other stuffs
+5. Other code
 
-5.1. Tidyverse stuff... \code{\link{pems.tidyverse}}
+5.1. Tidyverse related code... \code{\link{pems.tidyverse}}
 
 
 

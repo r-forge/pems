@@ -253,9 +253,88 @@ pemsin <- function(x, data=NULL){
 
 #local error catcher
 
-    x <- lazyeval::lazy(x)
+    x2 <- lazyeval::lazy(x)
     if(!is.null(data))
          if(!is.data.frame(data)) data <- as.data.frame(data)
-    x <- lazyeval::lazy_eval(x, data=data)
-    x
+    out <- try(lazyeval::lazy_eval(x, data=data), silent=TRUE)
+    if(class(out)[1]=="try-error"){
+         out <- try(x, silent=TRUE) 
+         if(class(out)[1]=="try-error") stop("unknown arg") 
+    }
+    out
 }
+
+
+pemsin2.old <- function (x, data = NULL) 
+{
+    x <- enquo(x)
+    data %>% as.data.frame() %>% pull(!!x)
+}
+
+pemsin2 <- function (x, data = NULL, units = NULL, .x = enquo(x)){
+
+    ans <- if(is.null(data)) NULL else 
+         try(data[quo_name(.x)], silent = TRUE)
+    if (is.null(ans) | class(ans)[1] == "try-error") {
+        ans <- try(x, silent = TRUE)
+        if (class(ans)[1] == "try-error") 
+            return(NULL)
+    }
+    if (!is.null(units)) 
+        ans <- convertUnits(ans, to = units)
+    ans
+}
+
+
+
+calc.dist <- function(speed = NULL, time = NULL, data = NULL,
+                     ...){
+    #setup
+################
+#think I can simplify setup
+#maybe merge with pemsin 
+#     so we don't rename data? 
+################
+    if (!is.null(data) && quo_name(enquo(speed)) %in% names(data)) 
+        names(data)[names(data)==quo_name(enquo(speed))] <- "speed"
+    if (!is.null(data) && quo_name(enquo(time)) %in% names(data)) 
+        names(data)[names(data)==quo_name(enquo(time))] <- "time"
+
+    #get inputs
+    speed <- pemsin2(speed, data, units="m/s")
+    time <- pemsin2(time, data, units="s")
+
+    #my assumption
+    #first unit resolution is average of rest
+    #rest are time.now - time.last
+
+    temp <- diff(time)
+    temp <- c(mean(temp, na.rm=TRUE), temp)
+
+    #my calculation
+    distance <- speed * temp
+
+    #my structure
+################
+#look into this 
+#    makePEMSElement versus pems.element
+#    also does it keep historical data types...
+################
+    distance <- makePEMSElement(distance, name="distance", units="m")
+    distance
+      
+}
+
+
+calc.new <- function (speed = NULL, time = NULL, data = NULL, ...) 
+{
+    if (!is.null(data) && quo_name(enquo(speed)) %in% names(data)) 
+        names(data)[names(data)==quo_name(enquo(speed))] <- "speed"
+    if (!is.null(data) && quo_name(enquo(time)) %in% names(data)) 
+        names(data)[names(data)==quo_name(enquo(time))] <- "time"
+    speed <- pemsin2(speed, data)
+    time <- pemsin2(time, data)
+    distance <- calc.dist(speed, time)
+    distance
+}
+

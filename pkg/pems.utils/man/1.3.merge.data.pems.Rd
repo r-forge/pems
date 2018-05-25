@@ -202,9 +202,11 @@ names(ans) <- c("x", "y")
 plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
 
 #shortcut using cAlign
-#plot(x, type="l"); lines(y, col="blue", lty=2)
-#ans <- cAlign(x~y)
-#plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
+\dontrun{
+plot(x, type="l"); lines(y, col="blue", lty=2)
+ans <- cAlign(x~y)
+plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
+}
 
 
 ###########
@@ -224,24 +226,28 @@ ans <- cAlign(~conc.co, p1, p2)
 #this aligns by comparing p1$conc.co and p2$conc.co
 #and aligning at point of best linear regression fit
 
+\dontrun{
+
 #compare:
 
-#cAlign(~conc.co, p2, p1)
-#cAlign(conc.co2~conc.co, p1, p2)
+cAlign(~conc.co, p2, p1)
+cAlign(conc.co2~conc.co, p1, p2)
 #(aligns using p1$conc.co2 and p2$conc.co)
-#cAlign(conc.co2~conc.co, p1)
+cAlign(conc.co2~conc.co, p1)
 #(realigns just conc.co within p1 based on best fit 
-# with conc.co2 and returns as output ans)
- 
-#time stamp alignment using join 
-#tAlign(~time.stamp, p1, p2)
+# with conc.co2 and returns as output ans) 
+
+#time stamp alignment  
+tAlign(~time.stamp, p1, p2)
 
 #this aligns by pairing elements in p1$time.stamp 
 #and p2$time.stamp
-#(NOTE: if time stamps have different names 
+#(if time stamps have different names 
 # tAlign(time1~time2, p1, p2), the time stamp name 
 # from p1 would be retained when merging p1$time1 
-# and p2$time2, generating ans$time1)  
+# and p2$time2, generating [output]$time1)  
+
+}
 
 }
 

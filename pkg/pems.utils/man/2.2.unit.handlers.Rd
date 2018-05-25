@@ -207,8 +207,7 @@ listUnitConversions(unit.conversions = ref.unit.conversions, ...,
 
 #work with data units
 
-#getting units
-#(where assigned)
+#getting units (where assigned)
 getUnits(velocity, pems.1) #km/h
 
 #setting units

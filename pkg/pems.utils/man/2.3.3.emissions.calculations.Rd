@@ -161,10 +161,7 @@ calcEmHoribaPitot(conc = NULL, time = "local.time", exflow = "exh.flow.rate",
 
 em.co <- calcEm(conc.co, data = pems.1)
 
-#em.co pems.elements
-
-
-
+#where the returned object, em.co, is a pems.element
 
 }
 
