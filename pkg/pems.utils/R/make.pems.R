@@ -147,6 +147,10 @@ pems <- function(x, units = NULL, constants = NULL,
 
     class(output) <- "pems"
 
+    #restack pems so all columns are pems.elements
+    for(i in names(output))
+         output[["data"]][, i] <- output[, i]
+
     rebuildPEMS(output)
 }
 
@@ -214,10 +218,16 @@ isPEMS <- function(...) is.pems(...)
 pems.element <- function(x, name=NULL, units=NULL, ...){
 
     attr(x, "class") <- unique(c("pems.element", attr(x, "class")))
-    attr(x, "name") <- name
-    attr(x, "units") <- units
 
-    invisible(x)
+#if(is.null(attr(x, "name")) & !is.null(name))
+#caused problems because it can't reset attr in calc... functions
+
+    if(!is.null(name))
+        attr(x, "name") <- name
+    if(!is.null(units))
+        attr(x, "units") <- units
+
+    return(x)
 
 }
 

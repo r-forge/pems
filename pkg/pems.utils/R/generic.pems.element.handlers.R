@@ -121,6 +121,9 @@ print.pems.element <- function (x, ..., n = NULL, rows = NULL){
              out.3 <- paste(out.3, " [", attributes(x)$units, "]", sep="")
 
     out.1 <- capture.output(print(ans, ...))
+#testing this to strip old factor labels
+    if("factor" %in% names(attributes(ans)))
+        out.1 <- out.1[1:(length(out.1)-1)]
 
 #this one makes nice ...
     temp <- out.1[1] #all have same spacing
@@ -292,6 +295,10 @@ plot.pems.element <- function (x, y = NULL, xlab = NULL, ylab = NULL, ...){
                 temp <- paste(" [", attributes(y)$units, "]", sep="")
                 if(!temp %in% c(" []", " [NA]")) ylab <- paste(ylab, temp, sep = "")
             }
+        }
+    if(!is.null(y)){
+            #might also need to strip units from attributes?
+            class(y) <- class(y)[class(y) != "pems.element"]
         }
     }
 

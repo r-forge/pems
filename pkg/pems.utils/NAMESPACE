@@ -228,6 +228,11 @@ export(summarise)
 S3method(summarise, pems)
 S3method(summarise_, pems)
 
+importFrom(dplyr, pull)
+export(pull)
+S3method(pull, pems)
+#no pull_
+
 importFrom(dplyr, group_by)
 export(group_by)
 S3method(group_by, pems)

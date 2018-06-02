@@ -52,6 +52,7 @@
 #(in development)
 #        - group_by, group_by_.pems, groups.pems, ungroup.pems, 
 #          group_size.pems, n_groups.pems
+#        - pull.pems
 
 
 #(identified to do)
@@ -904,6 +905,39 @@ summarise_.pems <- function(.data, ..., warn=TRUE) {
 }
 
 
+
+
+
+
+
+
+
+
+############################
+############################
+##pull.pems
+############################
+############################
+
+
+#pull.pems <- function (.data, var = -1) {
+pull.pems <- function (.data, ...) {
+
+    #make sure we have latest version
+    .data <- as.data.frame(rebuildPEMS(.data, "new"))
+    pull(.data, ...)
+
+    #testing
+    #pull(as.data.frame(.data), ...)
+    #var <- select_var(names(.data), !(!enquo(var)))
+
+    #works for select.pems
+    #vars <- select_vars(names(.data), !!! quos(...))
+    #.data <- select(.data, vars)
+
+    #var <- select_var(names(.data), !(!enquo(var)))
+    #.data[[var]]
+}
 
 
 

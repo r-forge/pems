@@ -161,7 +161,9 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
 
     #############################
     #the header
-    header <- paste("\npems (", nrow(x), "x", ncol(x), ")", sep="")
+
+#test removed \n from start of header
+    header <- paste("pems (", nrow(x), "x", ncol(x), ")", sep="")
     if(grpd) header <- paste(header, "\n<grp>: ", paste(attributes(x)$vars, collapse="; "), sep="", collapse="")
 
     #############################

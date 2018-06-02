@@ -33,6 +33,8 @@
 \alias{summarise_.pems}
 \alias{summarise.pems}
 \alias{summarise}
+\alias{pull.pems}
+\alias{pull}
 
 \alias{left_join.pems}
 \alias{left_join}
@@ -75,6 +77,7 @@ Various codes and methods.
 \method{group_size}{pems}(x)
 \method{n_groups}{pems}(x)
 \method{summarise}{pems}(.data, ...)
+\method{pull}{pems}(.data, ...)
 
 #dplyr (2) related underscore methods
 \method{select_}{pems}(.data, ..., warn=TRUE)
@@ -112,13 +115,16 @@ Various codes and methods.
   (Character) In mutate, the units to assign to new elements created by call. See Below.
 }
   \item{x}{
-   (Various) For \code{group...} fucntions, an object of \code{grouped_df} class. For 
+   (Various) For \code{group...} functions, an object of \code{grouped_df} class. For 
    \code{...join} functions, the first of two datasets, typically a \code{pems} object or 
    \code{data.frame}, to be joined together.
 }
   \item{add}{
    (Optional) Argument used by group_by and related dplyr grouping functions. 
 }
+%  \item{var}{
+%   (pems.element) For pull, the pems.element to extract from .data.
+%}
   \item{y, by, copy}{
    (various) For \code{...join} functions, consistent with \code{dplyr}, \code{y} is the 
    second of two datasets, typically a \code{pems} object or \code{data.frame}, to be 

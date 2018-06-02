@@ -1,6 +1,7 @@
-Changes in pems.utils 0.2.25 [2018-05-25]
+Changes in pems.utils 0.2.25 [2018-06-02]
 ========================================
 
+*	added pems method for pull 
 *       updated help, now uses \dontrun{} 
 *       updated print.pems.element, now 
         foreshortens longer outputs

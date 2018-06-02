@@ -109,8 +109,12 @@ import2PEMS <- function(file.name = file.choose(), ...,
   }
   
   #update names(data) and units 
-  if(!is.null(args$names))
-    names(data) <- make.names(args$names, unique=TRUE)
+  if(!is.null(args$names)){
+    temp <- make.names(args$names, unique=TRUE)
+    if(length(names(data))<length(temp))
+          names(data) <- temp[1:length(names(data))] else
+          names(data)[1:length(temp)] <- temp
+  }
   units <- args$units
   args <- stripFormals(getNamesFromFile, getUnitsFromFile, getUnitsFromNames,
                        args=args)
