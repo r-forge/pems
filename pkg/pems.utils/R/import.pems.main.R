@@ -71,14 +71,34 @@
 ##########################
 
 import2PEMS <- function(file.name = file.choose(), ..., 
-                        file.reader = read.delim, output="pems"){
+                            file.reader = read.delim, output="pems"){
 
 #think about this
   
-  
   # with get... functions => rationalisation of import2PEMS v0.1
   file <- file.name
-  args <- list(file = file, ..., file.reader = file.reader)
+  
+  #set defaults
+##################
+#june updates
+# like to tidy some of this...
+##################
+  args <- listUpdate(list(file = file, file.reader = file.reader, 
+                          as.is = TRUE, names=1),
+                     list(...))
+  if("names" %in% names(args) & !"header" %in% names(args)){
+    args$header = FALSE
+    if(is.numeric(args$names) & !"data.from" %in% names(args))
+      args$data.from <- max(args$names, na.rm=TRUE)+1
+  } 
+  if("data.from" %in% names(args) & !"skip" %in% names(args)){
+    #could take this further and make a 
+    #dataArgsHandler?
+    args$skip = args$data.from-1
+    args <- args[names(args)!="data.from"]
+  }
+  
+##################
   
   # to do 
   # file.type reset
@@ -109,15 +129,10 @@ import2PEMS <- function(file.name = file.choose(), ...,
   }
   
   #update names(data) and units 
-  if(!is.null(args$names)){
-    temp <- make.names(args$names, unique=TRUE)
-    if(length(names(data))<length(temp))
-          names(data) <- temp[1:length(names(data))] else
-          names(data)[1:length(temp)] <- temp
-  }
+  if(!is.null(args$names)) data <- renameData(data, args$names)
   units <- args$units
-  args <- stripFormals(getNamesFromFile, getUnitsFromFile, getUnitsFromNames,
-                       args=args)
+  args <- stripFormals(getNamesFromFile, getUnitsFromFile,
+                       getUnitsFromNames, args=args)
 
 #from this point forward we could have a pems.list  
   
@@ -129,8 +144,8 @@ import2PEMS <- function(file.name = file.choose(), ...,
   if("time.stamp" %in% names(data)){
     data <- setDataTimeStamp(data, args$time.format, 
                              args$tz, output="data")  
-    temp <- if(is.null(args$tz)) "Y-M-D H:M:S UTC" else paste("Y-M-D H:M:S", 
-                                                              args$tz, sep=" ")
+    temp <- if(is.null(args$tz)) "Y-M-D H:M:S UTC" else 
+      paste("Y-M-D H:M:S", args$tz, sep=" ")
     #check this has worked NOT died..?
     units[which(names(data)=="time.stamp")] <- temp
   }
@@ -765,6 +780,16 @@ stripFormals <- function(..., args=NULL){
   args[!names(args) %in% temp]
 }
 
+
+renameData <- function(data, names){
+  #to tidy names 
+  #and handle mismatching data cols and names length  
+  if(ncol(data)<length(names))
+    data[(ncol(data)+1):length(names)]<-NA
+  names(data)[1:length(names)] <- make.names(names, unique=TRUE)
+  #might need to tidy further if data.cols>names.length
+  data
+}
 
 
 setDataTimeStamp <- function(data, time.format="%d/%m/%Y %H:%M:%OS", 

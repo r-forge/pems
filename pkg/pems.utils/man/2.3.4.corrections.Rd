@@ -24,7 +24,7 @@ correctInput(input = NULL, ..., data = NULL,
 zeroNegatives(input = NULL, ..., data = NULL, 
          screen = FALSE)
 
-correctBaseline(x, ..., output = "ans")
+correctBaseline(x, ..., data = NULL, output = "ans")
 
 #associated
 

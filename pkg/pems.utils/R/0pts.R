@@ -11,8 +11,11 @@
 #utils::globalVariables(c("a", "othervar"))
 
 globalVariables(c("pems.scheme", "ref.unit.conversions", "ref.chem", "ref.diesel", "ref.petrol",
-                  "panel.surfaceSmooth", "data"))
+                  "panel.surfaceSmooth", "data", "exh.flow.rate", "exh.press", "exh.temp", 
+                  "local.time"))
 
+#might move following into function
+#      exh.flow.rate exh.press exh.temp local.time
 #panel.surfaceSmooth only needed until new version of loa gets on CRAN...
 
 

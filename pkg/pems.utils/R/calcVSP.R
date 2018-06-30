@@ -4,6 +4,8 @@
 ##########################
 ##########################
 
+#need chceking re new pems structure
+
 #kr
 
 #description
@@ -14,14 +16,21 @@
 #includes 
 ##########################
 #calcVSP
+#binVSP
 
 
 #to do
 ##########################
+#remake calcVSP
+#tidy binVP
+
 
 #comments
 ##########################
-#
+#used calcChecks, checkIfMissing
+#binVSP.old is previous code (not exported)
+#     this should go
+#binVSP and binVSP_... are current methods
 
 
 
@@ -31,7 +40,7 @@
 ##########################
 ##########################
 
-#kr 23/01/2012 v 0.0.6
+#kr 17/06/2018 v 0.0.7
 
 #what it does
 ##########################
@@ -57,27 +66,28 @@
 
 calcVSP <- function(speed = NULL, accel = NULL, slope = NULL, 
                     time = NULL, distance = NULL, data = NULL,
-                    calc.method = calcVSPJimenezPalaciosCMEM,
-                    ..., fun.name = "calcVSP", this.call = NULL, 
-                    hijack= FALSE){
-  
-    #setup
-#temp fix
-#think about using listUpdate in loa
-    if(is.null(this.call)) 
-        this.call <- match.call() 
-    
-    #run checks
-    settings <- calcChecks(fun.name, ..., data = data)
+                    calc.method = calcVSP_JimenezPalaciosCMEM,
+                    ..., fun.name = "calcVSP", this.call = NULL){
 
-    #get what there is 
-    if(!hijack){   
-        speed <- checkInput(speed, data=data, if.missing = "return")  
-        accel <- checkInput(accel, data=data, if.missing = "return")
-        slope <- checkInput(slope, data=data, if.missing = "return")
-        time <- checkInput(time, data=data, if.missing = "return")
-        distance <- checkInput(distance, data=data, if.missing = "return")
-    }
+#setup
+    dots <- quos(...)
+    this.call <- match.call()
+    settings <- calcChecks(fun.name=fun.name, ..., data = data)
+
+#inputs
+    if(!missing(speed))
+        speed <- getPEMSElement(!!enquo(speed), data, if.missing="return")
+    if(!missing(accel))
+        accel <- getPEMSElement(!!enquo(accel), data, if.missing="return")
+    if(!missing(slope))
+        slope <- getPEMSElement(!!enquo(slope), data, if.missing="return")
+    if(!missing(time))
+        time <- getPEMSElement(!!enquo(time), data, if.missing="return")
+    if(!missing(distance))
+        distance <- getPEMSElement(!!enquo(distance), data, if.missing="return")
+
+    #if missing they are left as NULL
+    #better way to do this???
 
     if(is.null(speed) & is.null(accel) & is.null(time) &is.null(distance))
             checkIfMissing(if.missing = settings$if.missing, 
@@ -93,10 +103,9 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
                            fun.name = fun.name)
         } else {
             speed <- calcSpeed(distance = distance, time = time, if.missing = settings$if.missing, 
-                               unit.conversions= settings$unit.conversions, hijack = TRUE)
+                               unit.conversions= settings$unit.conversions)
         }
     }
-
 
     if(is.null(accel)){
         if(is.null(time) | is.null(speed)){
@@ -106,53 +115,50 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
                            fun.name = fun.name)
         } else {
             accel <- calcAccel(speed = speed, time = time, if.missing = settings$if.missing, 
-                               unit.conversions= settings$unit.conversions, hijack = TRUE)
+                               unit.conversions= settings$unit.conversions)
         }
     }
 
 
-###################################
-#rearrange this bit so 
-#it can pack here?
-#not sure????
-###################################
+#calc.method could be character?
 
-
-    if(is.function(calc.method))
-        return(calc.method(speed = speed, accel = accel, slope = slope, data = data, 
-                    ..., fun.name = fun.name, this.call = this.call, hijack= TRUE))
+    if(is.function(calc.method)){
+        #new version
+        #strip output because calcVSP packing this...
+        if("output" %in% names(dots))
+             dots[[which(names(dots)=="output")]]<-NULL
+        vsp <- eval_tidy(quo(calc.method(speed=speed, accel=accel, slope=slope, data=data, fun.name=fun.name, 
+                                         this.call=this.call, !!!dots)))
+        return(pemsOutput(vsp, output = settings$output, data = data,  
+                          fun.name = fun.name, this.call = this.call))
+    }
 
     #not good
     checkIfMissing(if.missing = settings$if.missing, 
                    reply = "could not run calc.method!", 
                            suggest = "check ?calcVSP if reason unclear", if.warning = "returning NULL", 
                            fun.name = fun.name)
-
     return(NULL)    
 }
 
 
+calcVSP_JimenezPalaciosCMEM <- function(speed = NULL, accel = NULL, 
+                    slope = NULL, vehicle.weight = NULL, vsp.a = NULL, 
+                    vsp.b = NULL, vsp.c = NULL, vsp.g = NULL, ..., data = NULL,  
+                    fun.name = "calcVSP_JimenezPalaciosCMEM", 
+                    this.call = NULL){
 
-calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL, 
-                    slope = NULL, m = NULL, a = NULL, b = NULL, 
-                    c = NULL, g = NULL, ..., data = NULL,  
-                    fun.name = "calcVSPJimenezPalaciosCMEM", 
-                    this.call = NULL, hijack= FALSE){
+    #constant g might be messy...
   
     #setup
-#temp fix
-    if(is.null(this.call)) 
-        this.call <- match.call() 
-
-    #run checks
     settings <- calcChecks(fun.name, ..., data = data)
 
-    #get what there is 
-    if(!hijack){   
-        speed <- checkInput(speed, data=data, if.missing = settings$if.missing)  
-        accel <- checkInput(accel, data=data, if.missing = settings$if.missing)
-        slope <- checkInput(slope, data=data, if.missing = "return")
-    }
+    if(!missing(speed))
+        speed <- getPEMSElement(!!enquo(speed), data, if.missing="return")
+    if(!missing(accel))
+        accel <- getPEMSElement(!!enquo(accel), data, if.missing="return")
+    if(!missing(slope))
+        slope <- getPEMSElement(!!enquo(slope), data, if.missing="return")
 
     if(is.null(speed) | is.null(accel))
             checkIfMissing(if.missing = settings$if.missing, 
@@ -179,69 +185,282 @@ calcVSPJimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
     #make data always pems
     if(!isPEMS(data)) data <- makePEMS(data)
 
-###################
-#temp fix
-###################
-    old.class <- class(data)
-    class(data) <- "not.pems"
+################
+#testing
+################
+
+################
+#
+
+
+
+    pems.const <- getPEMSConstants(data)    
        
-    if(is.null(m)){        
-        m <- if(is.null(data$constants$vsp.m))
-                 1.5 else data$constants$vsp.m
+    if(is.null(vehicle.weight)){        
+        vehicle.weight <- if(is.null(pems.const$vehicle.weight))
+                 1.5 else pems.const$vehicle.weight
     }
 
 #note no special bus handling
 
-    if(is.null(a)){        
-        a <- if(is.null(data$constants$vsp.a)){
-                    if(m < 3.855) 1.1
-                       else if(m < 6.35) (0.0996 * m) / 2204.6 
-                           else if(m < 14.968) (0.0875 * m) / 2204.6
-                               else (0.0661 * m) / 2204.6 
-                 } else data$constants$vsp.a
+    if(is.null(vsp.a)){        
+        vsp.a <- if(is.null(pems.const$vsp.a)){
+                    if(vehicle.weight < 3.855) 1.1
+                       else if(vehicle.weight < 6.35) (0.0996 * vehicle.weight) / 2204.6 
+                           else if(vehicle.weight < 14.968) (0.0875 * vehicle.weight) / 2204.6
+                               else (0.0661 * vehicle.weight) / 2204.6 
+                 } else pems.const$vsp.a
     }
     
-    if(is.null(b)){        
-        b <- if(is.null(data$constants$vsp.b))
-                 0.132 else data$constants$vsp.b
+    if(is.null(vsp.b)){        
+        vsp.b <- if(is.null(pems.const$vsp.b))
+                 0.132 else pems.const$vsp.b
     }
 
-    if(is.null(c)){        
-        c <- if(is.null(data$constants$vsp.c)){
-                    if(m < 3.855) 0.000302
-                       else if(m < 6.35) (1.47 + (5.2e-05 * m)) / 2205 
-                           else if(m < 14.968) (1.93 + (5.90e-5 * m)) / 2205
-                               else (2.89 + (4.21e-5 * m)) / 2205
-                 } else data$constants$vsp.c
+    if(is.null(vsp.c)){        
+        vsp.c <- if(is.null(pems.const$vsp.c)){
+                    if(vehicle.weight < 3.855) 0.000302
+                       else if(vehicle.weight < 6.35) (1.47 + (5.2e-05 * vehicle.weight)) / 2205 
+                           else if(vehicle.weight < 14.968) (1.93 + (5.90e-5 * vehicle.weight)) / 2205
+                               else (2.89 + (4.21e-5 * vehicle.weight)) / 2205
+                 } else pems.const$vsp.c
     }
 
-    if(is.null(g)){        
-        g <- if(is.null(data$constants$vsp.g))
-                 9.81 else data$constants$vsp.g
+    if(is.null(vsp.g)){        
+        vsp.g <- if(is.null(pems.const$vsp.g))
+                 9.81 else pems.const$vsp.g
     }
-
-
-    vsp <- speed * (a * accel + (g * slope) + b) + (c * speed^3)
-
-        this.vsp.units <- "kW/metric Ton"
-
-    #my units
-    vsp <- makePEMSElement(vsp, name="vsp", units="kW/metric ton")
-
 
 ########################
-#temp fix
+#need to check a, b, c for different wt vehicles 
+#might need vsp.a, vsp.b, vsp.c?
+#vehicle.weight?
 ########################
-    class(data) <- old.class
+    if(!is.null(list(...)$sneaky))
+          print(paste(vehicle.weight, vsp.a, vsp.b, vsp.c, vsp.g, sep="; "))
+########################
+#might think about a sneaky=TRUE 
+#option for diagnostic info
+########################
 
-    #make output
-    calcPack(output = vsp, data = data, settings = settings, 
-             fun.name = fun.name, this.call = this.call) 
 
+    vsp <- speed * (vsp.a * accel + (vsp.g * slope) + vsp.b) + (vsp.c * speed^3)
+    vsp <- pems.element(vsp, name="vsp", units="kW/metric ton")
+    vsp <- pemsOutput(vsp, output = settings$output, data = data,  
+                      fun.name = fun.name, this.call = this.call)
+    vsp
 }
 
 
 
+
+
+
+
+
+
+###################################
+#binVSP
+###################################
+
+#notes binVSP_MOVES23 needs more work...
+# issue noted in docs 
+
+#kr v.0.1.3 19/06/2018
+
+binVSP <- function(..., bin.method="ncsu.14"){
+
+   #NSE method?
+   bin.method <- paste("binVSP_", toupper(bin.method), sep="")
+   bin.method <- try(get(bin.method))
+#error catch#tidy later
+   if(class(bin.method)[1]=="try-error" || !is.function(bin.method))
+         stop("bin.method not found")     
+   
+   #dots
+#one line of code?
+   dots <- quos(...)
+   eval_tidy(quo(bin.method(!!!dots)))
+}
+
+
+binVSP_NCSU.14 <- function (vsp = NULL, data = NULL, 
+                    ..., fun.name="binVSP_NSCU.14") {
+
+#setup
+    this.call <- match.call()
+    settings <- calcChecks(fun.name=fun.name, ..., data = data)
+#get vsp
+    vsp <- getPEMSElement(!!enquo(vsp), data, units="kW/metric ton", 
+                          ref.name="vsp")
+##vsp binning method that just uses vsp
+#ncsu 14 bin method
+#Frey et al 2002/3
+    temp <- cut(vsp, right=FALSE,
+	        breaks=c(-Inf, -2, 0, 1, 4, 7, 10, 13, 16, 19, 
+	                 23, 28, 33, 39, Inf),
+	        labels=sprintf("MODE%02d", 1:14),
+	        ordered_result=TRUE, exclude=FALSE)
+    vsp.bin <- makePEMSElement(temp, units="")
+    
+#output
+    pemsOutput(vsp.bin, output = settings$output, data = data,  
+                  fun.name = fun.name, this.call = this.call) 
+}
+
+
+binVSP_MOVES.23 <- function (vsp = NULL, speed = NULL, data = NULL, 
+                    ..., fun.name="binVSP_MOVES.23") {
+
+#setup
+    this.call <- match.call()
+    settings <- calcChecks(fun.name=fun.name, ..., data = data)
+
+#get vsp and speed
+    vsp <- getPEMSElement(!!enquo(vsp), data, units="kW/metric ton", 
+                          ref.name="vsp")
+    speed <- getPEMSElement(!!enquo(speed), data=data, units="mph", 
+                            ref.name="speed")
+
+##modes 23 bin method 
+#Koupal, J., Cumberworth, M. and Beardsley, M., 
+#Introducing MOVES2004, the initial release of EPA's new generation mobile source emission model. Ann Arbor, 1001, p.48105.
+
+     temp <- rep(NA, length(vsp))
+#doing this up hand
+           temp[vsp < 0 & speed >= 1 & speed < 25] <- "MODE11"
+           temp[vsp >= 0 & vsp < 3 & speed >= 1 & speed < 25] <- "MODE12"
+           temp[vsp >= 3 & vsp < 6 & speed >= 1 & speed < 25] <- "MODE13"
+           temp[vsp >= 6 & vsp < 9 & speed >= 1 & speed < 25] <- "MODE14"
+           temp[vsp >= 9 & vsp < 12 & speed >= 1 & speed < 25] <- "MODE15"
+           temp[vsp >= 12 & speed >= 1 & speed < 25] <- "MODE16"
+           temp[vsp < 0 & speed >= 25 & speed < 50] <- "MODE21"
+           temp[vsp >=0 & vsp < 3 & speed >= 25 & speed < 50] <- "MODE22"
+           temp[vsp >=3 & vsp < 6 & speed >= 25 & speed < 50] <- "MODE23"
+           temp[vsp >=6 & vsp < 9 & speed >= 25 & speed < 50] <- "MODE24"
+           temp[vsp >=9 & vsp < 12 & speed >= 25 & speed < 50] <- "MODE25"
+           temp[vsp >=12 & vsp < 18 & speed >= 25 & speed < 50] <- "MODE27"
+           temp[vsp >=18 & vsp < 24 & speed >= 25 & speed < 50] <- "MODE28"
+           temp[vsp >=24 & vsp < 30 & speed >= 25 & speed < 50] <- "MODE29"
+           temp[vsp >=30 & speed >= 25 & speed < 50] <- "MODE30"
+           temp[vsp < 6 & speed >= 50] <- "MODE33"
+           temp[vsp >= 6 & vsp < 12 & speed >= 50] <- "MODE35"
+           temp[vsp >= 12 & vsp < 18 & speed >= 50] <- "MODE37"
+           temp[vsp >= 18 & vsp < 24 & speed >= 50] <- "MODE38"
+           temp[vsp >= 24 & vsp < 30 & speed >= 50] <- "MODE39"
+           temp[vsp >= 30 & speed >= 50] <- "MODE40"
+           temp[speed < 1] <- "MODE01"
+
+#00 Braking to assign 
+           temp1 <- c("MODE00", "MODE01", 
+                      "MODE11", "MODE12", "MODE13", "MODE14", "MODE15", "MODE16", 
+                      "MODE21", "MODE22", "MODE23", "MODE24", "MODE25", "MODE27", "MODE28", "MODE29", "MODE30",
+                      "MODE33", "MODE35", "MODE37", "MODE38", "MODE39", "MODE40")
+	   temp <- factor(temp, levels=temp1, labels=temp1,  
+	                  ordered=TRUE, exclude=FALSE)
+    vsp.bin <- makePEMSElement(temp, units="")
+    pemsOutput(vsp.bin, output = settings$output, data = data,  
+                  fun.name = fun.name, this.call = this.call) 
+}
+
+
+
+
+
+
+
+
+
+binVSP.old <- function (vsp = NULL, speed = NULL, data = NULL, 
+                    bin.method="ncsu.14", ..., fun.name="binVSP") {
+
+#setup
+    this.call <- match.call()
+    settings <- calcChecks(fun.name=fun.name, ..., data = data)
+
+    #get vsp
+    vsp <- getPEMSElement(!!enquo(vsp), data, units="kW/metric ton")
+#####################
+#don't like this 
+#needs a better fix
+####################
+    speed <- if(missing(speed)) NULL else 
+                  getPEMSElement(!!enquo(speed), data=data, units="mph", if.missing="return")
+
+    vsp.bin <- NULL
+	
+#could bring speed to here and make bin options methods
+
+    ##vsp binning methods that just use vsp
+	#ncsu 14 bin method
+	#Frey et al 2002/3
+	if(tolower(bin.method)=="ncsu.14"){
+	   temp <- cut(vsp, right=FALSE,
+	               breaks=c(-Inf, -2, 0, 1, 4, 7, 10, 13, 16, 19, 
+	                        23, 28, 33, 39, Inf),
+	               labels=sprintf("MODE%02d", 1:14),
+	               ordered_result=TRUE, exclude=FALSE)
+           vsp.bin <- makePEMSElement(temp, units="")
+	}
+        #nscu 8 bin method
+        #Frey et al 2007
+	##TO DO
+	
+  ##vsp binning methods that use vsp and speed...
+
+        ##modes 23 bin method 
+        #Koupal, J., Cumberworth, M. and Beardsley, M., 
+        #Introducing MOVES2004, the initial release of EPA's new generation mobile source emission model. Ann Arbor, 1001, p.48105.
+	if(tolower(bin.method)=="moves.23"){
+           if(is.null(speed))
+            checkIfMissing(if.missing = "stop", 
+                           reply = "Need vsp and speed to generate MOVES 23 bin series", 
+                           suggest = "add valid speed to call or see ?calcVSP", if.warning = NULL, 
+                           fun.name = fun.name)
+
+           temp <- rep(NA, length(vsp))
+           #doing this up hand
+           temp[vsp < 0 & speed >= 1 & speed < 25] <- "MODE11"
+           temp[vsp >= 0 & vsp < 3 & speed >= 1 & speed < 25] <- "MODE12"
+           temp[vsp >= 3 & vsp < 6 & speed >= 1 & speed < 25] <- "MODE13"
+           temp[vsp >= 6 & vsp < 9 & speed >= 1 & speed < 25] <- "MODE14"
+           temp[vsp >= 9 & vsp < 12 & speed >= 1 & speed < 25] <- "MODE15"
+           temp[vsp >= 12 & speed >= 1 & speed < 25] <- "MODE16"
+           temp[vsp < 0 & speed >= 25 & speed < 50] <- "MODE21"
+           temp[vsp >=0 & vsp < 3 & speed >= 25 & speed < 50] <- "MODE22"
+           temp[vsp >=3 & vsp < 6 & speed >= 25 & speed < 50] <- "MODE23"
+           temp[vsp >=6 & vsp < 9 & speed >= 25 & speed < 50] <- "MODE24"
+           temp[vsp >=9 & vsp < 12 & speed >= 25 & speed < 50] <- "MODE25"
+           temp[vsp >=12 & vsp < 18 & speed >= 25 & speed < 50] <- "MODE27"
+           temp[vsp >=18 & vsp < 24 & speed >= 25 & speed < 50] <- "MODE28"
+           temp[vsp >=24 & vsp < 30 & speed >= 25 & speed < 50] <- "MODE29"
+           temp[vsp >=30 & speed >= 25 & speed < 50] <- "MODE30"
+           temp[vsp < 6 & speed >= 50] <- "MODE33"
+           temp[vsp >= 6 & vsp < 12 & speed >= 50] <- "MODE35"
+           temp[vsp >= 12 & vsp < 18 & speed >= 50] <- "MODE37"
+           temp[vsp >= 18 & vsp < 24 & speed >= 50] <- "MODE38"
+           temp[vsp >= 24 & vsp < 30 & speed >= 50] <- "MODE39"
+           temp[vsp >= 30 & speed >= 50] <- "MODE40"
+           temp[speed < 1] <- "MODE01"
+
+           #00 Braking to assign 
+           temp1 <- c("MODE00", "MODE01", 
+                      "MODE11", "MODE12", "MODE13", "MODE14", "MODE15", "MODE16", 
+                      "MODE21", "MODE22", "MODE23", "MODE24", "MODE25", "MODE27", "MODE28", "MODE29", "MODE30",
+                      "MODE33", "MODE35", "MODE37", "MODE38", "MODE39", "MODE40")
+	   temp <- factor(temp, levels=temp1, labels=temp1,  
+	                  ordered=TRUE, exclude=FALSE)
+           vsp.bin <- makePEMSElement(temp, units="")
+	}
+        
+
+    if(!is.null(vsp.bin)) 
+       return(pemsOutput(vsp.bin, output = settings$output, data = data,  
+                  fun.name = fun.name, this.call = this.call)) 
+
+    ##error message if no binning method assigned... 	
+	stop("unknown bin method")
+}
 
 
 

@@ -4,6 +4,12 @@
 ########################
 ########################
 
+#checkInput is going...
+#checkInput2 is going...
+
+
+
+
 #in place
 #################
 #checkInput
@@ -51,6 +57,7 @@
 
 #this can be simplified once 
 #pems and pems.element full set up
+
 
 
 checkInput <- function(input = NULL, data = NULL, 
@@ -681,13 +688,8 @@ checkUnits <- function (input = NULL, units = NULL, data = NULL,
                       "units" else "input"
 
     #get input
+    ans <- getPEMSElement(!!enquo(input), data, ref.name="input")
 
-#    ans <- checkInput(input = input, data = data, input.name = input.name, 
-#                      fun.name = fun.name, if.missing = if.missing, 
-#                      output = "input")
-
-
-ans <- input
 
     input.name <- if(is.character(input.name))
                        input.name[1] else attributes(ans)$name[1]
@@ -877,11 +879,7 @@ checkOutput <- function (input = NULL, data = NULL,
                        fun.name=fun.name)
 
     #get input
-#    ans <- checkInput(input = input, data = data, input.name = input.name, 
-#                      fun.name = fun.name, if.missing = if.missing, 
-#                      output = "input")
-
-ans <- input
+    ans <- getPEMSElement(!!enquo(input), data, ref.name="input")
 
 
     input.name <- if(is.character(input.name))

@@ -1,6 +1,25 @@
-Changes in pems.utils 0.2.25 [2018-06-02]
+Changes in pems.utils 0.2.25 [2018-06-22]
 ========================================
 
+*       added as.pems.pems.element 
+*       updated binVSP, added binVSP_NCSU.14 
+        and binVSP_MOVES.23 
+*       getPEMSConstants replaces pemsConstants,
+        getPEMSData replaces pemsData, 
+        getPEMSElement replaces pemsElement, now 
+        also all rlang/dplyr methods 
+*       removed test functions calc.accel, 
+        calc.dist, calc.new
+*       added (not exported) calcTemplate, 
+        pemsOutput  
+*       simplified calcDistance, calcSpeed, 
+        calcAccel, calcJerk
+*       pemsXYZCondUnitsHandler update, catch 
+        x[1]=NA mistmatch
+*       added MOVES.2004 model to binVSP 
+*       added calc.accel as in-testing 
+        alternative to calcAccel
+*       added binVSP function
 *	added pems method for pull 
 *       updated help, now uses \dontrun{} 
 *       updated print.pems.element, now 

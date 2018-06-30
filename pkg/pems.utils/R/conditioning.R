@@ -4,6 +4,9 @@
 ##########################
 ##########################
 
+
+#this uses checkInput
+
 #kr
 
 #description
@@ -64,10 +67,9 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
     settings <- calcChecks(fun.name, ..., data = data)
 
     #get what there is 
-    if(!hijack)   
-        ref <- checkInput(ref, data=data, fun.name = fun.name,   
+    ref <- getPEMSElement(!!enquo(ref), data, fun.name=fun.name,
                             if.missing = settings$if.missing,
-                            unit.conversions = settings$unit.conversions)  
+                            unit.conversions = settings$unit.conversions)
 
     if(is.null(cut.method)){
         #select suitable cut.method
@@ -130,10 +132,9 @@ cutByRow <- function(ref = NULL, n = 4, rows = NULL, ..., data = NULL,
     settings <- calcChecks(fun.name, ..., data = data)
 
     #get what there is 
-    if(!hijack)   
-        ref <- checkInput(ref, data=data, fun.name = fun.name,   
+    ref <- getPEMSElement(!!enquo(ref), data, fun.name=fun.name,
                             if.missing = settings$if.missing,
-                            unit.conversions = settings$unit.conversions)  
+                            unit.conversions = settings$unit.conversions)
 
     #both n and row should 
     if(!is.numeric(n) & !is.numeric(rows)){

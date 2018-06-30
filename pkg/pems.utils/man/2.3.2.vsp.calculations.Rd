@@ -3,7 +3,11 @@
 \alias{vsp.calculations}
 \alias{vsp}
 \alias{calcVSP}
-\alias{calcVSPJimenezPalaciosCMEM}
+\alias{calcVSP_JimenezPalaciosCMEM}
+\alias{binVSP}
+\alias{binVSP_NCSU.14}
+\alias{binVSP_MOVES.23}
+
 
 
 \title{
@@ -18,15 +22,22 @@
 
 calcVSP(speed = NULL, accel = NULL, slope = NULL, 
           time = NULL, distance = NULL, data = NULL,
-          calc.method = calcVSPJimenezPalaciosCMEM,
-          ..., fun.name = "calcVSP", this.call = NULL, 
-          hijack= FALSE)
+          calc.method = calcVSP_JimenezPalaciosCMEM,
+          ..., fun.name = "calcVSP", this.call = NULL)
 
-calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL, 
-          slope = NULL, m = NULL, a = NULL, b = NULL, 
-          c = NULL, g = NULL, ..., data = NULL,  
-          fun.name = "calcVSPJimenezPalaciosCMEM", 
-          this.call = NULL, hijack= FALSE)
+calcVSP_JimenezPalaciosCMEM(speed = NULL, accel = NULL, 
+          slope = NULL, vehicle.weight = NULL, vsp.a = NULL, 
+          vsp.b = NULL, vsp.c = NULL, vsp.g = NULL, ..., data = NULL,  
+          fun.name = "calcVSP_JimenezPalaciosCMEM", 
+          this.call = NULL)
+
+binVSP(..., bin.method="ncsu.14")
+
+#associated methods
+binVSP_NCSU.14(vsp = NULL, data = NULL, 
+          ..., fun.name="binVSP_NSCU.14")
+binVSP_MOVES.23(vsp = NULL, speed = NULL, data = NULL, 
+          ..., fun.name="binVSP_MOVES.23")
 
 }
 
@@ -35,26 +46,27 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
 \arguments{
 
-  \item{speed, accel, slope, time, distance}{
-  (Data series, typically vectors) The inputs to use when doing a calculation. See 
-  Note about \code{calcVSP} usage and \code{calc.method}.
+  \item{speed, accel, slope, time, distance, vsp}{
+  (Typically pems.element vectors) \code{speed}, \code{accel}, \code{slope}, 
+  \code{time} and \code{distance} are possible inputs for VSP calculation. 
+  \code{vsp} and \code{speed} are possible inputs for VSP binning methods. 
+  (See Notes about inputs and methods.)
 } 
 
   \item{data}{
-  (Optional \code{data.frame} or \code{pems} object) The data source if either a 
-  \code{data.frame} or \code{pems} object is being used.
+  (Optional, typically \code{pems}) The data source for inputs.
 } 
 
-  \item{calc.method}{
-  (Required function) The function to use to calculate VSP. (default 
-  \code{calcVSPJimenezPalaciosCMEM}). See Note about \code{calcVSP} usage and 
-  \code{calc.method}.
+  \item{calc.method, bin.method}{
+  (Required functions) \code{calc.method} is the function used to calculate VSP (default 
+  \code{calcVSP_JimenezPalaciosCMEM}). \code{bin.method} is the methods used when binning 
+  VSP measurements. (See Notes.)
 }
 
   \item{\dots}{
-  (Optional) Other arguments, currently passed on to function provided as 
-  \code{calc.method} (default \code{calcVSPJimenezPalaciosCMEM}) and appropriate 
-  \code{\link{check...}} functions.
+  (Optional) Other arguments, currently passed on as supplied to e.g.   
+  \code{calc.method} (default \code{calcVSP_JimenezPalaciosCMEM}) and \code{pems.utils}  
+  functions as appropriate.
 }
 
   \item{fun.name}{
@@ -66,23 +78,16 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
   for further details.
 }
 
-  \item{hijack}{
-  (Logical) Is this function being locally 'hijacked' by a user/function developer? See Note on 
-  \code{hijack} below.
+  \item{vehicle.weight, vsp.a, vsp.b, vsp.c, vsp.g}{
+  (Numerics) VSP constants. If not supplied, defaults are applied. See Below.
 }
-
-  \item{m, a, b, c, g}{
-  (Numerics) VSP constants. If not supplied or preset in the associated \code{pems} object, defaults 
-  are applied. See Below.
-}
-
     
 }
 
 
 \details{
 
-  \code{calcVSP...} functions calculate VSP using.
+  \code{calcVSP...} functions calculate VSP using:
 
   \code{calcVSP} is a wrapper function which allows users to supply different combinations 
   of inputs. VSP calculations typically require speed, acceleration and slope inputs. This 
@@ -94,49 +99,55 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
   speed and accel
 
-  ... and passes on speed and accel to the method defined by \code{calc.method}. (This means 
-  all VSP functions run via \code{calcVSP(..., calc.method = function)} share this option 
-  without needed dedicated code and only required speed and accel as inputs.)
+  This then passes on \code{speed}, \code{accel} and (if supplied) \code{slope} to the method 
+  defined by \code{calc.method}. (This means other VSP functions run via 
+  \code{calcVSP(..., calc.method = function)} share this option without needed dedicated code.)
 
-  \code{calcVSPJimenezPalaciosCMEM} calculates VSP according to Jimenez Palacios and CMEM methods. 
+  \code{calcVSP_JimenezPalaciosCMEM} calculates VSP according to Jimenez Palacios and CMEM methods. 
   See References and Note below.
+
+  \code{binVSP} generates VSP Mode bins depending on method applied. 
+
+  \code{method} 'ncsu.14' uses supplied \code{vsp} and the 14 bin method described in Frey et al 2002; 
+  \code{method} 'moves.23' uses supplied \code{vsp} and \code{speed} and the 23 bin methods from 
+   MOVES (See Note).   
  
 }
 
 
 \value{
 
-  \code{calcVSPJimenezPalaciosCMEM} and \code{calcVSP} by default use Jimenez Palacios and CMEM 
+  \code{calcVSP_JimenezPalaciosCMEM} and \code{calcVSP} by default use Jimenez Palacios and CMEM 
   methods to calculate VSP (in kW/metric ton).
+
+  \code{binVSP} generates a \code{pems.element factor} vector of VSP Mode Bins. 
 
 }
 
 
 \section{Warning }{
-  \code{calcVSPJimenezPalaciosCMEM} does not currently have special case for buses as of 
+  \code{calcVSP_JimenezPalaciosCMEM} does not currently have special case for buses as of 
   Giannelli et al (2005). (Please let me know if you need to use them.)  
 }
 
 \note{
 
   \code{calcVSP...} constants can be set/modified in the calculation call, e.g. 
-  \code{calcVSP(..., a = [new.value])}. If not supplied these are first checked for 
-  in the associated \code{pems} object (if supplied), or set to default values. See 
-  References. If VSP constants are to be added to a \code{pems} object, these should 
-  have the prefix 'vsp.', so for, e.g., \code{a} is stored in pems constants are 
-  \code{vsp.a}. This is because the common VSP designations (\code{a}, \code{b}, \code{c}, 
-  etc.) can be very easily wrongly assigned. 
+  \code{calcVSP(..., vsp.a = [new.value])}. If not supplied, defaults are used (see 
+  References). 
+
+  \code{binVSP_MOVES.23} is in-development. Do not use without independent confirmation 
+  of values.  
+
+%This option under review
+%If VSP constants are to be added to a \code{pems} object, these should 
+%  have the prefix 'vsp.', so for, e.g., \code{a} is stored in pems constants are 
+%  \code{vsp.a}. This is because the common VSP designations (\code{a}, \code{b}, \code{c}, 
+%  etc.) can be very easily wrongly assigned. 
   
   Unit handling in \code{pems.utils} is via \code{\link{checkUnits}}, \code{\link{getUnits}}, 
   \code{\link{setUnits}} and \code{\link{convertUnits}}. See \code{\link{common.calculations}} 
   for details.
-
-  \code{hijack} is an in-development argument, supplied to allow code developers to run multiple 
-  functions in different function environments. When developers 'mix and match' code from 
-  several sources it can become unstable, especially if functions are run within functions within 
-  functions, etc. \code{hijack = TRUE} and associated code makes a function local to 'side-step' 
-  this issue. This work by assuming/expecting all inputs to be local, i.e. supplied directly by 
-  the code user.          
  
 }
 
@@ -153,7 +164,7 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
 \references{
   
- \code{calcVSPJimenezPalaciosCMEM} uses methods described in:
+ \code{calcVSP_JimenezPalaciosCMEM} uses methods described in:
 
  Jimenez-Palacios, J.L. (1999) Understanding and Quantifying Motor Vehicle Emissions with 
  Vehicle Specific Power and TILDAS Remote Sensing. PhD Thesis, Massachusetts Institute of 
@@ -163,13 +174,13 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
  Heavy-Duty Diesel Vehicle Fuel Consumption Modelling Based on Road Load and Power Train 
  Parameters. SAE Technical Papers, No, 05CV-3.
 
- \code{m} is the vehicle mass (in metric tons), and \code{a}, \code{b}, \code{c} and \code{g} 
- are the calculations constants for:
+ \code{vehicle.weight} is the vehicle mass (in metric tons), and \code{vsp.a}, \code{vsp.b}, 
+ \code{vsp.c} and \code{vsp.g} are the calculations constants for:
 
  \code{vsp = speed * (a * accel + (g * slope) + b) + (c * speed^3)}
 
  In all cases, by default b = 0.132, g = 9.81, and if not supplied \code{slope} is assumed to be 
- zero and \code{m} is assumed to 1.5 metric tons.
+ zero and \code{vehicle.weight} is assumed to 1.5 metric tons.
 
  For vehicles < 3.855 metric tons; a = 1.1, and c = 0.000302 (as of Jimenez-Palacios, 1999).
 
@@ -181,6 +192,12 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 
  For vehicles > 14.968 metric tone; a = 0.0661m/2204.6, c = 2.89 + 4.21e-5m/2205 (as of 
  Giannelli et al, 2005).
+
+ \code{binVSP} method \code{ncsu.14} uses methods described in:
+ 
+ Frey, H.C., Unal, A., Chen, J., Li, S. and Xuan, C., 2002. Methodology for developing modal 
+ emission rates for EPA's multi-scale motor vehicle & equipment emission system. Ann Arbor, 
+ Michigan: US Environmental Protection Agency. (EPA420-R-02-027)
 
 }
 
@@ -194,8 +211,11 @@ calcVSPJimenezPalaciosCMEM(speed = NULL, accel = NULL,
 #basic usage
 
 vsp <- calcVSP(velocity, time = local.time, data = pems.1)
+#where the returned object, vsp, is vsp values as pems.element
 
-#where the returned object, vsp, is a pems.element
+ncsu.14 <- binVSP(vsp)
+#where the returned object, nscu.14, is the associated modal bin 
+# assignments based on the Frey et al (2002) 14 bin method. 
 
 }
 

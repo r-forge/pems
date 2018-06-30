@@ -4,6 +4,8 @@
 ##########################
 ##########################
 
+#this uses checkInput
+
 #kr
 
 #description
@@ -90,12 +92,24 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
 
     #get what there is 
 
-    if(!hijack){   
-        speed <- checkInput(speed, data=data, if.missing = "return")  
-        accel <- checkInput(accel, data=data, if.missing = "return")
-        time <- checkInput(time, data=data, if.missing = "return")
-        distance <- checkInput(distance, data=data, if.missing = "return")
-    }
+    speed <- getPEMSElement(!!enquo(speed), data, fun.name=fun.name,
+                        if.missing = "return", ref.name="speed")
+    accel <- getPEMSElement(!!enquo(accel), data, fun.name=fun.name,
+                        if.missing = "return", ref.name="accel")
+    time <- getPEMSElement(!!enquo(time), data, fun.name=fun.name,
+                        if.missing = "return", ref.name="time")
+    distance <- getPEMSElement(!!enquo(distance), data, fun.name=fun.name,
+                        if.missing = "return", ref.name="distance")
+
+###########################
+#as of pemsGetElement
+#    if(!hijack){   
+#        speed <- checkInput(speed, data=data, if.missing = "return")  
+#        accel <- checkInput(accel, data=data, if.missing = "return")
+#        time <- checkInput(time, data=data, if.missing = "return")
+#        distance <- checkInput(distance, data=data, if.missing = "return")
+#    }
+###########################
 
 #######################
 #suggestion 

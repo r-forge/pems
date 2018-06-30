@@ -9,6 +9,9 @@
 \alias{units<-.pems.element}
 \alias{summary.pems.element}
 \alias{summary}
+\alias{as.pems.pems.element}
+\alias{round.pems.element}
+\alias{round}
 \alias{[.pems.element}
 \alias{[<-.pems.element}
 
@@ -26,7 +29,9 @@
 
 \method{[}{pems.element} (x, i, ..., force = TRUE, wrap = FALSE) <- value
 
-\method{print}{pems.element}(x, ..., n = NULL, rows = NULL)
+\method{as.pems}{pems.element}(x, ...)
+
+\method{print}{pems.element}(x, ..., n = NULL, rows = NULL, width = NULL)
 
 \method{plot}{pems.element}(x, y = NULL, xlab = NULL, ylab = NULL, ...)
 
@@ -35,6 +40,8 @@
 \method{units}{pems.element}(x) <- value
 
 \method{summary}{pems.element}(object, ...)
+
+\method{round}{pems.element}(x, ...)
 
 }
 
@@ -64,8 +71,9 @@
    the value to be inserted.
 }
 
-  \item{n, rows}{
-   (Numerics) For \code{print(pems)}, number of elements or rows to foreshorten print output to. 
+  \item{n, rows, width}{
+   (Numerics) For \code{print(pems)}, number of elements, rows or screen width to foreshorten 
+   print output to. 
 }
 
   \item{y, xlab, ylab}{ 
@@ -86,13 +94,18 @@
   \code{plot(pems.element)} generates a standard R plot of the supplied 
   \code{pems.element}. 
 
-
   \code{units(pems.element)} extracts the units from the supplied 
   \code{pems.element}.  
  
 }
 
 \author{ Karl Ropkins }
+
+\note{
+  Special \code{round(pems.element)} is required to as a wrapper to \code{round.Date} and 
+  \code{round.POSIXt} handling.
+}
+
 
 \examples{
 

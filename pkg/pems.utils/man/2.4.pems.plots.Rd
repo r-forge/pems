@@ -48,8 +48,9 @@ panel.pemsPlot(..., loa.settings = FALSE)
 
 #WatsonPlot
 
-WatsonPlot(speed, accel = NULL, z = NULL, cond = NULL, ..., data = NULL, 
-         plot.type=2, fun.name = "WatsonPlot", scheme = pems.scheme)
+WatsonPlot(speed, accel = NULL, z = NULL, ..., data = NULL, 
+         cond = NULL, units = TRUE, plot.type = 2, fun.name="WatsonPlot",
+         scheme = pems.scheme)
 
 #WatsonPlot elements
 
@@ -98,11 +99,10 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   for a surface plot. \code{cond} is a conditioning terms that can be used to 
   subset the supplied data and generate multiple plot panels. See Note Below.
 
-  For new plots, these can be supplied either individually or as a formula, e.g. 
+  For new plots, these should be supplied individually, e.g. 
   for \code{pemsPlot}:
 
-  \code{pemsPlot(x, y, z, cond)} or \cr
-  \code{pemsPlot(z~x*y|cond)}
+  \code{pemsPlot(x, y, z, cond)} 
 
   For old plots, these must be formulae.         
 
@@ -158,8 +158,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
   \item{speed, accel}{
   (Various) For \code{WatsonPlot}. The \code{x} and \code{y} terms, speed and acceleration, 
-  respectively, for a Watson plot. As with \code{x} above, the first term can be either the 
-  \code{x} data-series, or a plot formula in form \code{z~x*y|cond}.
+  respectively, for a Watson plot. 
   }
 
   \item{ref.line}{
@@ -355,6 +354,9 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
   \code{XYZPlot} is a short-term replace for previous function \code{quickPlot}. It will most likely 
   be replaced when \code{pems.utils.0.3} is released.
+
+
+  \code{pemsPlot} and \code{WatsonPlot} no longer accept formula \code{x}, \code{y}, \code{z} inputs. 
   
   With all these functions I have tried to make the default plotting options as robust as possible. 
   However, it is not always possible to test all the plot combines that users might try. So, please 
@@ -427,17 +429,8 @@ XYZPlot(~accel*velocity, data=a, plot = wireframe, shade=TRUE)
 
 #basic usage of pemsPlot
 
-#like latticePlot example above 
-
-pemsPlot(~local.time*velocity, data=pems.1, type="l")
-
-#note formula format z~x*y, with z ignored for standard scatter plot
-
-\dontrun{
-#or in conventional plot(x, y, ...) format
-
 pemsPlot(local.time, velocity, data=pems.1, type="l")
-}
+
 
 ###########
 ##example 5 
@@ -445,7 +438,7 @@ pemsPlot(local.time, velocity, data=pems.1, type="l")
 
 #basic usage of WatsonPlot
 
-#Note: using a generated in example 3 
+#Note: using 'a' generated in example 3 
 WatsonPlot(velocity, accel, data=a)
 
 \dontrun{

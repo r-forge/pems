@@ -4,9 +4,20 @@
 ########################
 ########################
 
+#this includes old pemsElement at moment looking to remove
+#this includes pemsData; looking to replace with getPEMSData
+
+#other pems... function under review
+
+######################################################
+##things that are going in rlang update...
+#pemsElement.old, pemsElement, pemsin, pemsin2, 
+#think these are only reason for lazyeval
+######################################################
+
 #in place
 #################
-#pemsElement
+#getPEMSElement
 #pemsData
 #pemsConstants
 #pemsHistory
@@ -41,14 +52,209 @@
 
 ########################
 ########################
-##pemsElement
+##getPEMSElement
 ########################
 ########################
+
+#version 0.3.0
+#karl 22/06/2018
+
+#getPEMSElement replaces pemsElement
+#pemsElement using rlang/dplyr
+
+#getElement already used...
+
+#########################
+#need to think about
+#########################
+#if.missing warning
+#attribute name handling
+#attribute units handling
+
+
+getPEMSElement <- function (x, pems = NULL, units = NULL, ..., 
+                         fun.name = "getPEMSElement", if.missing = "stop",
+                         .x = enquo(x)){
+
+#################################################
+#I guess there must be a better way of doing this
+#but I am not seeing it
+#################################################
+
+    #################################################
+    #I die if arg is missing
+    #################################################
+    #element.name <- quo_name(.x)
+    #test...
+    #NB if quo_is_null(.x) that means x is null because nothing to do???
+
+    ref.name <- if(is.null(list(...)$ref.name)) "element" else list(...)$ref.name
+    ##element.name <- try(quo_name(.x), silent=TRUE)
+    if(quo_is_null(.x)){
+         checkIfMissing(if.missing = if.missing,
+                       reply = paste("required ", ref.name, " NULL", sep=""),
+                       suggest = "checking call arguments", 
+                       if.warning = NULL, 
+                       fun.name = fun.name)
+         return(NULL)
+    }
+    element.name <- quo_name(.x)    
+
+    ans <- if (is.null(pems)) NULL else 
+                try(pems[element.name], silent = TRUE)
+###############
+#testing cond eval
+    if (is.null(ans) | class(ans)[1] == "try-error") {
+        ans <- try(eval_tidy(enquo(x), pemsData(pems)), silent=TRUE)
+    }
+#################
+
+    if (is.null(ans) | class(ans)[1] == "try-error") {
+             ans <- try(eval_tidy(.x), silent = TRUE)
+    }
+    if (is.null(ans) | class(ans)[1] == "try-error") {
+             ans <- try(eval_tidy(x), silent = TRUE)
+    }
+    if (class(ans)[1] == "try-error") 
+             ans <- NULL
+    if(is.null(ans))
+         checkIfMissing(if.missing = if.missing,
+                       reply = paste(ref.name, " '", element.name[1], "' not found or NULL", sep=""),
+                       suggest = "checking call arguments", 
+                       if.warning = NULL, 
+                       fun.name = fun.name) 
+
+#no name attribute management
+    #pass ref to convertUnits?
+#no option if units are set but ans does not have units...
+
+    if (!is.null(units) & !is.null(ans)) 
+        ans <- convertUnits(ans, to = units)
+    ans
+}
+
+
+
+
+#########################
+#########################
+##testPEMS
+#########################
+#########################
+
+#version 0.0.1
+#karl 24/06/2018
+
+#this is a general test for several of the getPEMS... functions
+#might not export it....
+
+#this kills function if missing and if.missing="stop"
+#returns NULL, FALSE or TRUE
+
+testPEMS <- function(pems=NULL, fun.name = "testPEMS", if.missing = "stop",
+         .pems = enquo(pems), ...){
+
+    if(quo_is_null(.pems)){
+         checkIfMissing(if.missing = if.missing,
+                       reply = paste("required pems NULL", sep=""),
+                       suggest = "checking call arguments", 
+                       if.warning = NULL, 
+                       fun.name = fun.name)
+         return(NULL)
+    }
+    pems.name <- quo_name(.pems)
+    if(is.null(pems)){
+          checkIfMissing(if.missing = if.missing,
+               reply = paste("pems '", pems.name[1], "' not found", sep=""),
+               suggest = "checking call arguments", 
+               if.warning = NULL, 
+               fun.name = fun.name)
+         return(NULL)
+    }
+    if(!"pems" %in% class(pems)) {
+          checkIfMissing(if.missing = if.missing,
+               reply = paste("pems '", pems.name[1], "' not a pems", sep=""),
+               suggest = "checking pems", 
+               if.warning = NULL, 
+               fun.name = fun.name)
+        return(FALSE)
+    }
+    TRUE
+}
+
+
+
+##############################
+##############################
+##getPEMSConstants
+##############################
+##############################
+
+#replacing pemsConstants
+
+getPEMSConstants <- function(pems=NULL, ..., 
+         fun.name = "getPEMSConstants", if.missing = "stop",
+         .pems = enquo(pems)){
+
+    test <- testPEMS(pems, fun.name=fun.name, if.missing=if.missing, 
+             .pems=.pems)
+    if(is.logical(test) && test) pems[["constants"]] else NULL
+}
+
+
+
+##############################
+##############################
+##getPEMSData
+##############################
+##############################
+
+#replacing with pemsData
+
+getPEMSData <- function(pems=NULL, ..., 
+         fun.name = "getPEMSData", if.missing = "stop",
+         .pems = enquo(pems)){
+
+#################
+#might want to include option for 
+#more aggressive conversions
+#################
+
+    test <- testPEMS(pems, fun.name=fun.name, if.missing=if.missing, 
+             .pems=.pems)
+    if(is.logical(test) && test) pems[["data"]] else NULL
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #version 0.2.0
 #karl 17/09/2010
 
-pemsElement <- function(element, pems=NULL, ..., 
+#not exporting
+#will be removing...
+
+pemsElement.old <- function(element, pems=NULL, ..., 
          fun.name = "pemsElement", if.missing = "stop",
          element.name = deparse(substitute(element))){
 
@@ -141,6 +347,8 @@ pemsData <- function(pems=NULL, ...,
 ##############################
 ##############################
 
+#replacing with getPEMSContansts
+
 
 pemsConstants <- function(pems=NULL, ..., 
          fun.name = "pemsConstants", if.missing = "stop",
@@ -158,6 +366,11 @@ pemsConstants <- function(pems=NULL, ...,
     pems$constants
 
 }
+
+
+
+
+
 
 
 
@@ -286,55 +499,4 @@ pemsin2 <- function (x, data = NULL, units = NULL, .x = enquo(x)){
 }
 
 
-
-calc.dist <- function(speed = NULL, time = NULL, data = NULL,
-                     ...){
-    #setup
-################
-#think I can simplify setup
-#maybe merge with pemsin 
-#     so we don't rename data? 
-################
-    if (!is.null(data) && quo_name(enquo(speed)) %in% names(data)) 
-        names(data)[names(data)==quo_name(enquo(speed))] <- "speed"
-    if (!is.null(data) && quo_name(enquo(time)) %in% names(data)) 
-        names(data)[names(data)==quo_name(enquo(time))] <- "time"
-
-    #get inputs
-    speed <- pemsin2(speed, data, units="m/s")
-    time <- pemsin2(time, data, units="s")
-
-    #my assumption
-    #first unit resolution is average of rest
-    #rest are time.now - time.last
-
-    temp <- diff(time)
-    temp <- c(mean(temp, na.rm=TRUE), temp)
-
-    #my calculation
-    distance <- speed * temp
-
-    #my structure
-################
-#look into this 
-#    makePEMSElement versus pems.element
-#    also does it keep historical data types...
-################
-    distance <- makePEMSElement(distance, name="distance", units="m")
-    distance
-      
-}
-
-
-calc.new <- function (speed = NULL, time = NULL, data = NULL, ...) 
-{
-    if (!is.null(data) && quo_name(enquo(speed)) %in% names(data)) 
-        names(data)[names(data)==quo_name(enquo(speed))] <- "speed"
-    if (!is.null(data) && quo_name(enquo(time)) %in% names(data)) 
-        names(data)[names(data)==quo_name(enquo(time))] <- "time"
-    speed <- pemsin2(speed, data)
-    time <- pemsin2(time, data)
-    distance <- calc.dist(speed, time)
-    distance
-}
 

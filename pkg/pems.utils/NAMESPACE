@@ -43,7 +43,16 @@ importFrom(utils, read.table, read.csv, read.delim, write.table,
            head, tail, capture.output, install.packages, 
            installed.packages)
 importFrom(baseline, baseline, getBaseline, getCorrected)
+############################
+#i think lazyeval and pemsin and pemsin2 
+#can go once pemsElement is up and running
+############################
 importFrom(lazyeval, lazy, lazy_eval)
+importFrom(rlang, eval_tidy, quo_is_null)
+
+#I don't think I need to importFrom round because 
+#  it is primative and in base...
+
 
 
 ##########################
@@ -93,6 +102,7 @@ S3method(subset, pems)
 ##generic.pems.element handlers
 
 S3method(as.data.frame, pems.element)
+S3method(as.pems, pems.element)
 S3method(print, pems.element)
 S3method("[", pems.element)
 S3method("[<-", pems.element)
@@ -100,6 +110,7 @@ S3method(plot, pems.element)
 S3method(units, pems.element)
 S3method("units<-", pems.element)
 S3method(summary, pems.element)
+S3method(round, pems.element)
 
 
 
@@ -157,7 +168,11 @@ export(importRoyalTek2PEMS)
 export(importKML2PEMS) 
 
 #structure
-export(pemsElement)
+export(getPEMSElement)
+export(getPEMSData)
+export(getPEMSConstants)
+
+
 export(pemsData)
 export(pemsConstants)
 export(pemsHistory)
@@ -321,11 +336,16 @@ export(calcAccel)
 export(calcAcceleration)
 export(calcJerk)
 export(calcVSP)
-export(calcVSPJimenezPalaciosCMEM)
+export(calcVSP_JimenezPalaciosCMEM)
 export(calcEm)
-export(calcEmHoribaPitot)
-export(calc.dist)
-export(calc.new)
+export(calcEm_HoribaPitot)
+
+#bins
+export(binVSP)
+##not exporting/removing...
+##export(binVSP.old)
+export(binVSP_NCSU.14)
+export(binVSP_MOVES.23)
 
 #calc handlers
 export(calcChecks)

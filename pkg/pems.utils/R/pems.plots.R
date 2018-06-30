@@ -4,6 +4,8 @@
 ##########################
 ##########################
 
+#this uses checkInput
+
 #kr
 
 #description
@@ -63,7 +65,8 @@ pemsPlot <- function(x, y = NULL, z = NULL, ..., data = NULL,
     #standardise formula or x,y,z,cond input as formula
     #and grab units
     extra.args$units <- listLoad(listUpdate(extra.args, list(load="units")))
-    extra.args <- pemsXYZCondUnitsHandler(x, y, z, cond, data = data,
+    extra.args <- pemsXYZCondUnitsHandler(!!enquo(x), !!enquo(y), !!enquo(z), 
+                              !!enquo(cond), data = data,
                               units = units, settings = settings, ...)
 
     extra.args <- listUpdate(extra.args, list(panel = panel, scheme = scheme, 
@@ -101,9 +104,15 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = N
     extra.args$units <- listUpdate(list(add.to.labels=TRUE), extra.args$units)
     extra.args$units$units <- if(isGood4LOA(units)) TRUE else FALSE
 
-    temp <- if(hijack) x else 
-                checkInput(x, data=data, if.missing="return")
-    if(as.character(temp)[1]=="~"){
+###########################
+#rlang update
+#    temp <- if(hijack) x else 
+#                checkInput(x, data=data, if.missing="return")
+############################
+    temp <- getPEMSElement(!!enquo(x), data, fun.name=fun.name,
+                            if.missing = "return")
+
+    if(!is.na(as.character(temp[1])) && as.character(temp)[1]=="~"){
         #this is a formula
         is.formula <- TRUE
     } else {
@@ -129,14 +138,23 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = N
     #if formula you cant get to here
     #so this is none formula handling
 
-    if(!hijack){   
-        y <- checkInput(y, data=data, if.missing="return")
-        z <- checkInput(z, data=data, if.missing="return")
-        cond <- checkInput(cond, data=data, if.missing="return")
-    }
+    y <- getPEMSElement(!!enquo(y), data, fun.name=fun.name,
+                        if.missing = "return")
+    z <- getPEMSElement(!!enquo(z), data, fun.name=fun.name,
+                        if.missing = "return")
+    cond <- getPEMSElement(!!enquo(cond), data, fun.name=fun.name,
+                           if.missing = "return")
+################################
+#as of pemsGetElement update
+#    if(!hijack){   
+#        y <- checkInput(y, data=data, if.missing="return")
+#        z <- checkInput(z, data=data, if.missing="return")
+#        cond <- checkInput(cond, data=data, if.missing="return")
+#    }
+################################
 
     #this bit is for index case, like plot(x)
-        if(is.null(y)){
+    if(is.null(y)){
         y <- x
         x <- 1:length(x)
         attr(x, "name") <- "Index"
@@ -322,17 +340,22 @@ panel.pemsPlot <- function(..., loa.settings = FALSE){
 #maybe use bin then surfacesmooth for contour plot version
 
 
-WatsonPlot <- function (speed, accel = NULL, z = NULL, cond = NULL, ..., data = NULL, 
-    plot.type=2, fun.name = "WatsonPlot", scheme = pems.scheme) 
-{
-    extra.args <- listUpdate(list(units = TRUE), 
-                             list(...))
-    settings <- calcChecks(fun.name, ..., data = data)
-    #extra.args <- listLoad(listUpdate(extra.args, list(load = "units")))
-    extra.args <- pemsXYZCondUnitsHandler(speed, accel, z, cond, data = data, 
-        settings = settings, ...)
+WatsonPlot <- function(speed, accel = NULL, z = NULL, ..., data = NULL, 
+         cond = NULL, units = TRUE, plot.type = 2, fun.name="WatsonPlot",
+         scheme = pems.scheme){
 
-    #panel reset
+    #passes settings on to convert units
+
+    #setup
+    extra.args <- list(...)
+    settings <- calcChecks(fun.name, ..., data = data)
+
+    #standardise formula or x,y,z,cond input as formula
+    #and grab units
+    extra.args$units <- listLoad(listUpdate(extra.args, list(load="units")))
+    extra.args <- pemsXYZCondUnitsHandler(!!enquo(speed), !!enquo(accel), !!enquo(z), 
+                              !!enquo(cond), data = data,
+                              units = units, settings = settings, ...)
     if(!"panel" %in% names(extra.args)){
         if(plot.type==1) extra.args$panel <- panel.pemsPlot
         if(plot.type==2) extra.args$panel <- panel.WatsonBinPlot
@@ -344,12 +367,12 @@ WatsonPlot <- function (speed, accel = NULL, z = NULL, cond = NULL, ..., data = 
                 call.=FALSE)
         extra.args$panel <- panel.pemsPlot
     }
+    extra.args <- listUpdate(extra.args, list(scheme = scheme, 
+                                              data = data))
 
-    extra.args <- listUpdate(extra.args, list(data = data, scheme =scheme))
     do.call(loaPlot, extra.args)
+
 }
-
-
 
 
 

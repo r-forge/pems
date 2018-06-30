@@ -5,6 +5,17 @@
 ##########################
 ##########################
 
+#########################
+#updating 
+#########################
+#this still uses calcCheck
+# but checkInput replaced with getPEMSElement 
+# and calcPack2 replaced with pemsOutput
+
+#no longer used calcPack2 includes an overwrite...
+
+
+
 #kr
 
 #description
@@ -117,6 +128,11 @@ calcPack2 <- function(input, ..., settings = NULL, data = NULL){
 ################################
 
 
+#this uses calcChecks, checkInput, calcPack2
+
+#replaced checkInput with getPEMSElement
+#         calcPack2 with pemsOutput (not export)
+
 correctInput <- function(input = NULL, ..., data = NULL,
          correction = NULL){
 
@@ -126,13 +142,9 @@ correctInput <- function(input = NULL, ..., data = NULL,
                              list(...))
     settings <- do.call(calcChecks, listUpdate(list(data=data), extra.args))
 
-#this could be first check in
-#checkInput? then hijack would be 
-#hidden
+#need to look at what this does...
 
-    if(!"hijack" %in% names(extra.args) || extra.args$hijack == FALSE){   
-        input <- checkInput(input, data=data, if.missing = "stop", fun.name = extra.args$fun.name)  
-    }
+    input <- getPEMSElement(!!enquo(input), data)
     att <- attributes(input)
     temp <- try(names(formals(correction)), silent=TRUE)
     if(class(temp)[1]=="try-error") 
@@ -149,7 +161,7 @@ correctInput <- function(input = NULL, ..., data = NULL,
              call. = FALSE)
     attributes(ans) <- att
 
-    calcPack2(input=ans, settings=settings, data=data, 
+    pemsOutput(x=ans, data=data, output=settings$output,
               this.call=extra.args$this.call, fun.name=extra.args$fun.name)
  
 }
@@ -173,9 +185,8 @@ zeroNegatives <- function(input = NULL, ..., data = NULL, screen = FALSE){
                                   overwrite=TRUE), 
                              list(...))
     settings <- do.call(calcChecks, listUpdate(list(data=data), extra.args))
-    if(!"hijack" %in% names(extra.args) || extra.args$hijack == FALSE){   
-        input <- checkInput(input, data=data, if.missing = "stop", fun.name = extra.args$fun.name)  
-    }
+    input <- getPEMSElement(!!enquo(input), data, if.missing = "stop", 
+                            fun.name = extra.args$fun.name)
 
     #get current attributes
     att <- attributes(input)
@@ -224,7 +235,7 @@ zeroNegatives <- function(input = NULL, ..., data = NULL, screen = FALSE){
     #transfer attributes
     attributes(ans) <- att
 
-    calcPack2(input=ans, settings=settings, data=data, 
+    pemsOutput(x=ans, data=data, output=settings$output,
               this.call=extra.args$this.call, fun.name=extra.args$fun.name)
  
 }
@@ -254,8 +265,10 @@ zeroNegatives <- function(input = NULL, ..., data = NULL, screen = FALSE){
 #previsional version 
 #need to rationalise this and ofter pems corrections...
 
+#rlang input + data handling
+#pemsOutput handling of outputs?
 
-correctBaseline <- function(x, ..., output = "ans"){
+correctBaseline <- function(x, ..., data = NULL, output = "ans"){
 
     #correct baseline for sleeper.service
     #v 0.2 based on UCR method from 2015/16 work 
@@ -267,6 +280,12 @@ correctBaseline <- function(x, ..., output = "ans"){
 #    require(baseline)
 ############################################
 
+############################################
+#needs to use
+#    input <- getPEMSElement(!!enquo(input), data, units="units.i.want", 
+#                            ref.name="what.i.call.it")
+#    and include data in formals
+#############################################
 
 
     #ans <- baseline(..., method='modpolyfit', deg=6)
@@ -282,6 +301,8 @@ correctBaseline <- function(x, ..., output = "ans"){
 
     #set up method
     x.args <- list(...)
+    x <- getPEMSElement(!!enquo(x), data, fun.name=x.args$fun.name, 
+                        if.missing="stop", ref.name="x")
 
 #think about this
 

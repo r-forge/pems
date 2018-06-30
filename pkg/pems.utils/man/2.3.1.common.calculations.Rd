@@ -9,10 +9,6 @@
 \alias{calcChecks}
 \alias{calcPack}
 
-\alias{calc.dist}
-\alias{calc.new}
-
-
 \title{
   Common calculations
 }
@@ -23,25 +19,20 @@
 
 \usage{
 
-
 calcDistance(speed = NULL, time = NULL, data = NULL, 
-          ..., fun.name = "calcDistance", hijack= FALSE)
+          ..., fun.name = "calcDistance")
 
 calcSpeed(distance = NULL, time = NULL, data = NULL, 
-          ..., fun.name = "calcSpeed", hijack= FALSE)
-
+          ..., fun.name = "calcSpeed")
 
 calcAccel(speed = NULL, time = NULL, data = NULL, 
-          ..., fun.name = "calcAccel", hijack= FALSE)
+          ..., method = 2, fun.name = "calcAccel")
 
-calcAcceleration(...)
+calcAcceleration(speed = NULL, time = NULL, data = NULL, 
+          ..., method = 2, fun.name = "calcAccel")
 
 calcJerk(accel = NULL, time = NULL, data = NULL, 
-          ..., fun.name = "calcJerk", hijack= FALSE)
-
-
-calc.dist(speed = NULL, time = NULL, data = NULL,
-           ...)
+          ..., fun.name = "calcJerk")
 
 #associated
 
@@ -78,11 +69,6 @@ calcPack(output = NULL, data = NULL, settings = NULL,
   (Optional character) The name of the parent function, to be used in error messaging.
 }
 
-  \item{hijack}{
-  (Logical) Is this function being locally 'hijacked' by a user/function developer? See Note on 
-  \code{hijack} below.
-}
-
   \item{if.missing, output, unit.conversions, overwrite, settings, this.call}{
   (Various) Along with \code{data} and \code{fun.name}, arguments used by \code{calcCheck} and 
   \code{calcPack} to manage error and unit handling and workhorse \code{calc...} operations. These 
@@ -90,14 +76,18 @@ calcPack(output = NULL, data = NULL, settings = NULL,
   See Details, Note and Examples below. 
 
 }
+
+  \item{method}{
+  (Character) Currently for \code{calcAccel} only. The method to use if options exist. 
+}
     
 }
 
 
 \details{
 
-  With the exception of \code{calcChecks}, \code{calc...} functions do common 
-  calculations.
+  With the exception of \code{calcChecks} and \code{calcPack}, \code{calc...} functions 
+  are common calculations.
 
   \code{calcDistance} calculates distance (in m) using speed and time.    
 
@@ -109,19 +99,14 @@ calcPack(output = NULL, data = NULL, settings = NULL,
   acceleration and time.
 
   By default results are returned as \code{pems.elements}. Other options include 
-  returning as the original data plus the results as either a \code{data.frame} or a 
-  \code{pems} object. One final option is to return the results in the supplied 
-  format. So, for example, uf: inputs are supplied as vectors, the answer is returned 
-  as a vector; If inputs are supplied in a \code{pems} object, that \code{pems} object 
-  is returned with the answer added in. This behaviour is enabled by the default 
-  \code{output = "special"}. 
+  returning as the supplied data plus the results as either a \code{data.frame} or a 
+  \code{pems} object. See Note below. 
 
   Unit management is by \code{\link{convertUnits}}. See Note below. 
 
   The extra functions \code{calcChecks} and \code{calcPack} are add-ins that anyone can use 
-  to develop other similiar functions. They are add at the start and end of standard 
-  \code{calc...} functions to provide a 'minimal code' mechanism for the integrating 
-  of third-party code. See Note and Example 3 below. 
+  to develop other similiar functions. They are added at the start and end of standard 
+  \code{calc...} functions to provide an option to use with third-party code. See Note.  
  
 }
 
@@ -129,8 +114,8 @@ calcPack(output = NULL, data = NULL, settings = NULL,
 \value{
 
   With the exception of \code{calcChecks} and \code{calcPack}, all \code{calc...} functions 
-  return either a vector, \code{data.frame} or \code{pems} object, depending on \code{output} 
-  and \code{data} settings.
+  return either a \code{pems.element} vector, \code{data.frame} or \code{pems} object, depending 
+  on \code{output} setting and \code{data} supplied.
 
 }
 
@@ -148,13 +133,11 @@ calcPack(output = NULL, data = NULL, settings = NULL,
   by the user. See \code{\link{convertUnits}} for an example of how to locally work with unit 
   conversions.
 
-  \code{hijack} is an in-development argument, supplied to allow code developers to run multiple 
-  functions in different function environments. When developers 'mix and match' code from 
-  several sources it can become unstable, especially if functions are run within functions within 
-  functions, etc. \code{hijack = TRUE} and associated code makes a function local to 'side-step' 
-  this issue. This work by assuming/expecting all inputs to be local, i.e. supplied directly by 
-  the code user. See Example 3 below.         
- 
+  \code{calc.dist} and \code{calc.accel} are alternatives to \code{calcDistance} and \code{calcAccel}. 
+
+  The functions \code{calcChecks} and \code{calcPack} are currently under revision and likely to be 
+  replaced in future versions of \code{pems.utils}.
+         
 }
 
 %\section{Warning }{
@@ -162,13 +145,9 @@ calcPack(output = NULL, data = NULL, settings = NULL,
 %}
 
 \seealso{
-
   \code{\link{calcVSP}} for VSP calculations. \code{\link{calcEm}} for emissions calculations.
- 
-  \code{\link{getElement}} (\code{\link{checkInput}} if passing elements as inputs), \code{\link{checkUnits}} 
-  and \code{\link{convertUnits}} for data management.
-
 }
+
 \examples{
 
 ###########
@@ -204,90 +183,17 @@ sapply(my.pems, function(x)
 #ans = accel data series for each pems in my.pems list
 
 #             [,1]        [,2]
-# [1,]  0.00000000  0.00000000
+# [1,]          NA          NA
 # [2,]  0.00000000  0.00000000
 # [3,]  0.05555556  0.05555556
 # [4,]  0.00000000  0.00000000
 # [5,] -0.02777778 -0.02777778
 # [6,]  0.05555556  0.05555556
-# ...
+#       ....
 
 #note:
 #sapply if you can/want to simiplify outputs
 #lapply if you want to keep output as a list of answers
-
-
-###########
-#example 3
-###########
-
-#making a function that allows third party hijack
-#and pems management
-
-my.fun <- function(speed, time, data = NULL, hijack = FALSE, 
-                   ..., fun.name = "my.function"){
-
-    #setup
-    this.call <- match.call()
-    
-    #run checks
-    settings <- calcChecks(fun.name, ..., data = data)
-    
-    #get pems elements if not already got
-    if(!hijack){
- 
-        #the check handle errors and error messaging
-        #checkInput 
-        speed <- checkInput(speed, data, fun.name = fun.name,   
-                            if.missing = settings$if.missing,
-                            unit.conversions = settings$unit.conversions)
-
-        time <- checkInput(time, data, fun.name = fun.name,   
-                            if.missing = settings$if.missing,
-                            unit.conversions = settings$unit.conversions)
-    }
-
-    #any extra error/missing case handling? 
-
-    #run 'hijacked' code
-
-    #reset units to what you want
-    #... allows you to pass local unit.conversions
-    speed <- convertUnits(speed, to = "km/h", hijack = TRUE, 
-                          if.missing = settings$if.missing,
-                          unit.conversions = settings$unit.conversions)
-
-    #use someone else's calculation
-    distance <- calcDistance(speed, time, hijack = TRUE, 
-                          if.missing = settings$if.missing,
-                          unit.conversions = settings$unit.conversions)
-
-    #do other stuff?
-
-    #reset units again?
-
-    #output
-    #calcPack handling the output type  
-    #and my pems history tracking if data modified
-    calcPack(output = distance, data = data, settings = settings, 
-             fun.name = fun.name, this.call = this.call)     
-
-}
-
-ans <- my.fun(velocity, local.time, pems.1, output="pems")
-
-#seems long winded but gives you control of 
-#the error handling, unit management, and output type
-#and (if working in pems objects) history logging 
-
-##and lets you do this
-
-ans <- lapply(my.pems, function(x) 
-                  my.fun(velocity, local.time, data=x, output="pems"))
-
-#which will not always work if you are running 
-#functions in functions, especially if those functions
-#are also running functions in functions...
 
 }
 

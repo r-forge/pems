@@ -9,16 +9,28 @@
 #kr rebuild 11/2017 
 ##print.pems.element reactivated
 
+#next project
+#to stop attribute loss on time.stamp round...
+#round.pems.element
+#function(x,...){
+#att <- attributes(x)
+#pems.element(round(x,...), units=att$units, name=att$name)
+#}
+
+
+
 
 #includes 
 #(functions/code below) 
 ##########################
 #as.data.frame.pems.element
+#as.pems.pems.element
 #print.pems.element
 #plot.pems.element
 #units.pems.element
 #<-.units.pems.element
 #summary.pems.element
+#round.pems.element
 #[.pems.element
 #[<-.pems.element
 
@@ -74,8 +86,10 @@ as.data.frame.pems.element <- function(x, ...){
 }
 
 
+as.pems.pems.element <- function(x, ...) pems(x, ...)
 
-print.pems.element <- function (x, ..., n = NULL, rows = NULL){
+
+print.pems.element <- function (x, ..., n = NULL, rows = NULL, width = NULL){
 
 #to do
 ###################
@@ -100,6 +114,7 @@ print.pems.element <- function (x, ..., n = NULL, rows = NULL){
         if(n<length(x)) out.2 <- paste(" not showing: ", length(x)-n, " (of ", length(x), ") elements", sep="")
         x <- x[1:n]
     }
+    if(is.null(width)) width <- getOption("width") * 0.9
 
     #data 
     #print with default method and attributes stripped
@@ -153,10 +168,31 @@ print.pems.element <- function (x, ..., n = NULL, rows = NULL){
     if(length(out.1)>1 || out.1!="") out.1 <- paste(out.1, collapse="\n")
     out.1 <- if(out.1 != "" & out.2 !="") paste(out.1, "\n", indent, out.2, "\n", sep="") else 
                  if(out.1 != "") paste(out.1, "\n", sep="") else  paste(indent, out.2, "\n", sep="")
-    if("levels" %in% names(attributes(ans)))
-           out.1 <- paste(out.1, indent, " levels: ", paste(levels(ans), collapse="; "), "\n", sep="")
+
     out.1 <- paste(out.0, "\n", out.1, sep="")
     out.1 <- paste(out.1, indent, out.3, "\n", sep="")
+
+
+#######################################
+#need to update this to handling 
+#long level lists...
+#testing
+# strwrap(paste(levels, collapse=""), width=width)
+#######################################
+
+    if("levels" %in% names(attributes(ans))){
+        temp <- paste(indent, " levels: ", sep="")
+        out.2 <- paste(temp,
+                       strwrap(paste(levels(ans), collapse="; ", sep=""),
+                         width=width*0.85), sep="")
+        if(length(out.2)>1){
+                 out.2[2:length(out.2)] <- gsub(temp, 
+                               paste("\n", paste(rep(" ", nchar(temp)), collapse="", sep=""),
+                               sep=""), out.2[2:length(out.2)])
+                 out.2 <- paste(out.2, collapse="")
+        }
+        out.1 <- paste(paste(out.1, out.2, sep=""), "\n", sep="")
+    }
 
     #output 
     cat(out.1)
@@ -341,8 +377,18 @@ summary.pems.element <- function(object, ...){
 }
 
 
+###################
+#round.pems.element
+###################
 
+#round 
+#needed because time.stamp rounding is specially handled
 
+round.pems.element <- function(x,...){
+   att <- attributes(x)
+   class(x) <- class(x)[class(x) != "pems.element"]
+   pems.element(round(x,...), units=att$units, name=att$name)
+}
 
 
 
