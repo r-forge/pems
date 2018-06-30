@@ -81,7 +81,7 @@
 summaryReport <- function(speed = NULL, time = NULL, accel = NULL,  
                     distance = NULL, data = NULL, ..., 
                     lod.speed = 0.1, lod.accel = 0.1,
-                    fun.name = "summaryReport", hijack= FALSE){
+                    fun.name = "summaryReport"){
   
     #setup
     this.call <- match.call()
@@ -155,7 +155,7 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
                            fun.name = fun.name)
         } else {
             distance <- calcDistance(speed = speed, time = time, if.missing = settings$if.missing, 
-                                     unit.convesions = settings$unit.conversions, hijack = TRUE)
+                                     unit.convesions = settings$unit.conversions)
         }
     }        
 
@@ -167,7 +167,7 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
                            fun.name = fun.name)
         } else {
             speed <- calcSpeed(distance = distance, time = time, if.missing = settings$if.missing, 
-                               unit.convesions = settings$unit.conversions, hijack = TRUE)
+                               unit.convesions = settings$unit.conversions)
         }
     }
 
@@ -179,7 +179,7 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
                            fun.name = fun.name)
         } else {
             accel <- calcAccel(speed = speed, time = time, if.missing = settings$if.missing, 
-                               unit.convesions = settings$unit.conversions, hijack = TRUE)
+                               unit.convesions = settings$unit.conversions)
         }
     }
 
@@ -193,9 +193,9 @@ summaryReport <- function(speed = NULL, time = NULL, accel = NULL,
     #note: 
     #need this to be separate to bit before
 
-    speed <- convertUnits(speed, to = "km/h", hijack = TRUE, if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
-    distance <- convertUnits(distance, to = "km", hijack = TRUE, if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
-    accel <- convertUnits(accel, to = "m/s/s", hijack = TRUE, if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
+    speed <- convertUnits(speed, to = "km/h", if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
+    distance <- convertUnits(distance, to = "km", if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
+    accel <- convertUnits(accel, to = "m/s/s", if.missing = settings$if.missing, unit.convesions = settings$unit.conversions)
 
     #calculate time interval
 

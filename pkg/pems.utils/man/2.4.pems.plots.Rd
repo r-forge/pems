@@ -39,8 +39,7 @@ pemsPlot(x, y = NULL, z = NULL, ..., data = NULL, cond = NULL,
 #pemsPlot elements
 
 pemsXYZCondUnitsHandler(x, y = NULL, z = NULL, cond = NULL, 
-         data = NULL, units = TRUE, ..., fun.name = "pemsXYZCondHandler", 
-         hijack= FALSE)
+         data = NULL, units = TRUE, ..., fun.name = "pemsXYZCondHandler")
 
 preprocess.pemsPlot(lattice.like = lattice.like, units = units, ...)
 
@@ -76,14 +75,13 @@ panel.WatsonSmoothContourPlot(..., plot.panel=panel.surfaceSmooth,
 #old plots
 
 latticePlot(x = NULL, data = NULL, plot = xyplot, panel = NULL, 
-          ..., greyscale = FALSE, fun.name = "latticePlot", 
-          hijack = FALSE)
+          ..., greyscale = FALSE, fun.name = "latticePlot")
 
 panel.PEMSXYPlot(..., grid=NULL)
 
 XYZPlot(x = NULL, ..., data = NULL, statistic = NULL, 
           x.res = 10, y.res = 20, plot = levelplot,
-          fun.name = "XYZPlot", hijack = FALSE)
+          fun.name = "XYZPlot")
 
 }
 
@@ -135,8 +133,8 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   (Optional) Other arguments, typically passed on.
   }
 
-  \item{fun.name, hijack}{
-  (Various) \code{pems.utils} management settings, can typically be ignored by most users.
+  \item{fun.name}{
+  (Function management argument) \code{pems.utils} management settings, can typically be ignored by most users.
   }
 
   \item{panel, plot.panel, process.panel}{

@@ -175,9 +175,9 @@ calcVSP_JimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
     }
     
     #want specific units
-    speed <- convertUnits(speed, to = "m/s", hijack = TRUE, unit.conversions = settings$unit.conversions, 
+    speed <- convertUnits(speed, to = "m/s", unit.conversions = settings$unit.conversions, 
                           if.missing = settings$if.missing, fun.name = fun.name)  
-    accel <- convertUnits(accel, to = "m/s/s", hijack = TRUE, unit.conversions = settings$unit.conversions, 
+    accel <- convertUnits(accel, to = "m/s/s", unit.conversions = settings$unit.conversions, 
                           if.missing = settings$if.missing, fun.name = fun.name)  
 
 #slope to sort out

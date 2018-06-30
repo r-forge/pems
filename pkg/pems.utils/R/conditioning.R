@@ -58,7 +58,7 @@
 
 cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL, 
                   labels = NULL,
-                  fun.name = "cutBy", hijack= FALSE){
+                  fun.name = "cutBy"){
   
     #setup
     this.call <- match.call()
@@ -89,7 +89,7 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
     if(is.function(cut.method)){
 
         cut <- cut.method(ref = ref, data = data, output = "input",
-                          ..., fun.name = "cutBy", hijack= TRUE)
+                          ..., fun.name = "cutBy")
 
         #check for attributes 
         #if not give it some
@@ -123,7 +123,7 @@ cutBy <- function(ref = NULL, ..., data = NULL, cut.method = NULL,
 
 
 cutByRow <- function(ref = NULL, n = 4, rows = NULL, ..., data = NULL,  
-                    fun.name = "cutByRow", hijack= FALSE){
+                    fun.name = "cutByRow"){
   
     #setup
     this.call <- match.call()

@@ -82,7 +82,7 @@ pemsPlot <- function(x, y = NULL, z = NULL, ..., data = NULL,
 ##############################
 
 pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = NULL, units = TRUE, 
-         ..., fun.name = "pemsXYZCondHandler", hijack= FALSE){
+         ..., fun.name = "pemsXYZCondHandler"){
 
 #think about error messaging and 
 #visible message sources
@@ -165,12 +165,12 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL, data = N
 
     if(is.null(x))
         checkIfMissing(settings$if.missing, reply = "argument 'x' not supplied or null")
-    extra.args$units$x.units <- getUnits(x, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
+    extra.args$units$x.units <- getUnits(x, if.missing="return", unit.conversions = settings$unit.conversions)
     if(is.null(y))
         checkIfMissing(settings$if.missing, reply = "argument 'y' not supplied or null")
-    extra.args$units$y.units <- getUnits(y, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
+    extra.args$units$y.units <- getUnits(y, if.missing="return", unit.conversions = settings$unit.conversions)
     if(!is.null(z))
-        extra.args$units$z.units <- getUnits(z, if.missing="return", unit.conversions = settings$unit.conversions, hijack = TRUE)
+        extra.args$units$z.units <- getUnits(z, if.missing="return", unit.conversions = settings$unit.conversions)
 
     if(is.null(z) & is.null(cond)) extra.args$x <- ~x*y
     if(is.null(z) & !is.null(cond)) extra.args$x <- ~x*y|cond
@@ -232,21 +232,21 @@ preprocess.pemsPlot <- function(lattice.like=lattice.like, units=units,...){
                 from <- if("x.from" %in% names(extra.args)) extra.args$x.from else units$x.units     
                 lattice.like$x <- convertUnits(lattice.like$x, to=extra.args$x.to, from=from, 
                                                unit.conversions = settings$unit.conversions, 
-                                               hijack=TRUE, force=TRUE)
+                                               force=TRUE)
                 units$x.units <- extra.args$x.to
             }
             if("y.to" %in% names(extra.args)){
                 from <- if("y.from" %in% names(extra.args)) extra.args$y.from else units$y.units     
                 lattice.like$y <- convertUnits(lattice.like$y, to=extra.args$y.to, from=from, 
                                                unit.conversions = settings$unit.conversions,
-                                               hijack=TRUE, force=TRUE)
+                                               force=TRUE)
                 units$y.units <- extra.args$y.to
             }
             if("z.to" %in% names(extra.args)){
                 from <- if("z.from" %in% names(extra.args)) extra.args$z.from else units$z.units     
                 lattice.like$z <- convertUnits(lattice.like$z, to=extra.args$z.to, from=from, 
                                                unit.conversions = settings$unit.conversions,
-                                               hijack=TRUE, force=TRUE)
+                                               force=TRUE)
                 units$z.units <- extra.args$z.to
             }
 
@@ -736,7 +736,7 @@ panel.WatsonSmoothContourPlot <- function(..., plot.panel=panel.surfaceSmooth,
 
 
 latticePlot <- function(x = NULL, data = NULL, plot = xyplot, panel = NULL, ..., 
-                   greyscale = FALSE, fun.name = "latticePlot", hijack = FALSE){
+                   greyscale = FALSE, fun.name = "latticePlot"){
 
     this.call <- match.call()
     extra.args <- list(...)
@@ -877,7 +877,7 @@ panel.PEMSXYPlot <- function(..., grid=NULL){
 
 XYZPlot <- function(x = NULL, ..., data = NULL, statistic = NULL, 
                     x.res = 10, y.res = 20, plot = levelplot,
-                    fun.name = "XYZPlot", hijack = FALSE){
+                    fun.name = "XYZPlot"){
 
 
     ####################

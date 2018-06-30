@@ -1,6 +1,8 @@
-Changes in pems.utils 0.2.25 [2018-06-22]
+Changes in pems.utils 0.2.25 [2018-06-30]
 ========================================
 
+*       removed hijack argument from all 
+        functions
 *       added as.pems.pems.element 
 *       updated binVSP, added binVSP_NCSU.14 
         and binVSP_MOVES.23 

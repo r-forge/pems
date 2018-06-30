@@ -218,10 +218,10 @@ tempGet <- function(..., id=NULL, data=NULL, default=NULL){
 ###################################
 
     #units of all inputs
-    conc <- convertUnits(conc, to = "vol%", hijack = TRUE, 
+    conc <- convertUnits(conc, to = "vol%",  
                          if.missing = settings$if.missing, 
                          unit.convesions = settings$unit.conversions)
-    exflow <- convertUnits(exflow, to = "L/min", hijack = TRUE, 
+    exflow <- convertUnits(exflow, to = "L/min",  
                            if.missing = settings$if.missing, 
                            unit.convesions = settings$unit.conversions)
 

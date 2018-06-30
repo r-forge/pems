@@ -227,7 +227,7 @@ zeroNegatives <- function(input = NULL, ..., data = NULL, screen = FALSE){
 
     #to use other function to do something similar
     #ans <- correctInput(input = input, correction = function(x) x <- ifelse(x<0,0,x), 
-    #                    hijack=TRUE, this.call=extra.args$this.call, 
+    #                    this.call=extra.args$this.call, 
     #                    fun.name=extra.args$fun.name)
     
     #note: we pass on fun.name, this.call and hijack

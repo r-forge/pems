@@ -1,7 +1,7 @@
 Package: pems.utils
 Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.2.25.16
+Version: 0.2.25.17
 Date: 2018-06-30
 Author: Karl Ropkins
 Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
