@@ -18,6 +18,8 @@
 #cAlign2
 #tAlign
 #findLinearOffset
+#stackPEMS
+
 
 #removed
 ############################
@@ -25,13 +27,11 @@
 
 #to do
 ##########################
-#decide on bindPEMS status
 #check vector issue with align
 #
 
 #comments
 ##########################
-#think about bindPEMS
 #
 
 
@@ -558,3 +558,80 @@ tAlign <- function(form, data1, data2 = NULL, order = TRUE, ...){
 
 
 
+
+
+
+
+####################################
+####################################
+##stackPEMS
+####################################
+####################################
+
+#kr v.0.2.1 2018/07/04
+
+stackPEMS <- stack <- function(..., key=key, ordered=TRUE){
+  
+  #####################
+  #notes
+  #####################
+  #exporting from rlang: get_expr, exprs
+  #####################
+  #key = source identifier 
+  #  where source is the name used for the column 
+  #     indicating what is stacked....
+  #     so stackPEMS(pems.1, d2=pems.2) 
+  #     should identify sources as pems.1 and d2
+
+  #####################
+  #to do
+  #####################
+  #sort name
+
+  #####################
+  #to think about
+  #####################
+  #think about specifying rlang for exprs, etc?
+  #think about stripping list(...) of not-pems..?
+  #think about order of elements 
+  #     should the key always be last
+  #think about key handling 
+  #     should it overwrite an existing case
+  # 
+  
+  temp <- exprs(...)
+  refs <- names(temp)
+  refs[refs==""] <- as.character(temp[refs==""])
+  key <- as.character(get_expr(enquo(key)))
+  
+  dots <- list(...) #rlang this later?
+  d1 <- rebuildPEMS(pems(dots[[1]]))
+  d1[, key, force=c("na.pad.target", "fill.insert")] <- refs[1]
+  
+  for(i in 2:length(dots)){
+    
+    #need to get this here but not d1     
+    d2 <- rebuildPEMS(pems(dots[[i]]))
+    d2[, key, force=c("na.pad.target", "fill.insert")] <- refs[i]
+     
+    #compare names 
+    ref <- intersect(names(d1), names(d2))
+    for(i in ref){
+      test <- units(d1[i])==units(d2[i])
+      if(!is.na(test) && !test){
+        d2[i] <- convertUnits(d2[i], to=units(d1[i]))
+      }
+    }
+    d1[["data"]] <- bind_rows(fortify(d1), fortify(d2))
+    
+    temp <- as.data.frame(listUpdate(as.list(units(d1)), 
+                                     as.list(units(d2))),
+                          stringsAsFactors=FALSE)
+    d1[["units"]] <- temp[names(d1[["data"]])]  
+    att.1 <- attributes(d1)$pems.tags
+    att.2 <- attributes(d2)$pems.tags
+    attributes(d1)$pems.tags <- listUpdate(att.1, att.2)
+  }
+  d1[key] <- factor(d1[key], levels=refs, ordered=ordered)
+  d1
+}

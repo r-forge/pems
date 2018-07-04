@@ -1,6 +1,9 @@
-Changes in pems.utils 0.2.25 [2018-06-30]
+Changes in pems.utils 0.2.25 [2018-07-04]
 ========================================
 
+*       added stackPEMS  
+*       removed checkInput, checkInput2, pemsElement, 
+        pemsin, pemsin2 and pemsin.old
 *       removed hijack argument from all 
         functions
 *       added as.pems.pems.element 

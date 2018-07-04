@@ -380,15 +380,13 @@ plot(pems.1)
 plot(pems.1$velocity)
 
 #lattice 
-xyplot(velocity~local.time, data = pemsData(pems.1), type = "l")
-
-#Note: to use lattice functions directly with pems objects
-#      data = pemsData(pems) NOT data = pems
-#Note: See also latticePlot as an alternative to data = pemsData(pems) 
+xyplot(velocity~local.time, data = pems.1, type = "l")
 
 #in ggplot2
 
 #Note: Suggests only so you need to load this...
+#Note: this uses fortify.pems
+
 require(ggplot2)
 qplot(time.stamp, velocity, data=pems.1)
 ggplot(pems.1, aes(x = time.stamp, y = velocity)) + geom_line() 

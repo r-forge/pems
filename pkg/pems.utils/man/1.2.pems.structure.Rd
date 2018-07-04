@@ -44,11 +44,6 @@ pemsConstants(pems=NULL, ...,
 pemsHistory(pems=NULL, ..., 
          fun.name = "pemsHistory", if.missing = "stop",
          pems.name = deparse(substitute(pems)))
-
-pemsin(x, data=NULL)
-
-pemsin2(x, data, units=NULL, .x=enquo(x))
-
 }
 
 
@@ -60,7 +55,7 @@ pemsin2(x, data, units=NULL, .x=enquo(x))
   data element.
 }
 
-  \item{pems, data}{
+  \item{pems}{
   (pems object) If supplied, the \code{pems} object to search for \code{x} before 
   checking the parent environments and R workspace.
 }
@@ -100,11 +95,6 @@ pemsin2(x, data, units=NULL, .x=enquo(x))
   \code{pems} object. 
 
   \code{pemsHistory} gets the history of supplied \code{pems} object.
-
-  \code{pemsin} is like earlier \code{pemsElement} but uses \code{lazyeval} to do all the hard work. 
-
-  \code{pemsin2} is like earlier \code{pemsElement} but uses \code{rlang} and \code{dplyr} to do all the hard work. 
-
 }
 
 
@@ -127,7 +117,16 @@ pemsin2(x, data, units=NULL, .x=enquo(x))
 }
 
 \references{
-  References in preparation.
+  \code{rlang} and \code{dplyr} package functions now do all the heavy lifting for \code{getPEMSElement}.
+
+   Lionel Henry and Hadley Wickham (2018). rlang: Functions for Base
+   Types and Core R and 'Tidyverse' Features. R package version 0.2.0.
+   https://CRAN.R-project.org/package=rlang
+
+   Hadley Wickham, Romain Francois, Lionel Henry and Kirill Muller
+   (2017). dplyr: A Grammar of Data Manipulation. R package version
+   0.7.4. https://CRAN.R-project.org/package=dplyr
+
 }
 \author{
   Karl Ropkins
@@ -143,6 +142,8 @@ pemsin2(x, data, units=NULL, .x=enquo(x))
  
   \code{getPEMS...} functions are a revision of earlier \code{pems...} \code{pems} object handlers. 
   They are intended for convenient 'front of house' use.       
+
+  \code{rlang} and \code{dplyr} functions now do all the heavy lifting for \code{getPEMSElement}.
 
 }
 
@@ -169,12 +170,9 @@ pems.1
 getPEMSElement(velocity, pems.1)
 
 \dontrun{
-#generic equivalents
+#generic (SE) equivalents
 pems.1$velocity
 pems.1["velocity"] 
-#etc
-#check... equivalent
-checkInput(velocity, pems.1)
 }
 
 }

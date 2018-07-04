@@ -123,7 +123,7 @@ summaryReport(speed = NULL, time = NULL, accel = NULL,
 
 \seealso{
  
-  \code{\link{checkInput}}, \code{\link{checkUnits}} and \code{\link{convertUnits}} for data management.
+  \code{\link{checkUnits}} and \code{\link{convertUnits}} for data management.
 }
 \examples{
 

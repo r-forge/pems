@@ -5,6 +5,7 @@
 \alias{cAlign}
 \alias{tAlign}
 \alias{findLinearOffset}
+\alias{stackPEMS}
 
 \title{
   Merging data and pems objects
@@ -25,6 +26,8 @@
   #alignment based on time.stamp
   tAlign(form, data1, data2 = NULL, order=TRUE, ...)
 
+  #basic stacking
+  stackPEMS(..., key=key, ordered=TRUE)
 
   #historical
   findLinearOffset(x = NULL, y = NULL, offset.range = NULL)
@@ -46,7 +49,8 @@
 }
 
   \item{...}{
-   (An other arguments) May be passed on but are typically ignored. See Notes.
+   (Any other arguments) For \code{stackPEMS} this is typically a series of \code{pems} objects 
+    to be stacked. For other functions, this may be passed on but are typically ignored. See Notes.
 }
 
   \item{form}{
@@ -58,6 +62,16 @@
 
   \item{order}{
    (\code{logical}; optional) If \code{TRUE} the function orders the data. 
+}
+
+  \item{key}{
+   (character or NSE) For \code{stackPEMS} the name to \code{key} column that 
+   identifies the data sources of elements in a stack of \code{pems} objects. 
+}
+
+  \item{ordered}{
+   (\code{logical}; default \code{TRUE}) For \code{stackPEMS}, when creating the 
+   source key should the order \code{pems} objects were supplied be retained. 
 }
 
   \item{x, y}{
@@ -106,6 +120,15 @@
    It is intended to be used in the form:
 
    \code{aligned.data <- tAlign(name1~name2, data1, data2)}
+
+   The \code{stackPEMS} function stacks two or more \code{pems} 
+   objects and returns a single \code{pems} object. \code{stackPEMS} 
+   stacks using \code{dplyr} function \code{bind_rows} so handles 
+   \code{pems} with column names that do not completely intersect. 
+   However it also attempts to units match. It is intended to be 
+   used in the form:
+
+   \code{stacked.data <- stackPEMS(data1, data2)}
 
    Historical functions:
 
@@ -213,7 +236,7 @@ plot(ans$x, type="l"); lines(ans$y, col="blue", lty=2)
 ##example 2 
 ###########
 
-##aligning and merging data sets
+##aligning data sets
 ##(pems object example)
 
 #make some offset data
@@ -248,6 +271,20 @@ tAlign(~time.stamp, p1, p2)
 # and p2$time2, generating [output]$time1)  
 
 }
+
+###########
+##example 3 
+###########
+
+##stacking pems
+
+#make some offset data
+p1 <- pems.1[1:2, 1:4]
+p2 <- pems.1[3, 2:4]
+p3 <- pems.1[4:6, 1:3]
+
+#stack  
+stackPEMS(p1, p2, p3, key=source)
 
 }
 

@@ -9,16 +9,6 @@
 #kr rebuild 11/2017 
 ##print.pems.element reactivated
 
-#next project
-#to stop attribute loss on time.stamp round...
-#round.pems.element
-#function(x,...){
-#att <- attributes(x)
-#pems.element(round(x,...), units=att$units, name=att$name)
-#}
-
-
-
 
 #includes 
 #(functions/code below) 
@@ -38,8 +28,6 @@
 ###############################
 #to do
 #############
-#look at as.data.frame.pems.element
-#before reinstating these
 #############
 #export [<-.pems.element
 #############

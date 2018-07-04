@@ -167,7 +167,7 @@ calcPack2(input, ..., settings = NULL, data = NULL)
 
   \code{\link{common.calculations}}, \code{\link{calcVSP}} or \code{\link{calcEm}} for calculation functions.
  
-  \code{\link{getElement}} (\code{\link{checkInput}} if passing elements as inputs), \code{\link{checkUnits}} 
+  \code{\link{getElement}} (\code{\link{checkUnits}, etc} 
   and \code{\link{convertUnits}} for data management.
 
 }

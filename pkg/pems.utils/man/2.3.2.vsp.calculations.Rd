@@ -154,7 +154,7 @@ binVSP_MOVES.23(vsp = NULL, speed = NULL, data = NULL,
 
 
 \seealso{
-  See \code{\link{common.calculations}} (and \code{\link{checkInput}}, \code{\link{checkUnits}} and 
+  See \code{\link{common.calculations}} (and \code{\link{checkUnits}} and 
   \code{\link{convertUnits}}) for details of data management.
 }
 

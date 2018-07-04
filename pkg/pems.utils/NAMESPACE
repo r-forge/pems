@@ -22,7 +22,6 @@ import(dplyr)
 
 ## no longer importing all package
 
-#import(lazyeval) #just using lazy and leazy_eval
 #import(baseline) #just importing used functions  
                   #because of plot conflict with graphics...
 #import(utils) #just importing head and tail methods
@@ -43,12 +42,9 @@ importFrom(utils, read.table, read.csv, read.delim, write.table,
            head, tail, capture.output, install.packages, 
            installed.packages)
 importFrom(baseline, baseline, getBaseline, getCorrected)
-############################
-#i think lazyeval and pemsin and pemsin2 
-#can go once pemsElement is up and running
-############################
-importFrom(lazyeval, lazy, lazy_eval)
-importFrom(rlang, eval_tidy, quo_is_null)
+
+#importFrom(lazyeval, lazy, lazy_eval) #replaced this with rlang, eval_tidy, etc...
+importFrom(rlang, eval_tidy, quo_is_null, get_expr, exprs)
 
 #I don't think I need to importFrom round because 
 #  it is primative and in base...
@@ -176,14 +172,16 @@ export(getPEMSConstants)
 export(pemsData)
 export(pemsConstants)
 export(pemsHistory)
-export(pemsin)
-export(pemsin2)
+
+#export(pemsin)   #gone 2018/06 0.2.25.17
+#export(pemsin2)  #gone 2018/06 0.2.25.17
 
 #merge.pems
 export(align)
 export(cAlign)
 export(findLinearOffset)
 export(tAlign)
+export(stackPEMS)
 #bindPEMS
 
 #export
@@ -374,7 +372,8 @@ export(listUnitConversions)
 export(summaryReport) 
 
 #check...functions
-export(checkInput) 
+##export(checkInput)
+## (removed 2018/06/30) 
 export(checkOption) 
 export(checkPEMS) 
 export(checkUnits) 

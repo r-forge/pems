@@ -4,34 +4,34 @@
 ########################
 ########################
 
-#this includes old pemsElement at moment looking to remove
-#this includes pemsData; looking to replace with getPEMSData
+#pemsElement (gone 2018/06/30 0.2.25.17)
+#pemsElement.old (gone 2018/06/30 0.2.25.17)
+#pemsin, pemsin2, pemsin2.old (gone 2018/06/30 0.2.25.17)
 
-#other pems... function under review
-
-######################################################
-##things that are going in rlang update...
-#pemsElement.old, pemsElement, pemsin, pemsin2, 
-#think these are only reason for lazyeval
-######################################################
 
 #in place
 #################
 #getPEMSElement
+
+
+
+#other pems... function under review
+########################################
 #pemsData
 #pemsConstants
 #pemsHistory
 #pemsDim
 
-#testing
-################
-#pemsin
 
+
+
+#next project
+################
+#getPEMSData/pemsData
 
 
 #TO DO
-################
-
+##########################
 #pemsConstants
 #tidy
 #document
@@ -248,63 +248,6 @@ getPEMSData <- function(pems=NULL, ...,
 
 
 
-#version 0.2.0
-#karl 17/09/2010
-
-#not exporting
-#will be removing...
-
-pemsElement.old <- function(element, pems=NULL, ..., 
-         fun.name = "pemsElement", if.missing = "stop",
-         element.name = deparse(substitute(element))){
-
-   #reorder this later
-
-    if(is.null(pems)) {
-       ans <- try(element, silent = TRUE)
-       if(is(ans)[1] == "try-error" || is.function(ans)){ 
-           checkIfMissing(if.missing = if.missing,
-                          reply = paste("element '", element.name[1], "' not found", sep=""),
-                          suggest = "checking call arguments", 
-                          if.warning = NULL, 
-                          fun.name = fun.name)
-           ans <- NULL
-       }
-       if(!is.null(ans))
-           if(is.null(attributes(ans)$name)) attr(ans, "name") <- element.name
-       return(ans)   
-    }
-
-    pems <- checkPEMS(rebuildPEMS(pems, "old"))
-    class(pems) <- "not.pems"
-
-    ans <- try(pems$data[,element.name], silent = TRUE)
-    units <- try(pems$units[1,element.name], silent = TRUE)
-
-    if(is(ans)[1] == "try-error" || is.function(ans)){ 
-        ans <- try(element, silent = TRUE)
-        if(is(ans)[1] == "try-error" || is.function(ans)){ 
-             checkIfMissing(if.missing = if.missing,
-                          reply = paste("element '", element.name[1], "' not found", sep=""),
-                          suggest = "checking call arguments", 
-                          if.warning = NULL, 
-                          fun.name = fun.name)
-             units <- NULL
-             ans <- NULL
-         }        
-    }
-
-    if(!is.null(ans))
-        attr(ans, "name") <- element.name
-    if(!is.null(ans) && !is.null(units))
-        if(is.null(attributes(ans)$units)) attr(ans, "units") <- units
-    class(ans) <- "pems.element"
-
-    return(ans)
-
-}
-
-
 
 
 
@@ -432,71 +375,6 @@ pemsDim <- function(pems=NULL, ...,
 }
 
 
-
-
-
-##########################
-##########################
-##pemsin
-##########################
-##########################
-
-#kr v.0.1 07/06/2017 (from sleeper.service)
-
-#pemsin
-#pems.utils
-
-#inputCheck alternative based on lazyeval package
-##uses 
-##lazy and lazyeval
-
-#comments
-##this is a test
-##this needs work
-##needs care 
-
-#currently import all of lazy eval 
-#might only need lazyeval and lazy
-
-pemsin <- function(x, data=NULL){
-
-######################
-#to do
-######################
-
-#local error catcher
-
-    x2 <- lazyeval::lazy(x)
-    if(!is.null(data))
-         if(!is.data.frame(data)) data <- as.data.frame(data)
-    out <- try(lazyeval::lazy_eval(x, data=data), silent=TRUE)
-    if(class(out)[1]=="try-error"){
-         out <- try(x, silent=TRUE) 
-         if(class(out)[1]=="try-error") stop("unknown arg") 
-    }
-    out
-}
-
-
-pemsin2.old <- function (x, data = NULL) 
-{
-    x <- enquo(x)
-    data %>% as.data.frame() %>% pull(!!x)
-}
-
-pemsin2 <- function (x, data = NULL, units = NULL, .x = enquo(x)){
-
-    ans <- if(is.null(data)) NULL else 
-         try(data[quo_name(.x)], silent = TRUE)
-    if (is.null(ans) | class(ans)[1] == "try-error") {
-        ans <- try(x, silent = TRUE)
-        if (class(ans)[1] == "try-error") 
-            return(NULL)
-    }
-    if (!is.null(units)) 
-        ans <- convertUnits(ans, to = units)
-    ans
-}
 
 
 
