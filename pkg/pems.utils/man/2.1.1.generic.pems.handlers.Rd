@@ -36,6 +36,8 @@
 \alias{print}
 \alias{plot.pems}
 \alias{summary.pems}
+\alias{na.omit.pems}
+\alias{na.omit}
 \alias{units.pems}
 \alias{units}
 \alias{units<-.pems}
@@ -83,6 +85,8 @@
 \method{tail}{pems}(x, n = 6, ...)
 
 \method{summary}{pems}(object, ...)
+
+\method{na.omit}{pems}(object, ...)
 
 \method{units}{pems}(x)
 
@@ -203,6 +207,9 @@
   \code{names(pems.object)} returns a vector of the names of data series held in a 
   \code{pems} object when used in the form \code{names(pems)} or resets names when 
   used in the form \code{names(pems) <- new.names}. 
+
+  \code{na.omit(pems.object)} returns the supplied \code{pems} object with all rows 
+  including NAs removed. 
 
   \code{summary(pems.object)} generates a summary report for data series held in a 
   \code{pems} object. 

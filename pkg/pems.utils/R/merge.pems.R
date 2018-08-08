@@ -602,6 +602,10 @@ stackPEMS <- stack <- function(..., key=key, ordered=TRUE){
   temp <- exprs(...)
   refs <- names(temp)
   refs[refs==""] <- as.character(temp[refs==""])
+  #added make.unique() refs below in case same pems sent twice...
+  #   (have to do this to refs after temp/ref update)
+  #   (not sure why anyone doing this...)
+  refs <- make.unique(refs)
   key <- as.character(get_expr(enquo(key)))
   
   dots <- list(...) #rlang this later?
@@ -623,15 +627,30 @@ stackPEMS <- stack <- function(..., key=key, ordered=TRUE){
       }
     }
     d1[["data"]] <- bind_rows(fortify(d1), fortify(d2))
-    
-    temp <- as.data.frame(listUpdate(as.list(units(d1)), 
-                                     as.list(units(d2))),
-                          stringsAsFactors=FALSE)
+
+    ##################################
+    #fix for names with spaces in    
+    #temp <- as.data.frame(listUpdate(as.list(units(d1)), 
+    #                                 as.list(units(d2))),
+    #                      stringsAsFactors=FALSE)
+    ##################################
+    temp <- listUpdate(as.list(units(d1)), 
+                       as.list(units(d2)))
+    test <- names(temp)
+    temp <- as.data.frame(temp, stringsAsFactors=FALSE)
+    names(temp) <- test
+    ##################################
+    #better way?	
+    ##################################
+
     d1[["units"]] <- temp[names(d1[["data"]])]  
     att.1 <- attributes(d1)$pems.tags
     att.2 <- attributes(d2)$pems.tags
     attributes(d1)$pems.tags <- listUpdate(att.1, att.2)
   }
   d1[key] <- factor(d1[key], levels=refs, ordered=ordered)
+  #make the vectors pems.elements
+  for(i in names(d1))
+       d1[["data"]][, i] <- d1[, i]
   d1
 }

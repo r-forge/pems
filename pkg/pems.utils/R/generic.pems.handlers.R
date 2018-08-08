@@ -124,12 +124,17 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
 ########################
     b <- data.frame(lapply(b[1:n,], as.character), stringsAsFactors=FALSE, 
                                                    check.names=FALSE)      
-                                                   #or it corrects names likevelocity<5
+                                                   #or it corrects names like velocity<5
     if(n==0) b[] <- "<empty>"   #to catch empty frames
     b[is.na(b)] <- "NA"   #to catch NAs
     
     #unit labels extensions
     if(has.units){
+         #if data and units do not have same dimensions or names...
+         if(length(names(b))!=length(names(attributes(x)$units)) || any(names(b)!=names(attributes(x)$units))){
+              cat("suspect pems [data/units conflict]; halted print\n")
+              return(invisible(x))
+         }
          #note the leading space on temp
          attributes(x)$units[] <- gsub("[[][]]", "", paste("[", attributes(x)$units, "]", sep=""))
          b <- rbind(attributes(x)$units, b)
@@ -293,8 +298,14 @@ names.pems <- function(x, ...) {
 
     x <- rebuildPEMS(x)
     old.class <- class(x)
-    x <- as.data.frame(x) #need data.frame to get at 
-                          #element attributes 
+
+    #############################
+    #x <- as.data.frame(x) #need data.frame to get at 
+    #                      #element attributes 
+    #############################
+    #since as.data.frame strips units
+    #############################
+    class(x) <- "data.frame"
 
     #check for duplication
     #currently corrects names without saying anything....
@@ -359,6 +370,11 @@ as.data.frame.pems <- function(x, ...){
  
      x <- rebuildPEMS(x, "new")
      class(x) <- "data.frame"
+     #########################
+     #added unit reset because  
+     #      df <- as.data.frame(pems)); modify df; pems(df)
+     #      can cause units/data conflict if  
+     attributes(x) <- attributes(x)[names(attributes(x))!="units"]
      x
 
 }
@@ -824,8 +840,19 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
 #########################
 #########################
 
-`[<-.pems` <- function(x, i, j, ..., force = FALSE, value){
+#########################
+#to think about
+#########################
+#with pems...
+#> a[["data"]][1,1:5] <- rep(NA,5) 
+#works but...
+#> a[1,1:5] <- rep(NA,5)
+#Error: In pems[i,j]<-value: questionable request
+#       elements and rows pems[i,j] and insert[i,j] dimension mismatch
+#       [check force setting if insertion required]
+#should you be able to change multiple rows at a go with a pems...
 
+`[<-.pems` <- function(x, i, j, ..., force = FALSE, value){
 
     #cheat
     x <- rebuildPEMS(x, "old")
@@ -1707,8 +1734,27 @@ tail.pems <- function(x, n=6, ...) {
 
 
 
+######################################
+######################################
+##na.omit.pems
+######################################
+######################################
 
+#kr 0.0.1 2018/07/06
 
+#not sure why I now need this...
+
+#needs more work
+#not sure why pems[complete.cases(pems),] dies 
+#  when all rows contain NAs 
+#  might be down to pems[i,] dying on pems[FALSE,] etc... 
+
+#might be able to reduce code if I fix this...
+
+na.omit.pems <- function(object, ...) {
+    object[["data"]] <- object[["data"]][complete.cases(object[["data"]]),]
+    object
+}
 
 
 ############################################################

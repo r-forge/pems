@@ -83,11 +83,13 @@ pems <- function(x, units = NULL, constants = NULL,
 
 ##################
 #testing
-#supply a pems/return it
-#might want to unpack and repack?
+#if supply a pems/return
+#   unless units supplied 
+#   then unpack/repack
+#think about this 
 #################
 
-                 if(is(x)[1]=="pems") return(rebuildPEMS(x))
+                 if(is(x)[1]=="pems" && is.null(units)) return(rebuildPEMS(x))
 
 ##################
 #testing 
@@ -112,19 +114,19 @@ pems <- function(x, units = NULL, constants = NULL,
             units <- rep(NA, ncol(x))
         if(!is.data.frame(units)){
             units <- as.data.frame(t(units), stringsAsFactors = FALSE)
-            units <- if(ncol(units)<ncol(x))
-                         cbind(units, as.data.frame(t(rep(NA, ncol(x)-ncol(units))), stringsAsFactors = FALSE)) else
-                             units[1:ncol(x)] 
-            names(units) <- c(names(x), names(units), rep(NA, ncol(x)))[1:ncol(x)]
         }
-
+        #after we know units is data.frame 
+        units <- if(ncol(units)<ncol(x))
+                    cbind(units, as.data.frame(t(rep(NA, ncol(x)-ncol(units))), stringsAsFactors = FALSE)) else
+                          units[1:ncol(x)] 
+        names(units) <- c(names(x), names(units), rep(NA, ncol(x)))[1:ncol(x)]
     }
 
 #to do
 ####################
 #update constants
 
-#droping history
+#dropping history
     history <- list()
     extra.args <- list(...)
 

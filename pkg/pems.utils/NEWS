@@ -1,6 +1,9 @@
-Changes in pems.utils 0.2.25 [2018-07-04]
+Changes in pems.utils 0.2.25 [2018-07-05]
 ========================================
 
+*       added na.omit.pems
+*       update to print.pems; halts print if 
+        units look suspect...
 *       added stackPEMS  
 *       removed checkInput, checkInput2, pemsElement, 
         pemsin, pemsin2 and pemsin.old

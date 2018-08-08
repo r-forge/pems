@@ -37,7 +37,7 @@ importFrom("grDevices", "colorRampPalette", "gray")
 importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
-           "na.omit", "na.pass")
+           "na.omit", "na.pass", "complete.cases")
 importFrom(utils, read.table, read.csv, read.delim, write.table, 
            head, tail, capture.output, install.packages, 
            installed.packages)
@@ -88,7 +88,7 @@ S3method(plot, pems)
 S3method(summary, pems)
 S3method(with, pems)
 S3method(subset, pems)
-
+S3method(na.omit, pems)
 
 #don't need these?
 # nrow.pems -dim does it
@@ -133,7 +133,7 @@ export(summary)
 export(with)
 export(subset)
 export(left_join)
-
+export(na.omit)
 
 
 
@@ -182,7 +182,7 @@ export(cAlign)
 export(findLinearOffset)
 export(tAlign)
 export(stackPEMS)
-#bindPEMS
+#export(bindPEMS)  #gone ~2017/12 0.2.18.01
 
 #export
 export(exportPEMSData)
