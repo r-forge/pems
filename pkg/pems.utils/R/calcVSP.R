@@ -89,7 +89,7 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
     #if missing they are left as NULL
     #better way to do this???
 
-    if(is.null(speed) & is.null(accel) & is.null(time) &is.null(distance))
+    if(is.null(speed) & is.null(accel) & is.null(time) & is.null(distance))
             checkIfMissing(if.missing = settings$if.missing, 
                            reply = "want speed and accel but insufficient inputs\n\t can make do with time and distance and work up", 
                            suggest = "add something I can work with to call", if.warning = NULL, 

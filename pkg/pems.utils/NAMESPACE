@@ -2,6 +2,9 @@
 #imports
 #############################
 
+useDynLib("pems.utils", .registration=TRUE)
+
+
 ## import/depends
 
 import(lattice)
@@ -183,6 +186,9 @@ export(findLinearOffset)
 export(tAlign)
 export(stackPEMS)
 #export(bindPEMS)  #gone ~2017/12 0.2.18.01
+
+#testing
+export(C_ylagxCOR) 
 
 #export
 export(exportPEMSData)
@@ -381,4 +387,7 @@ export(checkOutput)
 export(checkIfMissing)
 
 
+## C code setup 
+
+importFrom(Rcpp, sourceCpp)
 

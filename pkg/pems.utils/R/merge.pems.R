@@ -6,10 +6,16 @@
 
 #kr
 
+#testing 
+
+cAlign_ylagxCOR <- function(x, y) {
+  .Call('C_ylagxCOR', PACKAGE = 'pems.utils', x, y)
+}
+
+
 #description
 ##########################
 #functions for merging data and pems
-
 
 #includes 
 ##########################
