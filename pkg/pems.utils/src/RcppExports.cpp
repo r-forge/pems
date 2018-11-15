@@ -18,11 +18,8 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP C_ylagxCOR(SEXP, SEXP);
-
 static const R_CallMethodDef CallEntries[] = {
     {"_pems_utils_C_ylagxCOR", (DL_FUNC) &_pems_utils_C_ylagxCOR, 2},
-    {"C_ylagxCOR",             (DL_FUNC) &C_ylagxCOR,             2},
     {NULL, NULL, 0}
 };
 

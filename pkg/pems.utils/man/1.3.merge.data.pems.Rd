@@ -31,7 +31,7 @@
   stackPEMS(..., key=key, ordered=TRUE)
 
   #historical
-  findLinearOffset(x = NULL, y = NULL, offset.range = NULL)
+  findLinearOffset(x = NULL, y = NULL, ...)
 
   #c wrappers
   C_ylagxCOR(x, y)
@@ -83,12 +83,6 @@
   \code{data.frame}, \code{pems.elements} or \code{vectors} to be bound together. 
   For \code{findLinearOffset}, two \code{pems.elements} or \code{vectors} to be 
   aligned.
-} 
-
-  \item{offset.range}{
-  (Numeric) For \code{findLinearOffset}, the 'lag window' to compare \code{x} 
-  and \code{x} across. By default, the function applies the widest possible 
-  window.  
 } 
     
 }
@@ -184,13 +178,13 @@
   also provides a single argument alternative.     
 
   \code{bindPEMS}: The historical function \code{bindPEMS} has 
-  been superceded by \code{align}, \code{cAlign} options. 
+  been superceded by \code{align}. 
 
   \code{findLinearOffset}: \code{findLinearOffset} is currently 
   retained but will most likely be removed from future versions of 
   \code{pems.utils}. 
 
-  The call \code{cAlign(x, y, output = "offset")} is equivalent to 
+  The call \code{cAlign(x~y, output = "offset")} is equivalent to 
   \code{findLinearOffset(x, y)}.
      
 }

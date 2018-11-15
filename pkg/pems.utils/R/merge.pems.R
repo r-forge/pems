@@ -21,11 +21,11 @@ cAlign_ylagxCOR <- function(x, y) {
 ##########################
 #align
 #cAlign
-#cAlign2
+#cAlign.old (not exported)
+#C_ylagxCOR (c code)
 #tAlign
 #findLinearOffset
 #stackPEMS
-
 
 #removed
 ############################
@@ -130,117 +130,7 @@ align <- function(data1, data2, n=0, ...){
 ######################################
 ######################################
 
-#kr 26/12/2015 v 0.1.0
-#version update from sleeper.service
-
 #currently not exported
-
-cAlign.old <- function(form, data1=NULL, data2 = NULL, ...){
-
-#function for the time alignment of data in two datasets
-#using a common time-series or similar time-series.
-
-#form formula 
-#data1 first data source
-#data2 optional second data source
-
-#uses 
-#ccf in  base package?
-#align in sleeper.service
-
-#to do
-#tidy error messages
-#need to get this working with no data
-#cAlign(x~y)
-#need to sort out replacement for find offset command
-
-    #set up
-    data1 <- makePEMS(data1)
-    vars <- as.character(form)[-1]
-    #vars[1] is the "~"
-
-#tidy the next bit later
-#but don't want it as formal
-    extra.args <- list(...)
-    output <- if(is.null(extra.args$output)) c("plot", "pems") else extra.args$output
-    if("plot" %in% names(extra.args))
-         output <- if(extra.args$plot) 
-             unique(c(output, "plot")) else output[output != "plot"] 
-    if("pems" %in% names(extra.args))
-         output <- if(extra.args$pems) 
-             unique(c(output, "pems")) else output[output != "pems"]
-    if("offset" %in% names(extra.args))
-         output <- if(extra.args$offset) 
-             unique(c(output, "offset")) else output[output != "offset"] 
-    extra.args <- extra.args[!names(extra.args) %in% c("plot", "pems", "offset", "output")]
-
-#not tested
-    if(is.null(data2)){
-        if(length(vars)<2) stop("need two cases if only one data set provided")
-        if(nrow(data1)<1){
-            data2 <- data1
-        } else {
-            data2 <- makePEMS(data1[all.vars(form)[2]])
-            data1 <- data1[names(data1)[names(data1) != all.vars(form)[2]]]
-        }
-    }
-
-    #this first variable with be vars[1]
-    #note: x and y remain data.frames here
-    #(see below about making this work with no data)
-    #(backward compat...)
-    x <- try(model.frame(as.formula(paste("~", vars[1], sep="")), data1, na.action = na.pass),
-             silent = TRUE)
-    if(class(x)[1]=="try-error") stop("cAlign() conflict, '", vars[1], "' not found where expected", 
-                                      call. = FALSE)
-    
-    #get next term
-    temp <- if(length(vars)>1) vars[2] else vars[1]    
-    y <- try(model.frame(as.formula(paste("~", temp, sep="")), data2, na.action = na.pass),
-             silent = TRUE)
-    if(class(y)[1]=="try-error") stop("cAlign() conflict, '", temp, "' not found where expected", 
-                                      call. = FALSE)
-
-    #to make above work with no data sources
-    if(nrow(data1)<1) data1 <- makePEMS(x)
-    if(nrow(data2)<1) data2 <- makePEMS(y)
-    x <- x[,1]
-    y <- y[,1]
-
-#might rethink error messages
-#so only message if both args are missing
-
-    #align using ccf
-#might still need to do more work on what we pass
-#and make it more robust? ccf formals only???
-
-    ans <- do.call(ccf, listUpdate(list(x=x, y=y, na.action=na.pass, plot=FALSE), 
-                                   extra.args))
-    ##ans <- ccf(x, y, na.action=na.pass, plot=FALSE, ...)
-    fit <- ans$lag[which(ans$acf==max(ans$acf, na.rm=T))]
-
-#might want to do a prettier plot
-#this is before offset check 
-
-    if("plot" %in% output){
-       plot(ans, main="cAlign ACF")
-       abline(v=0, col="pink", lty=3)
-       abline(v=fit, col="red", lty=3)
-       if(fit!=0)
-           arrows(0, max(ans$acf, na.rm=T) ,fit, max(ans$acf, na.rm=T), 
-                  col="red", 0.1)
-    }
-
-    if("offset" %in% output)
-       if(!"pems" %in% output) return(fit) else 
-           print(paste("offset = ", fit, sep=""))
-
-    return(align(data1, data2, fit))
-
-}
-
-
-
 
 #kr 06/01/2018 v 0.2.0
 #version update from SGS L&L
@@ -251,7 +141,7 @@ cAlign.old <- function(form, data1=NULL, data2 = NULL, ...){
 #this needs tidying
 
 
-cAlign <- function(form, data1=NULL, data2 = NULL, ...){
+cAlign.old <- function(form, data1=NULL, data2 = NULL, ...){
 
 #function for the time alignment of data in two datasets
 #using a common time-series or similar time-series.
@@ -423,14 +313,166 @@ cAlign <- function(form, data1=NULL, data2 = NULL, ...){
 }
 
 
+#kr 15/11/2018 v 0.5.0
+#version update from RDE work...
+
+cAlign <- function(form, data1=NULL, data2 = NULL, ...){
+
+#function for the time alignment of data in two datasets
+#using a common time-series or similar time-series.
+
+#form formula 
+#data1 first data source
+#data2 optional second data source
+  
+#uses
+#align 
+#C_ylagxCORR
+
+#changes relative to previous
+#removed lag.start
+#removed lag.max
+#reinstated min.overlap
+
+#to do
+#######################
+#tidy error messages
+#input handling 
+  
+#need to get this working with no data
+#cAlign(x~y)
+#need to sort out replacement for find offset command
+#     maybe just cAlign(x, y, output="offset", ...)
+  
+#to think about 
+#######################
+##would add mask here
+#could use something like mask.1=1:30 to hide first 30 points of x, etc...
+
+
+  ######################
+  #set up
+  ######################
+  data1 <- makePEMS(data1)
+  vars <- as.character(form)[-1]  #vars[1] is the "~"
+#tidy the next bit later
+#but don't want it as formal
+  extra.args <- list(...)
+  output <- if(is.null(extra.args$output)) 
+    c("plot", "pems") else extra.args$output
+  if("all" %in% output) output <- c("pems", "plot", "offset")
+  if("plot" %in% names(extra.args))
+     output <- if(extra.args$plot) 
+                  unique(c(output, "plot")) else output[output != "plot"] 
+  if("pems" %in% names(extra.args))
+    output <- if(extra.args$pems) 
+                unique(c(output, "pems")) else output[output != "pems"]
+  if("offset" %in% names(extra.args)) 
+    output <- if(extra.args$offset) 
+                unique(c(output, "offset")) else output[output != "offset"] 
+  extra.args <- extra.args[!names(extra.args) %in% 
+                  c("plot", "pems", "offset", "output")]
+  if(is.null(data2)){
+    if(length(vars)<2) 
+      stop("need two elements if only one data set provided")
+    if(nrow(data1)<1){
+      data2 <- data1
+    } else {
+      data2 <- makePEMS(data1[all.vars(form)[2]])
+      data1 <- data1[names(data1)[names(data1) != all.vars(form)[2]]]
+    }
+  }
+  #this first variable with be vars[1]
+  #note: x and y remain data.frames here
+  #(see below about making this work with no data)
+  #(backward compat...)
+  x <- try(model.frame(as.formula(paste("~", vars[1], sep="")), 
+              data1, na.action = na.pass), silent = TRUE)
+  if(class(x)[1]=="try-error") 
+    stop("cAlign() conflict, '", vars[1], "' not found where expected", 
+         call. = FALSE)
+  #get next term
+  temp <- if(length(vars)>1)  vars[2] else vars[1]    
+  y <- try(model.frame(as.formula(paste("~", temp, sep="")), data2, 
+         na.action = na.pass), silent = TRUE)
+  if(class(y)[1]=="try-error") 
+    stop("cAlign() conflict, '", temp, "' not found where expected", 
+         call. = FALSE)
+  #to make above work with data sources
+  if(nrow(data1)<1) data1 <- makePEMS(x)
+  if(nrow(data2)<1) data2 <- makePEMS(y)
+  x <- x[,1]
+  y <- y[,1]
+
+  #############################
+  #main routine
+  #############################
+  #this is faster than version 3 but
+  #this is still slower than older cAlign (1-2) that 
+  #used stat ccf function
+  
+  #fit smallest to biggest
+  if(length(y)>length(x)){
+    temp <- y
+    y <- x
+    x <- temp
+    reversed=TRUE
+  } else {
+    reversed=FALSE
+  }
+  #set min.overlap if not in call
+  if(!"min.overlap" %in% names(extra.args))
+    extra.args$min.overlap <- min(c(floor(min(length(x), 
+                                              length(y))*0.2), 2000))
+  pad <- length(x) - extra.args$min.overlap
+  y <- c(rep(NA, pad), y, rep(NA, pad))
+  #use C_ylagxCOR to solve this
+  ans <- .Call("_pems_utils_C_ylagxCOR", x, y)
+  index <- (1:length(ans)) - length(x) + extra.args$min.overlap - 1
+  if(!reversed) index <- -index
+  ans2 <- index[which(ans==max(ans, na.rm=TRUE))[1]]   #[1] in case tie!!
+
+##########################
+#plot input tidy
+##########################
+  
+  #this is before offset check 
+  if("plot" %in% output){
+    plot(index, ans, main="cAlign ACF", type="h")
+    abline(v=0, col="pink", lty=3)
+    abline(v=ans2, col="red", lty=3)
+    if(ans2!=0)
+      arrows(0, max(ans, na.rm=T) ,ans2, max(ans, na.rm=T), 
+             col="red", 0.1)
+  }
+
+  #####################
+  #offset to sort out
+  ####################
+#this should be better handled
+  if("offset" %in% output)
+     if(!"pems" %in% output) return(ans2) else 
+         print(paste("offset = ", ans2, sep=""))
+
+  return(align(data1, data2, ans2))
+
+}
+
+
+
+
+
+
+
+
 ##########################
 ##########################
 ##findLinearOffset
 ##########################
 ##########################
 
-#kr 26/12/2015 v 0.1.0
-#update using sleeper.service revision
+#kr 15/11/2018 v 0.3.0
+#update based on cAlign 15/11/2018 update
 
 #what it does
 ##########################
@@ -444,18 +486,10 @@ cAlign <- function(form, data1=NULL, data2 = NULL, ...){
 
 #comments
 ##########################
+#
 #might not be keeping this 
 
-findLinearOffset <- function(x = NULL, y = NULL, offset.range = NULL){
-
-    if(is.null(offset.range)){
-        offset.range <- ceiling(max(c(length(x), length(y))))
-    }
-
-    ans <- ccf(x, y, lag.max=offset.range, plot=FALSE)
-    ans$lag[which(ans$acf == max(ans$acf))[1]]
-
-}
+findLinearOffset <- function(x = NULL, y = NULL, ...) cAlign(x~y, output="offset", ...)
 
 
 

@@ -1,4 +1,16 @@
-Changes in pems.utils 0.2.25 [2018-07-05]
+Changes in pems.utils 0.2.26 [2018-11-15]
+========================================
+
+*       updated findLinearOffset, following 
+        cAlign update
+*       updated cAlign, now uses C_ylagxCOR  
+*       added C_ylagxCOR cpp code; for new 
+        cAlign function
+*       added Rccp as import; to handle cpp 
+        code
+
+
+Changes in pems.utils 0.2.25 [2018-08-15]
 ========================================
 
 *       added na.omit.pems
