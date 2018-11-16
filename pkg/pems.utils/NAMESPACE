@@ -340,7 +340,7 @@ export(calcAccel)
 export(calcAcceleration)
 export(calcJerk)
 export(calcVSP)
-export(calcVSP_JimenezPalaciosCMEM)
+export(calcVSP_JimenezPalacios)
 export(calcEm)
 export(calcEm_HoribaPitot)
 
