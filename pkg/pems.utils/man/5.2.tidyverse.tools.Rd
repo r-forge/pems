@@ -1,5 +1,5 @@
-\name{5.1.pems.tidyverse.tools}
-\alias{5.1.pems.tidyverse.tools}
+\name{5.2.pems.tidyverse.tools}
+\alias{5.2.pems.tidyverse.tools}
 \alias{pems.tidyverse}
 \alias{select_.pems}
 \alias{select.pems}

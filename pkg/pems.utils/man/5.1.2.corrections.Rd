@@ -1,5 +1,5 @@
-\name{2.3.4.corrections}
-\alias{2.3.4.corrections}
+\name{5.1.2.corrections}
+\alias{5.1.2.corrections}
 \alias{corrections}
 \alias{calcPack2}
 \alias{correctInput}

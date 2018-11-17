@@ -1,5 +1,5 @@
-\name{2.3.2.vsp.calculations}
-\alias{2.3.2.vsp.calculations}
+\name{3.1.2.vsp.calculations}
+\alias{3.1.2.vsp.calculations}
 \alias{vsp.calculations}
 \alias{vsp}
 \alias{calcVSP}

@@ -3,18 +3,34 @@ Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
 Version: 0.2.26.2
 Date: 2018-11-16
-Author: Karl Ropkins
-Maintainer: Karl Ropkins <k.ropkins@its.leeds.ac.uk>
-Depends: R (>= 2.10.0), lattice, loa
-Imports: methods, utils, grid, RColorBrewer, latticeExtra, baseline, ggplot2, 
-  rlang, dplyr, Rcpp (>= 0.12.19) 
-LinkingTo: Rcpp  
+Authors@R: c(
+    person("Karl", "Ropkins", , "karl.ropkins@gmail.com", c("aut", "cre"), comment = c(ORCID = "0000-0002-0294-6997"))
+    )
+Author: Karl Ropkins [aut, cre]
+Maintainer: Karl Ropkins <karl.ropkins@gmail.com>
 Description: Utility functions for the handling, analysis and visualisation 
-  of data from portable emissions measurement systems ('PEMS') and other 
-  similar mobile activity monitoring devices. The package includes a dedicated 
-  'pems' data class that manages many of the quality control, unit handling 
-  and data archiving issues that can hinder efforts to standardise 'PEMS' 
-  research.
+    of data from portable emissions measurement systems ('PEMS') and other 
+    similar mobile activity monitoring devices. The package includes a dedicated 
+    'pems' data class that manages many of the quality control, unit handling 
+    and data archiving issues that can hinder efforts to standardise 'PEMS' 
+    research.
+Depends: 
+    R (>= 2.10.0), 
+    lattice, 
+    loa
+Imports: 
+    methods, 
+    utils, 
+    grid, 
+    RColorBrewer, 
+    latticeExtra, 
+    baseline, 
+    ggplot2, 
+    rlang, 
+    dplyr, 
+    Rcpp (>= 0.12.19) 
+LinkingTo: 
+    Rcpp  
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes

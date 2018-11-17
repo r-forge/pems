@@ -1,5 +1,5 @@
-\name{1.2.pems.structure}
-\alias{1.2.pems.structure}
+\name{2.2.pems.structure}
+\alias{2.2.pems.structure}
 \alias{pems.structure}
 \alias{getPEMSElement}
 \alias{getPEMSData}

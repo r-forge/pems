@@ -1,5 +1,5 @@
-\name{2.6.conditioning.pems.data}
-\alias{2.6.conditioning.pems.data}
+\name{2.3.2.conditioning.pems.data}
+\alias{2.3.2.conditioning.pems.data}
 \alias{conditioning.pems.data}
 \alias{cutBy}
 \alias{cutByRow}

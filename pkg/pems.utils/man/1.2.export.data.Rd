@@ -1,5 +1,5 @@
-\name{1.4.export.data}
-\alias{1.4.export.data}
+\name{1.2.export.data}
+\alias{1.2.export.data}
 \alias{export.data}
 \alias{exportPEMSData}
 \alias{exportPEMS2CSV}

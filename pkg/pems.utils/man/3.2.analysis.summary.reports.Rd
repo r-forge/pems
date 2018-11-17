@@ -1,5 +1,5 @@
-\name{2.5.analysis.summary.reports}
-\alias{2.5.analysis.summary.reports}
+\name{3.2.analysis.summary.reports}
+\alias{3.2.analysis.summary.reports}
 \alias{summary.reports}
 \alias{summaryReport}
 

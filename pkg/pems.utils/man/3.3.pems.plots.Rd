@@ -1,5 +1,5 @@
-\name{2.4.pems.plots}
-\alias{2.4.pems.plots}
+\name{3.3.pems.plots}
+\alias{3.3.pems.plots}
 \alias{pems.plots}
 \alias{latticePlot}
 \alias{panel.PEMSXYPlot}
