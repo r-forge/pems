@@ -1,12 +1,14 @@
 Package: pems.utils
 Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.2.26.2
-Date: 2018-11-16
+Version: 0.2.26.3
+Date: 2018-11-17
 Authors@R: c(
-    person("Karl", "Ropkins", , "karl.ropkins@gmail.com", c("aut", "cre"), comment = c(ORCID = "0000-0002-0294-6997"))
+    person("Karl", "Ropkins", , "karl.ropkins@gmail.com", c("aut", "cre"), comment = c(ORCID = "0000-0002-0294-6997")),
+    person("Adrian", "Felipe Ortega Calle", , role = "ctb")
     )
-Author: Karl Ropkins [aut, cre]
+Author: Karl Ropkins [aut, cre],
+    Adrian Felipe Ortega Calle [ctb]
 Maintainer: Karl Ropkins <karl.ropkins@gmail.com>
 Description: Utility functions for the handling, analysis and visualisation 
     of data from portable emissions measurement systems ('PEMS') and other 

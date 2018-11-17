@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.26.2\cr 
-Date: \tab 2018-11-16\cr
+Version: \tab 0.2.26.3\cr 
+Date: \tab 2018-11-17\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -48,7 +48,7 @@ follows:
 
 2.3.2. Conditioning pems objects: \code{\link{conditioning.pems.data}}, \code{\link{cutBy}}, etc.
 
-2.3.3. Time Handling functions. 
+2.3.3. Time handling functions: \code{\link{regularize}}, etc.  
 
 2.3.4. Unit handler functions: \code{\link{getUnits}}, \code{\link{setUnits}}, \code{\link{convertUnits}}, etc.
 

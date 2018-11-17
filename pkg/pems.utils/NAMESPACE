@@ -40,7 +40,7 @@ importFrom("grDevices", "colorRampPalette", "gray")
 importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
-           "na.omit", "na.pass", "complete.cases")
+           "na.omit", "na.pass", "complete.cases", "approx")
 importFrom(utils, read.table, read.csv, read.delim, write.table, 
            head, tail, capture.output, install.packages, 
            installed.packages)
@@ -193,7 +193,6 @@ export(C_ylagxCOR)
 #export
 export(exportPEMSData)
 export(exportPEMS2CSV)
-
 
 ###############################
 #tidyverse
@@ -365,8 +364,10 @@ export(correctBaseline)
 export(cutBy)
 export(cutByRow)
 
-#unit.handlers
+#time.handlers
+export(regularize)
 
+#unit.handlers
 export(getUnits) 
 export(setUnits) 
 export(convertUnits)

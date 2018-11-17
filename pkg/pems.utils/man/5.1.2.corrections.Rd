@@ -12,7 +12,7 @@
 }
 
 \description{
-  Corrections are a special subset of calculations which by default 
+  Corrections are a special subset of functions which by default 
   write over the elements that they recalculate.
 }
 
