@@ -40,7 +40,8 @@ importFrom("grDevices", "colorRampPalette", "gray")
 importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
-           "na.omit", "na.pass", "complete.cases", "approx")
+           "na.omit", "na.pass", "complete.cases", "approx", "lm", 
+           "predict")
 importFrom(utils, read.table, read.csv, read.delim, write.table, 
            head, tail, capture.output, install.packages, 
            installed.packages)
@@ -366,6 +367,7 @@ export(cutByRow)
 
 #time.handlers
 export(regularize)
+export(repairLocalTime)
 
 #unit.handlers
 export(getUnits) 

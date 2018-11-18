@@ -1,6 +1,7 @@
-Changes in pems.utils 0.2.26 [2018-11-17]
+Changes in pems.utils 0.2.26 [2018-11-18]
 ========================================
 
+*       added repairLocalTime
 *       added regularize 
 *       added calcVSP_JimenezPalacios, 
         as new calcVSP default 
