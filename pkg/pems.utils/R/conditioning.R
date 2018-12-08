@@ -149,7 +149,16 @@ cutByRow <- function(ref = NULL, n = 4, rows = NULL, ..., data = NULL,
 
     if(is.numeric(n) & !is.numeric(rows)){
         if(n > length(ref)) n <- length(ref)
-        rows <- floor(length(ref)/n[1])
+######################
+#testing 08/12/2-18
+#        rows <- floor(length(ref)/n[1])
+######################
+#adding extra n case 
+#when length(ref) not 
+#evenly divisible by n
+######################
+        rows <- length(ref)/n[1]
+######################
         rows <- seq(1, length(ref), by = rows)
     }
 
