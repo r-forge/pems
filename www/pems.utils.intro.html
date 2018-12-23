@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Karl Ropkins" />
+
+<meta name="date" content="2018-12-23" />
+
+<title>Introduction to R:pems.utils</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to R:pems.utils</h1>
+<h4 class="author"><em>Karl Ropkins</em></h4>
+<h4 class="date"><em>2018-12-23</em></h4>
+
+
+
+<div id="rpems.utils" class="section level1">
+<h1>R:pems.utils</h1>
+<p>The <strong>R</strong> package <strong>pems.utils</strong> was developed as part of work on a series of vehicle emissions measurement studies, and originally intended for use with datasets collected using Portable Emission Measurement Systems or PEMS.</p>
+<blockquote>
+<p>This note assumes you already have <strong>R</strong>. If not and anything here is of interest, <strong>R</strong> is open-source and free-to-distribute, and you can get it from <a href="https://www.r-project.org/" target="_blank">[&gt;the R Project]</a>.</p>
+</blockquote>
+<blockquote>
+<p>For those that are unfamiliar with them, PEMS are on-board systems that measure the emissions of in-use vehicles. PEMS data collection is one of a number of methods developed to provide real-world alternatives to laboratory-based emissions measurement methods traditionally used in regulatory practices. <a href="https://en.wikipedia.org/wiki/Portable_emissions_measurement_system" target="_blank">[&gt;for further information]</a></p>
+</blockquote>
+<p>The rationale behind <strong>pems.utils</strong> was two-fold:</p>
+<ol style="list-style-type: decimal">
+<li>To streamline mundane, laborious and often error-prone elements of routine data handling; and,</li>
+<li>To provide mobile data users with higher-level tools for the analysis of in-journey data.</li>
+</ol>
+<blockquote>
+<p>Although originally intended for use with PEMS data, <strong>pems.utils</strong> has also been used with datasets collected with other mobile systems. So, if you are working with time-series collected by any moving objects, <strong>pems.utils</strong> may also be of interest.</p>
+</blockquote>
+<blockquote>
+<p>If you use <strong>pems.utils</strong>, I hope it makes your work easier, better or maybe even both.</p>
+</blockquote>
+<blockquote>
+<p>If you have any suggestions how to make pems.utils better or you have any problems using it, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+</blockquote>
+</div>
+<div id="getting-pems.utils" class="section level1">
+<h1>Getting pems.utils</h1>
+<p>Installing <strong>pems.utils</strong> from <strong>R</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Release version from main archive CRAN:</span>
+<span class="kw">install.packages</span>(<span class="st">&quot;pems.utils&quot;</span>) 
+<span class="co">#Developer's version from r-forge:</span>
+<span class="kw">install.packages</span>(<span class="st">&quot;pems.utils&quot;</span>, <span class="dt">repos=</span><span class="st">&quot;http://R-Forge.R-project.org&quot;</span>)</code></pre></div>
+<p>Loading <strong>pems.utils</strong>, once it is installed:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(pems.utils) </code></pre></div>
+</div>
+<div id="pems-data-structures" class="section level1">
+<h1>PEMS Data Structures</h1>
+<p><strong>pems.utils</strong> uses two data types, <strong>pems</strong> and <strong>pems.element</strong>s, to manage data structure like units and meta information. <strong>pems.utils</strong> includes <strong>pems.1</strong> as an example <strong>pems</strong> object:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span></code></pre></div>
+<pre><code>## pems (1000x25)
+##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
+##   1  2005-09-08 11:46:07           0        0         0        0    20.447
+##   2  2005-09-08 11:46:08           1        0         0        0    21.973
+##   3  2005-09-08 11:46:09           2        0         0        0    20.752
+##   4  2005-09-08 11:46:10           3        0         0        0    22.583
+##   5  2005-09-08 11:46:11           4        0         0        0    20.142
+##   6  2005-09-08 11:46:12           5        0         0        0    20.142
+##  ... not showing: 994 rows; 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<p>Like a <strong>data.frame</strong>, the <strong>pems</strong> object contains named data-series as columns. However, unlike a <strong>data.frame</strong>:</p>
+<ul>
+<li>It associates units with each column. For example, the first column, <strong>time.stamp</strong> has units of <em>Y-M-D H:M:S GMT</em>, reported in the second row of the print output.</li>
+<li>By default, it limits displayed data to a screen-friendly range and a summary report of other columns and rows. This is a nice idea taken from <strong>tibbles</strong> for the tidy handling of larger datasets <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html">[&gt;for more details]</a></li>
+<li>All the columns in a <strong>pems</strong> object are <strong>pems.elements</strong>.</li>
+</ul>
+<p><strong>pems.elements</strong> can be extract from <strong>pems</strong> using <strong>$</strong> and <strong>[.]</strong> operators, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span><span class="op">$</span>time.stamp</code></pre></div>
+<pre><code>## pems.element [n=1000]
+##    [1] &quot;2005-09-08 11:46:07 GMT&quot; &quot;2005-09-08 11:46:08 GMT&quot;
+##    [3] &quot;2005-09-08 11:46:09 GMT&quot; &quot;2005-09-08 11:46:10 GMT&quot;
+##    [5] &quot;2005-09-08 11:46:11 GMT&quot; &quot;2005-09-08 11:46:12 GMT&quot;
+##    ... not showing: 497 rows
+##    ... &lt;POSIXct,POSIXt&gt; time.stamp [Y-M-D H:M:S GMT]</code></pre>
+<p><strong>pems.element</strong>s act like other vectors but, like <strong>pems</strong>, track units and limits the default print range to prevent long data-series filling the screen.</p>
+<blockquote>
+<p>See ?pems.generic for further details.</p>
+</blockquote>
+</div>
+<div id="importing-pems-data" class="section level1">
+<h1>Importing PEMS Data</h1>
+<p>You can make <strong>pems</strong> and <strong>pems.elements</strong> objects using <strong>pems()</strong> and <strong>pems.element()</strong>, but you are more likely to import PEMS data from a file previously logged by a PEMS or other mobile measurement system.</p>
+<p>A family of <strong>import2PEMS()</strong> functions are included in <strong>pems.utils</strong> for such work. These are typically used in the form:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">my.pems &lt;-<span class="st"> </span><span class="kw">import2PEMS</span>()</code></pre></div>
+<blockquote>
+<p>See ?import2PEMS for further details.</p>
+</blockquote>
+</div>
+<div id="pems-data-handling" class="section level1">
+<h1>PEMS Data Handling</h1>
+<p><strong>pems</strong> and <strong>pems.element</strong> objects can be handled like <strong>data.frames</strong> and <strong>vectors</strong>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#first three rows and two columns of pems.1 </span>
+pems.<span class="dv">1</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</code></pre></div>
+<pre><code>## pems (3x2)
+##               time.stamp  local.time
+##        [Y-M-D H:M:S GMT]         [s]
+##   1  2005-09-08 11:46:07           0
+##   2  2005-09-08 11:46:08           1
+##   3  2005-09-08 11:46:09           2</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#15th to 25th velocity records in pems.1 </span>
+pems.<span class="dv">1</span>[<span class="dv">15</span><span class="op">:</span><span class="dv">25</span>, <span class="st">&quot;velocity&quot;</span>]</code></pre></div>
+<pre><code>## pems.element [n=11]
+##  [1] 0.1 0.3 0.2 0.3 0.2 0.4 0.1 0.2 0.2 0.1 0.1
+##  ... &lt;numeric&gt; velocity [km/h]</code></pre>
+<p>They are however a little stricter, for example:</p>
+<ul>
+<li>Calling part of <strong>pems</strong> object that does not exist generates an error rather than a <code>NULL</code>.</li>
+<li>An added element does not wrap, unless specifically told to.
+<ul>
+<li>So, <code>pems.1$new &lt;- 1</code> would add a <strong>pems.element</strong> called <strong>new</strong> to <strong>pems.1</strong> which contained a ‘1’ followed by row a ’NA’s rather than a row of ’1’s.</li>
+</ul></li>
+</ul>
+<blockquote>
+<p><em>Why do we do this?</em> PEMS and other mobile data sources are typically contiguous data-series, each record following the one before in time order. If we align two datasets we rarely want data logged in shorter datasets wrapped and repeated alongside more than one row in longer datasets.</p>
+</blockquote>
+<p>You can modify and calculate new data-series manually using <strong>R</strong>, but functions are also included in <strong>pems.utils</strong> for many common mobile data conversions and parameter calculations, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span><span class="op">$</span>velocity</code></pre></div>
+<pre><code>## pems.element [n=1000]
+##    [1]  0.1  0.1  0.3  0.3  0.2  0.4  0.3  0.7  0.1  0.2  0.2  0.2  0.1
+##   [14]  0.2  0.1  0.3  0.2  0.3  0.2  0.4  0.1  0.2  0.2  0.1  0.1  0.1
+##   [27]  0.3  0.2  0.1  0.1  0.2  0.3  0.4  0.1  0.3  0.4  0.1  0.4  0.2
+##    ... not showing: 74 rows
+##    ... &lt;numeric&gt; velocity [km/h]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#convert pems.1$velocity units to miles per hour</span>
+<span class="kw">convertUnits</span>(pems.<span class="dv">1</span><span class="op">$</span>velocity, <span class="dt">to=</span><span class="st">&quot;mi/h&quot;</span>)</code></pre></div>
+<pre><code>## pems.element [n=1000]
+##    [1]  0.06213712  0.06213712  0.18641136  0.18641136  0.12427424
+##    [6]  0.24854848  0.18641136  0.43495983  0.06213712  0.12427424
+##   [11]  0.12427424  0.12427424  0.06213712  0.12427424  0.06213712
+##    ... not showing: 197 rows
+##    ... &lt;numeric&gt; velocity [mi/h]</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#calculate acceleration and add to pems.1</span>
+pems.<span class="dv">1</span><span class="op">$</span>accel &lt;-<span class="st"> </span><span class="kw">calcAccel</span>(velocity, local.time, pems.<span class="dv">1</span>)
+pems.<span class="dv">1</span><span class="op">$</span>accel</code></pre></div>
+<pre><code>## pems.element [n=1000]
+##    [1]          NA  0.00000000  0.05555556  0.00000000 -0.02777778
+##    [6]  0.05555556 -0.02777778  0.11111111 -0.16666667  0.02777778
+##   [11]  0.00000000  0.00000000 -0.02777778  0.02777778 -0.02777778
+##    ... not showing: 197 rows
+##    ... &lt;numeric&gt; accel [m/s/s]</code></pre>
+<blockquote>
+<p>For further information on these and other <strong>pems.utils</strong> functions, see in-package documentation.</p>
+</blockquote>
+</div>
+<div id="pems-data-analysis" class="section level1">
+<h1>PEMS Data Analysis</h1>
+<p>We can use such functions to quickly process and analysis PEMS data, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#calculate VSP and CO2 emissions and add both to pems.1</span>
+pems.<span class="dv">1</span><span class="op">$</span>vsp &lt;-<span class="st"> </span><span class="kw">calcVSP</span>(velocity, <span class="dt">time =</span> local.time, <span class="dt">data =</span> pems.<span class="dv">1</span>)
+pems.<span class="dv">1</span><span class="op">$</span>em.co2 &lt;-<span class="st"> </span><span class="kw">calcEm</span>(conc.co2, <span class="dt">data =</span> pems.<span class="dv">1</span>)</code></pre></div>
+<p>At this stage these are measurements recorded in the same instant and comparing they suggests a small degree of association:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#initial instantaneous comparison</span>
+<span class="kw">addXYLOESSFit</span>(<span class="kw">pemsPlot</span>(vsp, em.co2, <span class="dt">data=</span>pems.<span class="dv">1</span>, <span class="dt">grid.col=</span><span class="st">&quot;grey&quot;</span>, <span class="dt">grid.lty=</span><span class="dv">3</span>), 
+              <span class="dt">grid=</span><span class="ot">FALSE</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAEgCAMAAABrWDzDAAAA0lBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6Ojo6OpA6ZmY6ZpA6ZrY6kNs7pVhmAABmADpmAGZmOgBmOpBmZjpmZmZmkJBmkNtmtrZmtv9rfEKQOgCQOjqQOmaQXTKQZmaQZpCQkGaQkLaQtpCQttuQ2/+rRia2ZgC2Zjq2kDq2kJC225C22/+2/7a2//++vr7Oj4/abGzbkDrbtmbb25Db29vb/7bb/9vb///jUVH/AAD/bW3/kZH/tmb/wMD/25D//7b//9v///9apJNtAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAbVklEQVR4nO2di3/juHHHtZuq68uljeltL9fU6ztf29RW2rTrtZqkWstaW/z//6XgwQceM3iDIuX5fU63EgkOIOLrGTwIaNWSSBlanboApGWLACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZYkAImWJACJlaT4AVSpJrS9Ixa1sOFpUIxXNEkBzM0vFrW04WlQjFc0SQHMzS8WtbThaVCMVzRJAczNLxS1meEU6S00HULYF0gw1AUA9qg9t+zDf18Oy7D5Uug/RdkM90Xw80EMhO9OYte02TBXMFlK0XQphE6tpyhA0FxFA06ppChE0FwyXB9CiQ1jTFCKoliN7AyHsDQGEpyvmyEy9AYAWrSiA8ITFHFm+CKBJBdY8AoKDEQIoQ4sOYRAVCAkuSOoB9AZC2LIBsnFBUGgIoOIWzkMIPwYLjROgeo3oaBFAJxbMSeMBaD7jkcsDaOEhzJQfINhsJX7eQAh7awClmU3VGwDoXCTh8DaBTlS6YBFAJ1JjCDl1svKFankAnUcIy+WHQliylgYQyIHJTwOfcpitUNQku8sDaGGCScABWlD0Epo3QCd5SlxV9rdGaCCA6uVUNtc8ZeeP4ZAbwSiETZVrnqoB1GL8+MegpQigiXLNUz2AhraRdQ4iaMYRjQBqD//4y12t/B3OBPUxNkFzbhMRQO1fdi+/r5a/IxihPsYECLJBIWyiXEN0/OVzvfy9jgZKpQEEejECKPmalwvWvb58/afP7X/vcsskdPzlf2Lyj5U3ULW2j/EDNBstEKDfdm9ef8gC6OX3AsUP7eYffvzPw2Vw/qkyCFCxsBGBIhjY5D65lgoQ80AbVvnpOv78mVs6/nTXfQrNP1J9TDB9iBsgNblydjx63iGM/Wm/szo2JUPY+88MoDwPxOhRAGq316H5R6qrEYQQEyD9vJFUNXLWAL1eXbfb9+afdHEPlAcQC1pdCFOshuSfJIuQRoUGAsi+ep6NoRoAvfz6c/v60XRBMwOIuRxmabAxMUCNJi8apqMqVawCqgHQ8ea6PayH2u0nJhP2q3EDdLXOIIh7IGbp0HmgA9ieKrCnkdwfSKl7/lnnp9E/o7aUJGe+P9DxZmXX7czGgbo2ULuR/a/KbSDDeZgAhc2AqSnOvA10WbENVEh6v6teL6yTK4I15pEwI8rBYsWM1/LaQKWkzV9UHAfSCFGO6bzYR/TL1ess86ck6O0CVDd/I1q1IAkYP9ZwkW32wTCUXFBDswhhx5sFhLC6+VuhCU5gYGYDhPLxAJrJ1ywAqjuQOKVS8x9qFa9g1CGpJ7x8FAcoWsubyphSifmbPMQCBBz35pRW0nwRQBXyDwAI8zR6UpyP8w5hxSxU7oVtukh7vFmt1rstHw67FGOUfa+sGkDGUSylF6AFNqJfr7R1L1ZbOTsn3zW8fiH13XI+Rj0k+WPfFOufHRr668efPx/WOzlgzoehN3wk8fhvu/bAv1M3LlQOICwBcAWU0JdXWjlLKAEgdcz2MBuAhqFAEKBhzmtI9vLbdnupGBND0Sz58T9EEjkynduIDgYInU/tD+GUnJafBQD01KsvAKvzjZhF3/CIc1itrvmLz0uIwyNAm9X7393Jgxvx4hf1cxbMFbG3A09iLkxOiIljcsYttxsfDhD62BhC4VlPZZSzgHggGXIOAgfmNP7CX3Jy9PjT3QAQO//68a47+MNOvhmm3Rk9igfaCHT+OD5clgmQZ/4cck46Pz6Clg2QmOxaAROmJXLyXcPqnHuRw6Vs9L5cyBc/xo68GwHiRxgS8iALYeLNABADbmgD8ccH2iHOCYCkM8r9s8EAMghSvZV72iyzPBWUBNBmvXu5+ND92ZbOyXfN6IG69vDLb3bs9X+X3KMYHoh97A7+sJNvhuc2ZMhjRLFTG9n/6tgq0AYahFZ8g8iEzjo9N6UAxJtBh9V1TAMoIiffNVobaHW96V788YyL1bvfXUuAuDdhfHx/1x28Wv9ZvBnaQMj8e6udLbUuDD3hBKhpGhSgRYcwDtCGwWPPd5XIKfEaNxBAMnQ1IVfeOJAq1P/gXsihwcKiAWKxiz8N+Hp1khCGyQnEIOS5jQL5Rwj2LjH8zEeJjWjWeDjexK2qSQLo1Eoos18Jnme2/My8Gw9paVvcWUeK8LPcEPZ6FdXyic/Jp4UBZFe+QkS671kuQHI2LAGiU8+sn0YAApm+Z2ZKDGEJEL1JgCAIDDSSCUohqzyNGW2gyGD2FkMYDIF+FHzrJeghaRref82ZzYVBWj5AJYLYA3YipDiOJBMNJA7dXHA5Xl5O5ySAAZ+r0S7AAcLPhJSm1PdrEz3QgT+4x2cz+Kxq6ZzOSTZANhpRABl2FgpQP4S4Xe+24TPybzGEWY3o4UMYQPDqn9Y+EVkYPM1kc2Fch/ef4flU/oyx5ZreJEAtBEAoQcYVWhtm0QDxhYNc3AOBAPHHPb4rsTJ1YYLqRqsytQqD+EGStUENYrB8sdf4lNcGgufD7GXNMTktV2jtDIdBBCw6NDsoWykslOcnsRsv+mHM+WxAB8TXxquXdqqyn02x10O2jb52Lbvd4Qe9RaTu96OqS9dfj6R5kPmllNGZZhb7Ax3W/wV08M+9DaT7B8Wu4Vkc7sXwVVCSAb/c4iKaYjLVuyqDR7iDtTj+3EOYQYeTAOCiZmwXtVqscV0+A1UBiPXtu+fUE3JaqvT6Nd9hAAD8NI3e2p01P1VWpvI2UD2AFhHCxvdQS2dIr6VEUYOOLTeEhWhzCbimswPIdAYQP6zJimChOhP7KtPZ6JQlFTdM8wCIDyRWa0TPRXoN60c0Bhz8NFqDxwGQkWbK7+nR8mbjZyKriltf10nFAgLM3Vqyr5uHlgfQPEKYuyI9APmEDhkjcBXUPEJYJQtSSwAoj6AWjVRWuuJ6AwDNQ75qzOMHe/YUSnliJQC07R8kq78ydb6qCJADjOaTpm+qKn1Rn+IB2vINCcSi1NMANI8Q5pvZzgIIMcoocQBUBqT6IUw+y3G8We/eLECyit3OIoaWEIKajhc/QHkUTTcXtsEeBsrNafYKcRZRzx46COrefuuBeX6+HfXMVQGiKCV6oJbvsPA2AfI6Cy1dajBTbHzq/U6HTA/Rs6LTUZTQBuqweb2KW1p4JiEM8xVwyhacCwsliNPTS4PG5MeNUY3bMCipFyaD2PGGAHIB1NtNBsikR6EGIUhQBLaOSt+GQTQOFKlYgKBLbBu9Kc2sSQ/Tfn/PJP4ntJdSAeLJ4PZ1lftBAEUqnp+g5+d7pzNKtnxUejR0dIJGiAZfNVGTKA0g8XvH9g/yFMnJp1N34yP5eQAuwihSExr0dLiY/KgECYi0PlpCk2iaECZXZWxjFjafD0BauAlJ24b2xBTreuwaYHkCpSJ0f280lyIZmnpdWIWc5i+UHO2EAkYYP2NaFZ/B1XBUbAfEXZAKkThk9PILdM5wZa5Mzc7pZHM4FaT4EZfT8TqkgR8THiCC9TGsh6g/anTSRmz0Plr+lz61B4r/EicPYZiASATz4yZodD8jPWgLSGsECYjGw+AgETQHknUbTt0Giv8zmCtAHrcS6IEMfKRjGfm5tbTX1Qc6u3svGEJn0ZJvw6l7YbV6l9MrGCCX1Oi17+JWF5j26iyYMbKoMcSos3v3fR/fOw8b+7VPPQ5UtEE3saQ7UT8VxOe+C0cDBSo/0Gi07of0zr06yHjrmciPJGkmAEUQNJsQJivd+FgQH6P6dX4e7TkMDSIdIXOUEQfoSyxSaQBt1ruuIYTI2F8Bzyned84FoL7erQMF+OGxywo/2mNAQ0WjED0BbkiB8KQAbUT3y/VbGcC2HT6AFhbGxpoHDsWq5TdCw4cBZPSgHM+RYX7IRkgLgg5W6gLkHwc6/CreAy2MIACgZIJacR+eVXzub1V4vqkEgZUbipA2Sh2JEHgfssaBMICOP/9JAci5PxBzml/G14L2BxqrHzseAdAD++6Pj88KPre37LN6b1plnyH2/ot23+SLtYwe+9d+//WreD09fR3es5dseo/png0bkN3+VW5/IDkC9HKBNYK2lwltoFAnNJM2EOSBjBMeahQDwoUIhzFORQwtXd20WVzUEXna03p8HDRRI9o9DsR/4TYRoAWFMYSfiJlThR/W/Lnfd2OGPT6fPoUu/EIYCkYoMJSBedfoxm+uU3phCyXIcQrmRr1M5edezmUp+GDWIU2BEJhxBYC6HYTC9gcKLeeomYSwtqt+uJqdnsdI+KnjR85f9SN9WnL7Qqi4eQhJhiYKYVKOVRnpHsiL0CQABf/1o24ojKBGjP8wfkTrR/SOVHy0mVlHcQflIfQ8MUAO5QF08jjmiE5QwqiGkJGK8yPcz73oXn/j3XUjNZoJKBdCey9CrlgGZjeXqYxZIRRcYwYWyjVBAAl+bkd+bvuvrqVGnBcuHKGnEIRQhsDMTg1QZHHbKUJYeI3BnsIt7WqVHzlIqBs2zULFBWQhFBzHHh0MgVklAdRvtFngiUQH8Yid0wJkIQB5igCE5DuTn0+Nzy5QXEjDTYxFaJykrQiQ2FkhWjhAlZ/ajZYDIONwMDOwhuaz2XHXkLHpC5GF0D4QITyYgfnkzIXFyQVQdByrKry2rOO5/AzNH63jbiCTRpAToZCmkFU1YC45c2FxcgIU4YQm6Mb7+ClDkMKP2nMH1i4CAIXchfEu+pzQiBD4nFFpgFr7t5xiLQxC/SWK0BTjQMjfOuQG0vHp+LnV+YEWAQHt6HG9outLxTsh+EE1WTtgFmkAXRRtREc7ofqCawYCqE1kSOfHnVbLwsrY+UUcBMXEMSEwg7QQhj9JFmZhFOgrZ8EQoIIAjc3nT15+zE0XzHydZQ53Ql6EQPszaURHIHTKuTC4ylL4+QQ1fwIIUoprJsEU7oT2jhBW1gNVaET7CEpfuRSmMLNwZWm1GMbPbWj40glSi2slwWQShDoh9UHImgBVakRHeKHTCa4qwFXk82M0na2cbchQOQh60vhxEgSaTgthjt96CrIwCi6q1w3NTEit+/hxuh9viAIvQhTihPpF0RN4oCTFAORCaD7PA42KAkjyY7sfc7jHREMD5KEtR9CTxo++HmSxAOEIfckuCajJAML4sTrr4NVacQsRtH8yAEI6ZKDdNIBYEFvvNnFN6ViAHAxF5TuFEApc/Njhy5x3h69H8g0nCOiN7ccdHLTV1NUAOry72653r1dRBCUAtJzGkFp7RfjBp/fRvD0Aufrz3AmZG8ZUBIh347eFfuoAZ6dbAGeHsDoMZTatfNU+ANTzA3BhceAACHz6xAOQO4w96fwACIE2UwcSOUAldihz8iOXUGIAlUUot23eV186P8CcaWGAnATtnwx+LIRAkzkeaFNghzKswabvZIJGsvmEMjc4Pn4gTPAzrpzdpfQTtNdVBaCuDVRkhzIk3pp74cy+NVSYHydZrqx95XQTZE5t6HUDGkzuhRXaoQzxljZAA0P6whPxIHFUORCVaQP5+Ll/yuTHWtrcmp03n1wE7flCehQh0FyVcSD+uEfgz34j7hIESDL0xeRnfBQ9R/UBKsIP+EBZIEDdeZMgozcGaWKAeCP7YPknP0AKQxhARizTdzyJKGJxKVWYw08Iic5pMW8RWx9BOEKg1RoAHVjj+ngTtrQZ85coPypDwJ5LaKF8f565UmownZ8wgGxUQgBSUjgJQpzQfuKpDPuZoUCAeohQfpSVS9imXUA+3r9PRwizr4RsjTm4+PHBEfFwkZ15CD8egr7iTmgP2q0FkLIJuXODKXXzI+0lCFI2QoJeI0D2hkh6Pv3NS9lgSrnz2iZSUDotfTw/YbP5VnmMzacCNsTq7pO9IdVX8e8TWCflNpgK4Cd0j0SYdS2a4ep3ssA3He1yUW96rBrrYrctCJ9gfqIIsrIN+xrio+WDAsIYaLeOB9oCXfx4gPwQ+Tat7THKAMiuMrcxCJ8IfmxGzCOJ38W8zEcQgBBotwpA4CRZGkA2Q482Qd79kcYtU9AyY20gq0KtqtDNQvgk8gNZjB31sQvWf4YJGseBbIJAszUAgp94TQbIoEh/7FtrabsBcu/Q/kWJeKq8ABlVCeITzY9VBIXTPILGzyBBykCiRRBotcoWdxE7lIUCBLgiTC6CPJ7KyV53vQGQ8t7CYMAn3v+47m8OQeob2AcpBBkIgUZP/URiDEAxFJkYpfJjEKR97t92VYnjcx8//Oy8lSkEKWn7C/tviBJkOKGIak1PF2shGiDuZEMhUkny8YPv7ebjZxSGT0rzGWJDHBz+FwWQkni8EiDImAvTCIqo1vR0sRaSAJKKwsj2ScEA2aAg/OhS8Entvhv3KowyUEpq9VKboEfjbqthLKJa09PFWnjChj1DFYuRQ+jUybP2Y0uWXPjkPb2h3aqAJJjU5Nql/iimOKGIak1PF2thv9/bPz18Gowck29ehiyVwEfHI4MfHKAogiKqNT1drIWxmKEYQU+sFCDp0Tl9G8nPgE/uwxvKncrgxwGQSdCjg6CIak1PF2vBLKufIzdAKkluh4LyYR32AWT/EG637XMaPkgnK4MfHRrjYp0gMcpmEcQr5P4ezG9mAOkc5QU2+xlxf2p1ZYKxzgXABNRT97u3+e5HZyQHIB0a/dpvAVFMrvoBM5wnQGPBVUXAo1R4ZPLhKoOnIG7630yO2XgjFKCAbppDWnr90jCCJEB2jqcFqGnCXYRBkw8nw3+4E3oBgU7rxdFO3RZyP42nFRRx+x3JVYIeYYJEUAazPClADQcogiChvg3kISkUoD7NVw9AT5bAhH27KNn9gLPv4/1K5ccphaBH2AeJP5jZAdRIgGIJMmVXrV7PAfyYISsUFwidLHwcPLX1APJHsfuBIH+1wqoAUNMDFEaQL6Fx3sFCgLy4YOj0w4rF+QHGqrOrZJSPIPE9wUwXA1DvKLBu/L1pafQtDvyiQHFyM7JTDh/344nZNaJqmNFxEARmuhSARhxggHRcLKSsk+n8IINBxeFpPI/YZ1eIJgggkyAw04UANNZfxHmTH+vidFyqs+MDKLs6TEFBzCBodgOJPUB+ftIA8p1NwwVEpzw8Db7ErApAfoJmOJXRBHfjFQTAEGYjEjhNkSrsMaCy/OAEVdgpcniqBSMotFqz0sVZCB5I1AF6toQgkgMQdhp/hqwCPy3SDaux1egAEEZQcLXmpIu1EACPVtkQH97zSQA5uanLDjz+3FrzoIX1zRPFwItmB5CbEOys5zyCl8vvDGvOQNWEByBEOVSPHy9B4DWnBggnAoKA/4v9moOTLwSv/vDgZr6Nj99b0Hyz2YlZiJzBD6A6u2WPT/ZCBIGXVAHoeANsYp8LUC/Xz4Hg6ugwJVkZaFGPWfx8A4aCS0ITw091gCCCwEuqALT5wP8LspBEQ4gAWpwa+NGOjBFLlNbyE+m4AGvu+xxibnVhKV/fJgi8osoGUx/v2pdfmy6oKkCxuAQzZdSwwU8UQH1i3VbEfZ1CMEDP0wLE4eEQhViIZ8UIYaVogZY2Ix7CpsD2L/Yp+7vn8FPpF0PaBwdB4AUTAOTcH8i5/4/7Ze8JFPkK2R9IVrK1zw60704z7A2k7dkjkuP79iS+HgrbG+wq90e731PuD1TXAyV7nYhv4JLpN2y3Y52ZW5xySrljhg8Cky8shJ2OmxQtkR+0GfS88Eb08K0ca5BzuKnSqKjHT7U2UIsTBF6wgG68QYYboJhiaqpTI9X8zzQA6QSBF1QB6PWqzEBimK/J4oYECCEITDvTqYxwdAieCloyQF5e1BCWXahRNWPCcsz2dkGCwAsmBIh0lpoMoFKqVJJaX5CKW9lwtKhGKpolgOZmlopb23C0qEYqmiWA5maWilvbcLSoRiqaJYDmZpaKW9sw6W2IACJliQAiZYkAImWJACJliQAiZYkAImWJACJliQAiZWkuAInVHuDmDTlGL8RPvJY2W8NixcLWube95gLQhn87cNVHul6vrtvDu7vSZtviBeWqV9gq93bQTAA6/KpbtGivO8swut6xP7zr0maxBXJ5qlbYOvd20DwAOv78J/bl4JWveWJ/2OXN1igoV5XC1ru3QvMAaHv5UulLbte75QBUpbD17q3QLAB6/WFX6Utu39cwW6k2qhS23r2VOjlA29Xqw+a6Lf0luVn2f9YqXQxAdQpb4d5qOjlArVgxzVW+AbkVHddlNKIrFbbave01B4C4xJcr3NV8+U7+xS2iG1+vsFXu7aBZAQRu3pCujfzjK222LV5QrnqFrXJvB80FINJCRQCRskQAkbJEAJGyRACRskQAkbJEAJGyRACRskQAkbJEAJGyRACRskQAkbJEAJGyRACRskQAkbJEAJGyRABJvVys1n+9uhTvN+tdy5+q5p+ONx/Yyd/s4KsO1/JfvioQPKHoeLN6V+GZ5FOLAJJ6ueAPA0qA5NPJmx85R+LYAXkW1OLGfeJAAJ2vVID4+/b14x/4U8riUeVNFCfoCQJo2RJc8Frk2xisrhkbf2BvLseTAiAWuaTXWf//zbX0Rsef2CX/esXSdhsg8EVD7EL+af3Xj/++ev+/V/3RD9IYO7FrDyIVM8uvvSaAli7RnGENnD9zkA6ra1bN1/xfcbIHaMs/8+ULW7mKYSObQC8XrPK3/LF0ThRfwfVycSkczesVQ0V4HH60c2Li80E8Iv+Bvfi17EUALVy87lkNH7rVCRwBsZxYfhAASZ4O692RuZ/uH94EEmm7/11LSpgZCdBl2w5vOvHPxxuR6t2dOMHtE0ALV7eDyuuVJGgIaf2H16vvZURjDR+xEO+7u74JJNL2/5OXCJKupbPh/5Pmxpzk5y7VsHvL2ektASQW14ldVLo2EK9PDaB3ouHMt1npdlsR//x0ZwDU/aafAdB3Ix4jQOwdAXQ2OnStXabNuzsAoMtuDGhzuRXtpQ/bbhQI8EBtH7nIA70ZvV792K/O5FvxiDbQRmsD9XHt72/EP3/3z7IJpAM0dNI1gBxtIALoXLTh3WxRj6I3z3tGRi9M7gf38v13spnzrhsF0gCS+2hsZPN4wEMclT29bvhx6IURQOeirpPF2i+iI/4v3bBOqwDEq5xxIPyS+Ic3gQyAxIiP2HiQz3/0AI3jQOKEMg5EAJ2l1EaL/qGSCKDzEgFUQgRQ/2G1RqbcC4lm40kkWwQQKUsEEClLBBApSwQQKUsEEClLBBApSwQQKUsEEClLBBApSwQQKUsEEClLBBApS38DJSfBAg3Z82IAAAAASUVORK5CYII=" style="display: block; margin: auto;" /></p>
+<p>However, there are time offsets between the engine action, the vehicle activity and the associated emissions leaving the vehicle exhaust. Aligning <strong>vsp</strong> and <strong>em.co2</strong> reduces the offset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#align vsp and em.co2</span>
+pems.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">cAlign</span>(vsp<span class="op">~</span>em.co2, pems.<span class="dv">1</span>, <span class="dt">output=</span><span class="kw">c</span>(<span class="st">&quot;pems&quot;</span>, <span class="st">&quot;offset&quot;</span>))</code></pre></div>
+<pre><code>## [1] &quot;offset = 2&quot;</code></pre>
+<p>In this case the alignment moved <strong>em.co2</strong> two rows toward relative to <strong>vsp</strong>, and this provides a significantly stronger relationship.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#linear aligned VSP and CO2 emissions</span>
+<span class="kw">addXYLOESSFit</span>(<span class="kw">pemsPlot</span>(vsp, em.co2, <span class="dt">data=</span>pems.<span class="dv">1</span>, <span class="dt">grid.col=</span><span class="st">&quot;grey&quot;</span>, <span class="dt">grid.lty=</span><span class="dv">3</span>), 
+              <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">grid=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<blockquote>
+<p>Please Note: This is an approximation because the offset is not fixed.</p>
+</blockquote>
+<p>In many cases such data is often binned and reported on this basis:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#VSP binning using the Frey et al (2002) 14 mode bins method. </span>
+pems.<span class="dv">1</span><span class="op">$</span>ncsu.<span class="dv">14</span> &lt;-<span class="st"> </span><span class="kw">binVSP</span>(vsp, <span class="dt">data=</span>pems.<span class="dv">1</span>)
+<span class="kw">summary</span>(pems.<span class="dv">1</span><span class="op">$</span>ncsu.<span class="dv">14</span>)</code></pre></div>
+<pre><code>## MODE01 MODE02 MODE03 MODE04 MODE05 MODE06 MODE07 MODE08 MODE09 MODE10 
+##    150     58    443    123     64     58     35     23     22     11 
+## MODE11 MODE12 MODE13 MODE14   NA's 
+##      5      3      2      2      3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#frequency plot</span>
+<span class="kw">loaBarPlot</span>(ncsu.<span class="dv">14</span>, <span class="dt">data=</span>pems.<span class="dv">1</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>, <span class="dt">scales.x.rot=</span><span class="dv">45</span>)
+<span class="co">#emission averages plot</span>
+<span class="kw">loaBarPlot</span>(ncsu.<span class="dv">14</span>, em.co2, <span class="dt">data=</span>pems.<span class="dv">1</span>, <span class="dt">xlab=</span><span class="st">&quot;&quot;</span>, <span class="dt">col=</span><span class="st">&quot;darkgreen&quot;</span>,
+           <span class="dt">scales.x.rot=</span><span class="dv">45</span>, <span class="dt">stat=</span><span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">na.rm=</span><span class="ot">TRUE</span>))</code></pre></div>
+<p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,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" /></p>
+<blockquote>
+<p>Note: In this case there are relatively few measurements for bins 10 and above, and averages calculated for these are more uncertain.</p>
+</blockquote>
+</div>
+<div id="pems-data-batching-and-reporting" class="section level1">
+<h1>PEMS Data Batching and Reporting</h1>
+<p>One of the great things about <strong>R</strong> is that it allows you to batch process data, for example running the same code on different sections of a single dataset or different datasets.</p>
+<p>The <strong>pems.utils</strong> function <strong>summaryReport</strong> generates a summary table of some common vehicle activities parameters:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summaryReport</span>(velocity, local.time, <span class="dt">data=</span>pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##   distance.travelled.km time.total.s avg.speed.km.h avg.running.speed.km.h
+## 1              6.186056         1002        22.2698               28.78538
+##   time.idle.s time.idle.pc avg.accel.m.s.s time.accel.s time.accel.pc
+## 1          40     3.992016       0.7921279          271      27.04591
+##   avg.decel.m.s.s time.decel.s time.decel.pc
+## 1      -0.9039449          238       23.7525</code></pre>
+<p>If we cut that data in several subsections, we can analysis them separately and compare results:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span><span class="op">$</span>ref &lt;-<span class="st"> </span><span class="kw">cutBy</span>(velocity, <span class="dt">n=</span><span class="dv">4</span>, <span class="dt">data=</span>pems.<span class="dv">1</span>)
+<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="cf">function</span>(x) <span class="kw">summaryReport</span>(velocity, local.time, 
+                                       <span class="dt">data=</span>pems.<span class="dv">1</span>[pems.<span class="dv">1</span><span class="op">$</span>ref<span class="op">==</span>x,]))</code></pre></div>
+<pre><code>##                        [,1]       [,2]       [,3]      [,4]      
+## distance.travelled.km  1.266611   1.76625    1.674111  1.479083  
+## time.total.s           250        251        250       251       
+## avg.speed.km.h         18.2392    25.33267   24.1072   21.38434  
+## avg.running.speed.km.h 22.22244   31.93317   32.03138  29.38619  
+## time.idle.s            3          14         13        10        
+## time.idle.pc           1.2        5.577689   5.2       3.984064  
+## avg.accel.m.s.s        0.7419128  0.7680976  0.8423318 0.8117284 
+## time.accel.s           79         66         71        54        
+## time.accel.pc          31.6       26.29482   28.4      21.51394  
+## avg.decel.m.s.s        -0.8600218 -0.7875375 -1.246612 -0.8753968
+## time.decel.s           51         74         41        70        
+## time.decel.pc          20.4       29.48207   16.4      27.88845</code></pre>
+<p>Or if we wanted to compare several datasets:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">list</span>(pems.<span class="dv">1</span>, pems.<span class="dv">1</span>, pems.<span class="dv">1</span>, pems.<span class="dv">1</span>)
+<span class="kw">sapply</span>(temp, <span class="cf">function</span>(x) <span class="kw">summaryReport</span>(velocity, local.time, 
+                                      <span class="dt">data=</span>x))</code></pre></div>
+<pre><code>##                        [,1]       [,2]       [,3]       [,4]      
+## distance.travelled.km  6.186056   6.186056   6.186056   6.186056  
+## time.total.s           1002       1002       1002       1002      
+## avg.speed.km.h         22.2698    22.2698    22.2698    22.2698   
+## avg.running.speed.km.h 28.78538   28.78538   28.78538   28.78538  
+## time.idle.s            40         40         40         40        
+## time.idle.pc           3.992016   3.992016   3.992016   3.992016  
+## avg.accel.m.s.s        0.7921279  0.7921279  0.7921279  0.7921279 
+## time.accel.s           271        271        271        271       
+## time.accel.pc          27.04591   27.04591   27.04591   27.04591  
+## avg.decel.m.s.s        -0.9039449 -0.9039449 -0.9039449 -0.9039449
+## time.decel.s           238        238        238        238       
+## time.decel.pc          23.7525    23.7525    23.7525    23.7525</code></pre>
+<p>These examples are relatively crude and there are lots of different ways to do similar in <strong>R</strong> but hopefully this helps you to start to see how <strong>R</strong> and <strong>pems.utils</strong> could help you to analysis data more quickly and easily…</p>
+<blockquote>
+<p>For further information on these and other <strong>pems.utils</strong> functions, see in-package documentation.</p>
+</blockquote>
+<blockquote>
+<p>Any thoughts, suggestions or problems, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt; Karl]</a></p>
+</blockquote>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
