@@ -192,8 +192,10 @@ export(stackPEMS)
 export(C_ylagxCOR) 
 
 #export
-export(exportPEMSData)
+export(exportPEMS)
+export(exportPEMS2TAB)
 export(exportPEMS2CSV)
+#export(exportPEMSData) #gone 2019/03 0.2.25. 
 
 ###############################
 #tidyverse
