@@ -12,7 +12,7 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2019-03-01" />
+<meta name="date" content="2019-03-31" />
 
 <title>R:pems.utils Data Input/Output</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">R:pems.utils Data Input/Output</h1>
 <h4 class="author"><em>Karl Ropkins</em></h4>
-<h4 class="date"><em>2019-03-01</em></h4>
+<h4 class="date"><em>2019-03-31</em></h4>
 
 
 
@@ -276,30 +276,20 @@ my.pems &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span clas
 <blockquote>
 <p>This combination is particularly useful if you want to batch process multiple previously saved <strong>pems</strong> datasets using common code.</p>
 </blockquote>
-<p>You may also want to export <strong>pems</strong> data from <strong>R</strong> to other software packages. For this, two options are currently provided, <strong>exportPEMSData()</strong> and <strong>exportPEMS2CSV()</strong>.</p>
-<p>These are typically used in the form, <code>function(pems, &quot;file.name&quot;)</code> and work like <strong>write()</strong> functions in <strong>R</strong>, for example:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exportPEMSData</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.txt&quot;</span>)
-<span class="kw">exportPEMSData</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.csv&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)
-<span class="co">#etc</span></code></pre></div>
-<p><strong>exportPEMSData()</strong> copies just the <strong>data.frame</strong> part of the supplied <strong>pems</strong> to a text file (tab delimited). It is the simpliest option if you just want to export the data without any <strong>pems</strong> structure.</p>
-<p><strong>exportPEMS2CSV()</strong> also copies the <strong>data.frame</strong> but as a comma delimited file and attaches the <strong>pems.element</strong> units to the data-series names in the form <code>name(units)</code>.</p>
-<p>The save/re-load combination for these if you are processing and then returning the data to <strong>R</strong> and <strong>pems.utils</strong> is typically:</p>
-<p>For <strong>exportPEMSData()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exportPEMSData</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.txt&quot;</span>)
-<span class="co"># process .txt elsewhere </span>
-<span class="co"># then to re-load (assuming it is resaved as .txt with same structure)</span>
-units &lt;-<span class="st"> </span><span class="kw">units</span>(pems.<span class="dv">1</span>) <span class="co"># if elements and their order unchanged</span>
-                       <span class="co"># or declare units &lt;- c(...) if any changes</span>
-                       <span class="co"># (e.g. different order or new elements added) </span>
-pems.1b &lt;-<span class="st"> </span><span class="kw">importTAB2PEMS</span>(<span class="st">&quot;pems.1.data.txt&quot;</span>, <span class="dt">units=</span>units,
-                          <span class="dt">time.format=</span><span class="st">&quot;%Y-%m-%d %H:%M:%OS&quot;</span>, <span class="dt">tz=</span><span class="st">&quot;GMT&quot;</span>)</code></pre></div>
-<p>For <strong>exportPEMS2CSV()</strong></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exportPEMS2CSV</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.csv&quot;</span>)
-<span class="co"># process .csv elsewhere </span>
-<span class="co"># then to re-load (assuming it is resaved as .csv with same structure</span>
-<span class="co">#       and that name(units) headers have been kept)</span>
-pems.1c &lt;-<span class="st"> </span><span class="kw">importCSV2PEMS</span>(<span class="st">&quot;pems.1.data.csv&quot;</span>, <span class="dt">units=</span><span class="st">&quot;get.from.names&quot;</span>,
-                          <span class="dt">time.format=</span><span class="st">&quot;%Y-%m-%d %H:%M:%OS&quot;</span>, <span class="dt">tz=</span><span class="st">&quot;GMT&quot;</span>)</code></pre></div>
+<p>You may also want to export <strong>pems</strong> data from <strong>R</strong> to other software packages. For this, three options are currently provided, <strong>exportPEMS()</strong>, <strong>exportPEMS2CSV()</strong> and <strong>exportPEMS2TAB</strong>.</p>
+<p>These are typically used in the form <code>function(pems, &quot;file.name&quot;)</code> and work like <strong>write()</strong> functions in <strong>R</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exportPEMS</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data&quot;</span>)
+<span class="kw">exportPEMS</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.csv&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</code></pre></div>
+<p>All three export the <strong>pems</strong> <strong>data.frame</strong>.</p>
+<p><strong>exportPEMS()</strong> makes a relatively crude ‘as.is’ export and is a useful building-block if you want to develop different export functions.</p>
+<p><strong>exportPEMS2CSV()</strong> and <strong>exportPEMS2TAB()</strong> make comma-delimited and tab-delimited files, respectively, but also modify the files to make them easier to work with outside <strong>R</strong>. So, these are these probably the best start-point for those wishing to quickly export <strong>pems.utils</strong> data from <strong>R</strong>.</p>
+<p><strong>pems</strong> units can be added to the header row of the exported file in the form <code>name(units)</code> using the extra argument <code>units = &quot;add.to.names&quot;</code>.</p>
+<p>The recommended workflow for a user intending to export <strong>pems.utils</strong> data from <strong>R</strong>, process it elsewhere and then return it to <strong>R</strong> would be something like:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exportPEMS2CSV</span>(pems.<span class="dv">1</span>, <span class="st">&quot;pems.1.data.csv&quot;</span>, <span class="dt">units=</span><span class="st">&quot;add.to.names&quot;</span>)
+<span class="co"># read export into other software </span>
+<span class="co"># process it there </span>
+<span class="co"># then export it (e.g. again as .csv) and import the modified data into R</span>
+pems.1b &lt;-<span class="st"> </span><span class="kw">importCSV2PEMS</span>(<span class="st">&quot;pems.1.data.csv&quot;</span>, <span class="dt">units=</span><span class="st">&quot;get.from.names&quot;</span>)</code></pre></div>
 <blockquote>
 <p>If you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
