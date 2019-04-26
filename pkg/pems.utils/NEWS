@@ -1,10 +1,10 @@
-Changes in pems.utils 0.2.27 [2019-04-07]
+Changes in pems.utils 0.2.27 [2019-04-26]
 ========================================
 
 *       tidied cutByRow 
 *       removed exportPEMSData, added exportPEMS and  
         exportPEMS2TAB, updated exportPEMS2CVS 
-*       updated import2PEMS
+*       updated import2PEMS 
 
 
 Changes in pems.utils 0.2.26 [2018-11-18]
