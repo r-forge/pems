@@ -60,10 +60,16 @@
 #handles pems console appearance 
 #
 
-
 ###################################
 #too fix
 ###################################
+#
+
+##################################
+#to watch 
+##################################
+#print(pems, width [smaller than first column width])
+#print(pems, cols [less than 1])
 #
 
 
@@ -174,12 +180,31 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
 
     #############################
     #the shown data grid
-    out <- apply(b, 1, function(x) paste(x, collapse=""))          
-    out <- paste(paste(out, collaspe="\n", sep=""), collapse="")
+
+    #############################
+    #test == 1 does not show data....
+    #############################
+    #replaced code
+    ##out <- apply(b, 1, function(x) paste(x, collapse=""))          
+    ##out <- paste(paste(out, collaspe="\n", sep=""), collapse="")
+    if(test>1){
+       out <- apply(b, 1, function(x) paste(x, collapse=""))          
+       out <- paste(paste(out, collaspe="\n", sep=""), collapse="")
+    } else {
+       out <- ""
+    }
+    ##############################
     out <- paste(header, out, sep="\n", collapse="\n")
  
-    h.row <- nrow(x)-nrow(b)+2 #+2 for header
-    h.col <- ncol(x)-ncol(b)+1 #+1 for row.number
+    #############################
+    #with above replaced code
+    ##h.row <- nrow(x)-nrow(b)+2 #+2 for header
+    ##h.col <- ncol(x)-ncol(b)+1 #+1 for row.number
+    h.row <- if(is.null(nrow(b)))  
+                  nrow(x) else nrow(x)-nrow(b) +2      ##+2 for header
+    h.col <- if(is.null(ncol(b))) 
+                  ncol(x) else ncol(x)-ncol(b) +1       #+1 for row.number
+    ################################
 
     #################################
     #first footer rows and rows not plotted
@@ -194,6 +219,7 @@ print.pems <- function(x,..., rows=NULL, cols=NULL, width=NULL){
     } 
 
 #this needs tidying
+#header and foooter widths not controlled by forced width.....
 
     ################################
     #second footer other columns 
@@ -821,7 +847,10 @@ dim.pems <- function(x, ...) dim(as.data.frame(x))
     
     #otherwise return rebuilt pems
     x$data <- ans
-    x$units <- x$units[1,j]
+    #######################
+    #this update to stop pems.1[1, simplify=FALSE] killing print.pems
+    ##x$units <- x$units[1,j]
+    x$units <- x$units[j]
     if("history" %in% names(x))
          x$history <- c(x$history, call2)
       
