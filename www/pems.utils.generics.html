@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Karl Ropkins" />
+
+<meta name="date" content="2019-11-08" />
+
+<title>R:pems.utils Generic Functions</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%20code%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">R:pems.utils Generic Functions</h1>
+<h4 class="author">Karl Ropkins</h4>
+<h4 class="date">2019-11-08</h4>
+
+
+
+<div id="background" class="section level1">
+<h1>Background</h1>
+<p>The <strong>R</strong> package <strong>pems.utils</strong> uses two main data types: <strong>pems.element</strong>s, data-series with assigned units, and <strong>pems</strong>, data sets of simultaneously logged <strong>pems.element</strong>s.</p>
+<p>This document provides an overview to their generic handling in <strong>R</strong>.</p>
+<blockquote>
+<p>For a quick and more general introduction to <strong>pems.utils</strong>, see <a href="http://pems.r-forge.r-project.org/pems.utils.intro.html">[&gt;pems.utils introduction]</a></p>
+</blockquote>
+<blockquote>
+<p>If you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+</blockquote>
+<blockquote>
+<p>Unless you have setup <strong>R</strong> to automatically load <strong>pems.utils</strong>, you will need to load it e.g. using <code>library(pems.utils)</code> to use the functions described here.</p>
+</blockquote>
+<p>Generic functions are a special category of <strong>R</strong> functions that identify the object type being supplied and, where available, automatically apply object-specific methods to handle these potentially very different objects appropriately.</p>
+<p>This means that many functions that <strong>R</strong> users are already familiar with can be used with specialist object classes like <strong>pems</strong> and <strong>pems.element</strong>s.</p>
+<p>For those already familiar with <strong>R</strong> object classes, when used with generic functions, <strong>pems</strong> behave in a similar fashion to other (row and column) data set objects like <strong>data.frame</strong>s and <strong>data.table</strong>s, and <strong>pems.element</strong>s behave in a similar fashion to other <strong>vector</strong> objects like <strong>numeric</strong>s, <strong>character</strong>s and <strong>factor</strong>s.</p>
+<blockquote>
+<p>See Chambers (2008)<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> for further discussion of generic functions in <strong>R</strong>.</p>
+</blockquote>
+<p><strong>print</strong> is perhaps the most heavily used generic, and useful as an example of how they work.</p>
+<p>When an object is evaluated and not caught, it is printed. This means when, for example, you enter <code>pems.1</code>, the name of the example <strong>pems</strong> data set provided with <strong>pems.utils</strong>, you are actually seeing the output of <code>print(pems.1)</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span> </code></pre></div>
+<pre><code>## pems (1000x25)
+##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
+##   1  2005-09-08 11:46:07           0        0         0        0    20.447
+##   2  2005-09-08 11:46:08           1        0         0        0    21.973
+##   3  2005-09-08 11:46:09           2        0         0        0    20.752
+##   4  2005-09-08 11:46:10           3        0         0        0    22.583
+##   5  2005-09-08 11:46:11           4        0         0        0    20.142
+##   6  2005-09-08 11:46:12           5        0         0        0    20.142
+##  ... not showing: 994 rows; 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<blockquote>
+<p>Here, <code>print</code> identifies <code>pems.1</code> as a <strong>pems</strong> and passes this to a hidden function called <code>print.pems</code> that actually handles how the object is shown to the user.</p>
+</blockquote>
+<blockquote>
+<p>While this might seem a little involved, it is all handled silently by <strong>R</strong> and means that the user gets object-specific responses without having to check the object class and then running a dedicated <code>print.class</code> function themselves.</p>
+</blockquote>
+<blockquote>
+<p>It also allows package developers to more completely align the use of their and other packages.</p>
+</blockquote>
+</div>
+<div id="pems.utils-generic-functions" class="section level1">
+<h1>pems.utils Generic Functions</h1>
+<p><strong>as.data.frame</strong> converts a supplied <strong>pems</strong> or <strong>pems.element</strong> into a <strong>data.frame</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data.frame.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<blockquote>
+<p>As part of this process <strong>as.data.frame</strong> discards <strong>pems.utils</strong> information like units that are not tracked by <strong>data.frame</strong>s.</p>
+</blockquote>
+<blockquote>
+<p>While this might seem a disadvantage it does mean that functions that do not like such extra object structure have the option to convert it to a <strong>data.frame</strong> and work with that. The linear model function <strong>lm</strong>, for example, uses <strong>as.data.frame</strong> to allow it to work with many other classes of objects.</p>
+</blockquote>
+<p><strong>as.pems</strong> converts data set classes like <strong>data.frame</strong>s into <strong>pems</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as.pems</span>(data.frame.<span class="dv">1</span>)</code></pre></div>
+<p><strong>as.pems.element</strong> works similarly to convert vector classes to <strong>pems.element</strong>s.</p>
+<p>Both <strong>as.pems</strong> and <strong>as.pems.element</strong> will accepted extra arguments to associate <strong>pems.utils</strong> specific structure like units. So, the <strong>as…</strong> functions can be used in combination to work with functions that do not ‘like’ <strong>pems.utils</strong> classes, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#get units</span>
+units.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">units</span>(pems.<span class="dv">1</span>)                
+<span class="co">#make pems into data.frame</span>
+data.frame.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(pems.<span class="dv">1</span>)      
+<span class="co">#do whatever you cannot do with a pems with your data.frame...</span>
+<span class="co">#then if this makes a new data.frame you want to keep</span>
+<span class="co">#(update units if any changed or pems.elements were added)</span>
+<span class="co">#re-build the pems</span>
+pems.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as.pems</span>(data.frame.<span class="dv">1</span>, <span class="dt">units=</span>units.<span class="dv">1</span>)</code></pre></div>
+<p><strong>dim</strong> reports the dimensions, rows then columns, of a supplied <strong>pems</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## [1] 1000   25</code></pre>
+<p>Related functions <strong>ncol</strong> and <strong>nrow</strong> report the numbers of columns and rows in a <strong>pems</strong>, respectively.</p>
+<blockquote>
+<p>Similar to other vector classes, <code>dim(pems.element)</code>, <code>ncol(pems.element)</code> and <code>nrow(pems.element)</code> all return <code>NULL</code>.</p>
+</blockquote>
+<p><strong>head</strong> shows the top rows of a supplied <strong>pems</strong> or the start of a supplied <strong>pems.element</strong>. The extra argument <em>n</em> changes the number of <strong>pems</strong> rows or <strong>pems.element</strong> values shown, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## pems (6x25)
+##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
+##   1  2005-09-08 11:46:07           0        0         0        0    20.447
+##   2  2005-09-08 11:46:08           1        0         0        0    21.973
+##   3  2005-09-08 11:46:09           2        0         0        0    20.752
+##   4  2005-09-08 11:46:10           3        0         0        0    22.583
+##   5  2005-09-08 11:46:11           4        0         0        0    20.142
+##   6  2005-09-08 11:46:12           5        0         0        0    20.142
+##  ... not showing: 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pems.<span class="dv">1</span>, <span class="dt">n=</span><span class="dv">3</span>)</code></pre></div>
+<pre><code>## pems (3x25)
+##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
+##   1  2005-09-08 11:46:07           0        0         0        0    20.447
+##   2  2005-09-08 11:46:08           1        0         0        0    21.973
+##   3  2005-09-08 11:46:09           2        0         0        0    20.752
+##  ... not showing: 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<p>Related function <strong>tail</strong> work similarly but shows the end of a supplied <strong>pems</strong> or <strong>pems.element</strong>.</p>
+<p><strong>na.omit</strong> removes any rows of a supplied <strong>pems</strong> that contain <code>NA</code>s, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span>pems.<span class="dv">1</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]; a[<span class="dv">2</span>,<span class="dv">2</span>] &lt;-<span class="st"> </span><span class="ot">NA</span>; a</code></pre></div>
+<pre><code>## pems (4x3)
+##               time.stamp  local.time  conc.co
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]
+##   1  2005-09-08 11:46:07           0        0
+##   2  2005-09-08 11:46:08          NA        0
+##   3  2005-09-08 11:46:09           2        0
+##   4  2005-09-08 11:46:10           3        0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">na.omit</span>(a)</code></pre></div>
+<pre><code>## pems (3x3)
+##               time.stamp  local.time  conc.co
+##        [Y-M-D H:M:S GMT]         [s]   [vol%]
+##   1  2005-09-08 11:46:07           0        0
+##   3  2005-09-08 11:46:09           2        0
+##   4  2005-09-08 11:46:10           3        0</code></pre>
+<blockquote>
+<p>Functions that cannot handle datasets that contain missing values may use <strong>na.omit</strong> to ‘clean’ datasets, although typically not without asking the user or giving a warning that they have done so.</p>
+</blockquote>
+<p><strong>names</strong> reports the names of <strong>pems.elements</strong> in a supplied <strong>pems</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;time.stamp&quot;    &quot;local.time&quot;    &quot;conc.co&quot;       &quot;conc.co2&quot;     
+##  [5] &quot;conc.hc&quot;       &quot;conc.nox&quot;      &quot;afr&quot;           &quot;exh.flow.rate&quot;
+##  [9] &quot;exh.temp&quot;      &quot;exh.press&quot;     &quot;amb.temp&quot;      &quot;amb.press&quot;    
+## [13] &quot;amb.humidity&quot;  &quot;velocity&quot;      &quot;revolution&quot;    &quot;option.1&quot;     
+## [17] &quot;option2&quot;       &quot;option.3&quot;      &quot;latitude&quot;      &quot;longitude&quot;    
+## [21] &quot;altitude&quot;      &quot;gps.velocity&quot;  &quot;satellite&quot;     &quot;n.s&quot;          
+## [25] &quot;w.e&quot;</code></pre>
+<p>It can also be used to change the names of the <strong>pems.elements</strong> in a supplied <strong>pems</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(pems.<span class="dv">1</span>)[<span class="dv">3</span><span class="op">:</span><span class="dv">6</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;CO&quot;</span>, <span class="st">&quot;CO2&quot;</span>, <span class="st">&quot;HC&quot;</span>, <span class="st">&quot;NOX&quot;</span>)
+<span class="kw">names</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##  [1] &quot;time.stamp&quot;    &quot;local.time&quot;    &quot;CO&quot;            &quot;CO2&quot;          
+##  [5] &quot;HC&quot;            &quot;NOX&quot;           &quot;afr&quot;           &quot;exh.flow.rate&quot;
+##  [9] &quot;exh.temp&quot;      &quot;exh.press&quot;     &quot;amb.temp&quot;      &quot;amb.press&quot;    
+## [13] &quot;amb.humidity&quot;  &quot;velocity&quot;      &quot;revolution&quot;    &quot;option.1&quot;     
+## [17] &quot;option2&quot;       &quot;option.3&quot;      &quot;latitude&quot;      &quot;longitude&quot;    
+## [21] &quot;altitude&quot;      &quot;gps.velocity&quot;  &quot;satellite&quot;     &quot;n.s&quot;          
+## [25] &quot;w.e&quot;</code></pre>
+<blockquote>
+<p>Similar with other vector classes, <code>names(pems.element)</code> returns <code>NULL</code>.</p>
+</blockquote>
+<p><strong>plot</strong> generates a <code>scatterplot matrix</code> for a supplied <strong>pems</strong>. By default, the matrix is limited to three <strong>pems.element</strong>s, but plotted cases can be changed with the extra arguments n (number of plot cases), id (names of columns to use) and ignore (names of columns to ignore). It also accepts common <code>plot</code> arguments (col, pch, cex, etc) to modify the appearance of the plot, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pems.<span class="dv">1</span>)
+<span class="kw">plot</span>(pems.<span class="dv">1</span>, <span class="dt">id=</span><span class="kw">c</span>(<span class="st">&quot;velocity&quot;</span>, <span class="st">&quot;revolution&quot;</span>, <span class="st">&quot;exh.flow.rate&quot;</span>), 
+     <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">pch=</span><span class="dv">20</span>, <span class="dt">cex=</span><span class="fl">0.3</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" width="45%" /><img src="data:image/png;base64,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" width="45%" /></p>
+<blockquote>
+<p>Note: this output is selected to be consistent with <code>plot(data.frame)</code> handling.</p>
+</blockquote>
+<p><strong>plot</strong> generates a conventional <code>plot</code> of a supplied <strong>pems.element</strong>. It accepts common <code>plot</code> arguments (col, pch, cex, etc) and automatically adds units (if set) to axes labels, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(pems.<span class="dv">1</span><span class="op">$</span>velocity)
+<span class="kw">plot</span>(pems.<span class="dv">1</span><span class="op">$</span>local.time, pems.<span class="dv">1</span><span class="op">$</span>velocity, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" width="45%" /><img src="data:image/png;base64,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" width="45%" /></p>
+<blockquote>
+<p>Although the generic <code>plot</code> function is enabled for both <strong>pems</strong> and <strong>pems.element</strong>s, the package was written to support other plotting options in <strong>R</strong>.</p>
+</blockquote>
+<p><strong>print</strong> (described in above introductory example) generates a print report of a supplied <strong>pems</strong> or <strong>pems.element</strong>. Both are foreshorten to produce a screen-friendly summary report using a similar strategies to <strong>tibbles</strong>. <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html" target="_blank">[&gt;for more about tibbles]</a></p>
+<p>Additional arguments can also be used to modify outputs, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>## pems (1000x25)
+##               time.stamp  local.time      CO     CO2       HC     NOX
+##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]
+##   1  2005-09-08 11:46:07           0       0       0        0  20.447
+##   2  2005-09-08 11:46:08           1       0       0        0  21.973
+##   3  2005-09-08 11:46:09           2       0       0        0  20.752
+##   4  2005-09-08 11:46:10           3       0       0        0  22.583
+##   5  2005-09-08 11:46:11           4       0       0        0  20.142
+##   6  2005-09-08 11:46:12           5       0       0        0  20.142
+##  ... not showing: 994 rows; 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(pems.<span class="dv">1</span>, <span class="dt">rows=</span><span class="dv">7</span>, <span class="dt">cols=</span><span class="dv">4</span>)</code></pre></div>
+<pre><code>## pems (1000x25)
+##               time.stamp  local.time      CO     CO2
+##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]
+##   1  2005-09-08 11:46:07           0       0       0
+##   2  2005-09-08 11:46:08           1       0       0
+##   3  2005-09-08 11:46:09           2       0       0
+##   4  2005-09-08 11:46:10           3       0       0
+##   5  2005-09-08 11:46:11           4       0       0
+##   6  2005-09-08 11:46:12           5       0       0
+##   7  2005-09-08 11:46:13           6       0       0
+##  ... not showing: 993 rows; 21 cols (elements) 
+##  ... other cols: HC[ppmC6]; NOX[ppm]; afr; exh.flow.rate[L/min];
+##       exh.temp[degC]; exh.press[kPa]; amb.temp[degC]; amb.press[kPa];
+##       amb.humidity[%]; velocity[km/h]; revolution[rpm]; option.1[V];
+##       option2[V]; option.3[V]; latitude[d.degLat]; longitude[d.degLon];
+##       altitude[m]; gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<p><strong>subset</strong> extracts a subset from a supplied <strong>pems</strong> selected using a sub-sampling (or filtering) argument supplied in the same call, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(pems.<span class="dv">1</span>, local.time <span class="op">&lt;</span><span class="st"> </span><span class="dv">4</span>) </code></pre></div>
+<pre><code>## pems (4x25)
+##               time.stamp  local.time      CO     CO2       HC     NOX
+##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]
+##   1  2005-09-08 11:46:07           0       0       0        0  20.447
+##   2  2005-09-08 11:46:08           1       0       0        0  21.973
+##   3  2005-09-08 11:46:09           2       0       0        0  20.752
+##   4  2005-09-08 11:46:10           3       0       0        0  22.583
+##  ... not showing: 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">subset</span>(pems.<span class="dv">1</span>, CO<span class="op">==</span><span class="kw">max</span>(CO, <span class="dt">na.rm=</span><span class="ot">TRUE</span>))</code></pre></div>
+<pre><code>## pems (1x25)
+##                time.stamp  local.time      CO     CO2       HC     NOX
+##         [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]
+##   39  2005-09-08 11:46:45          38  2.9745  11.727   415.19  138.55
+##  ... not showing: 19 cols (elements) 
+##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V];
+##       option.3[V]; latitude[d.degLat]; longitude[d.degLon]; altitude[m];
+##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+<blockquote>
+<p>As with other vectors, <code>subset</code> is not intended for use with <strong>pems.element</strong>s.</p>
+</blockquote>
+<p><strong>summary</strong> generates a conventional <strong>R</strong> data summary for a supplied <strong>pems</strong> or <strong>pems.element</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pems.<span class="dv">1</span><span class="op">$</span>velocity)</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    0.20   15.55   22.27   46.23   69.70</code></pre>
+<p><strong>units</strong> gets or sets the units of a supplied <strong>pems</strong> or <strong>pems.element</strong>, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">units</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##        time.stamp local.time   CO  CO2    HC NOX afr exh.flow.rate
+## 1 Y-M-D H:M:S GMT          s vol% vol% ppmC6 ppm             L/min
+##   exh.temp exh.press amb.temp amb.press amb.humidity velocity revolution
+## 1     degC       kPa     degC       kPa            %     km/h        rpm
+##   option.1 option2 option.3 latitude longitude altitude gps.velocity
+## 1        V       V        V d.degLat  d.degLon        m         km/h
+##   satellite n.s w.e
+## 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">units</span>(pems.<span class="dv">1</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]</code></pre></div>
+<pre><code>##        time.stamp local.time
+## 1 Y-M-D H:M:S GMT          s</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">units</span>(pems.<span class="dv">1</span>)[<span class="st">&quot;afr&quot;</span>]</code></pre></div>
+<pre><code>##   afr
+## 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">units</span>(pems.<span class="dv">1</span>)[<span class="st">&quot;afr&quot;</span>] &lt;-<span class="st"> &quot;ratio&quot;</span>
+<span class="kw">units</span>(pems.<span class="dv">1</span>)</code></pre></div>
+<pre><code>##        time.stamp local.time   CO  CO2    HC NOX   afr exh.flow.rate
+## 1 Y-M-D H:M:S GMT          s vol% vol% ppmC6 ppm ratio         L/min
+##   exh.temp exh.press amb.temp amb.press amb.humidity velocity revolution
+## 1     degC       kPa     degC       kPa            %     km/h        rpm
+##   option.1 option2 option.3 latitude longitude altitude gps.velocity
+## 1        V       V        V d.degLat  d.degLon        m         km/h
+##   satellite n.s w.e
+## 1</code></pre>
+<blockquote>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for more on <strong>pems</strong> units handling.</p>
+</blockquote>
+<p><strong>with</strong> associates a supplied <strong>pems</strong>, so the user can work with contained <strong>pems.element</strong>s directly, for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#rather than</span>
+<span class="co">#diff(pems.1$velocity)/diff(pems.1$local.time)</span>
+<span class="kw">with</span>(pems.<span class="dv">1</span>, <span class="kw">diff</span>(velocity)<span class="op">/</span><span class="kw">diff</span>(local.time))</code></pre></div>
+<pre><code>## pems.element [n=999]
+##   [1]   0.0   0.2   0.0  -0.1   0.2  -0.1   0.4  -0.6   0.1   0.0   0.0
+##  [12]  -0.1   0.1  -0.1   0.2  -0.1   0.1  -0.1   0.2  -0.3   0.1   0.0
+##  [23]  -0.1   0.0   0.0   0.2  -0.1  -0.1   0.0   0.1   0.1   0.1  -0.3
+##   ... not showing: 88 rows
+##   ... &lt;numeric&gt;</code></pre>
+<blockquote>
+<p>As with other vectors, <code>with</code> is not intended for use with <strong>pems.element</strong>s.</p>
+</blockquote>
+</div>
+<div id="other-generic-functions" class="section level1">
+<h1>Other Generic Functions</h1>
+<p>There are numerous generic functions in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written where a need was identified.</p>
+<blockquote>
+<p>If you think any other generic functions would be useful, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
+</blockquote>
+<blockquote>
+<p>Similarly, if you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+</blockquote>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Chambers, J., 2008. Software for data analysis: programming with R. Springer Science &amp; Business Media.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
