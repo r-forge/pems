@@ -243,7 +243,7 @@ pems.<span class="dv">1</span><span class="op">$</span>accel</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#calculate VSP and CO2 emissions and add both to pems.1</span>
 pems.<span class="dv">1</span><span class="op">$</span>vsp &lt;-<span class="st"> </span><span class="kw">calcVSP</span>(velocity, <span class="dt">time =</span> local.time, <span class="dt">data =</span> pems.<span class="dv">1</span>)
 pems.<span class="dv">1</span><span class="op">$</span>em.co2 &lt;-<span class="st"> </span><span class="kw">calcEm</span>(conc.co2, <span class="dt">data =</span> pems.<span class="dv">1</span>)</code></pre></div>
-<p>At this stage these are measurements recorded in the same instant and comparing they suggests a small degree of association:</p>
+<p>At this stage these are measurements recorded in the same instant and comparing them suggests a small degree of association:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#initial instantaneous comparison</span>
 <span class="kw">addXYLOESSFit</span>(<span class="kw">pemsPlot</span>(vsp, em.co2, <span class="dt">data=</span>pems.<span class="dv">1</span>, <span class="dt">grid.col=</span><span class="st">&quot;grey&quot;</span>, <span class="dt">grid.lty=</span><span class="dv">3</span>), 
               <span class="dt">grid=</span><span class="ot">FALSE</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</code></pre></div>
