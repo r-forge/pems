@@ -13,7 +13,7 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2019-11-08" />
+<meta name="date" content="2019-11-10" />
 
 <title>Introduction to R:pems.utils</title>
 
@@ -96,7 +96,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Introduction to R:pems.utils</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2019-11-08</h4>
+<h4 class="date">2019-11-10</h4>
 
 
 
@@ -156,7 +156,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Like a <strong>data.frame</strong>, the <strong>pems</strong> object contains named data-series as columns. However, unlike a <strong>data.frame</strong>:</p>
 <ul>
 <li>It associates units with each column. For example, the first column, <strong>time.stamp</strong> has units of <em>Y-M-D H:M:S GMT</em>, reported in the second row of the print output.</li>
-<li>By default, it limits displayed data to a screen-friendly range and a summary report of other columns and rows. This is a nice idea taken from <strong>tibbles</strong> for the tidy handling of larger datasets <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html" target="_blank">[&gt;for more details]</a></li>
+<li>By default, it limits displayed data to a screen-friendly range and a summary report of other columns and rows. This is a nice idea taken from <strong>tibbles</strong> for the tidy handling of larger datasets <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html" target="_blank">[&gt;for more about tibbles]</a></li>
 <li>All the columns in a <strong>pems</strong> object are <strong>pems.elements</strong>.</li>
 </ul>
 <p><strong>pems.elements</strong> can be extract from <strong>pems</strong> using <strong>$</strong> and <strong>[.]</strong> operators, for example:</p>
@@ -169,7 +169,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ##    ... &lt;POSIXct,POSIXt&gt; time.stamp [Y-M-D H:M:S GMT]</code></pre>
 <p><strong>pems.element</strong>s act like other vectors but, like <strong>pems</strong>, track units and limits the default print range to prevent long data-series filling the screen.</p>
 <blockquote>
-<p>See <a href="http://pems.r-forge.r-project.org/pems.utils.operators.html">[&gt;pems.utils operators]</a> and <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics) for further details.</p>
+<p>See <a href="http://pems.r-forge.r-project.org/pems.utils.operators.html">[&gt;pems.utils operators]</a> for more about operators.</p>
+</blockquote>
+<blockquote>
+<p>See also <code>print</code> in <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics) for more about print report management.</p>
 </blockquote>
 </div>
 <div id="importing-pems-data" class="section level1">
@@ -234,7 +237,10 @@ pems.<span class="dv">1</span><span class="op">$</span>accel</code></pre></div>
 ##    ... not showing: 197 rows
 ##    ... &lt;numeric&gt; accel [m/s/s]</code></pre>
 <blockquote>
-<p>See <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for further details of <strong>pems</strong> units handling.</p>
+<p>See <a href="http://pems.r-forge.r-project.org/pems.utils.operators.html">[&gt;pems.utils operators]</a> and <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics) for more about general <strong>pems</strong> handling.</p>
+</blockquote>
+<blockquote>
+<p>See <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for more about <strong>pems</strong> units handling.</p>
 </blockquote>
 </div>
 <div id="pems-data-analysis" class="section level1">
@@ -328,7 +334,7 @@ pems.<span class="dv">1</span><span class="op">$</span>ncsu.<span class="dv">14<
 <p>For further information on these and other <strong>pems.utils</strong> functions, see in-package documentation.</p>
 </blockquote>
 <blockquote>
-<p>Any thoughts, suggestions or problems, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt; Karl]</a></p>
+<p>Any thoughts, suggestions or problems, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
 </div>
 
