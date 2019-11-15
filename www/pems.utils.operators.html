@@ -13,7 +13,7 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2019-11-08" />
+<meta name="date" content="2019-11-15" />
 
 <title>R:pems.utils Operators</title>
 
@@ -96,7 +96,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">R:pems.utils Operators</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2019-11-08</h4>
+<h4 class="date">2019-11-15</h4>
 
 
 
@@ -113,7 +113,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <blockquote>
 <p>Unless you have setup <strong>R</strong> to automatically load <strong>pems.utils</strong>, you will need to load it at the start of each <strong>R</strong> session e.g. using <code>library(pems.utils)</code>.</p>
 </blockquote>
-<p>For those already familiar with <strong>R</strong> object classes, <strong>pems</strong> behave in a similar fashion to other (row and column) data set objects like <strong>data.frame</strong>s, <strong>data.table</strong>s and <strong>tibble</strong>s, and <strong>pems.element</strong>s behave in a similar fashion to other <strong>vector</strong> objects like <strong>numeric</strong>s, <strong>character</strong>s and <strong>factor</strong>s, although there are some small differences documented below linked to object structure and PEMS data handling.</p>
+<p>For those already familiar with <strong>R</strong> object classes, <strong>pems</strong> behave in a similar fashion to other (row and column) data set objects like <strong>data.frame</strong>s and <strong>data.table</strong>s, and <strong>pems.element</strong>s behave in a similar fashion to other <strong>vector</strong> objects like <strong>numeric</strong>s, <strong>character</strong>s and <strong>factor</strong>s, although there are some small differences documented in the introduction and below linked to object structure and PEMS data handling.</p>
 </div>
 <div id="section" class="section level1">
 <h1></h1>
@@ -205,7 +205,7 @@ pems[i,j] &lt;-<span class="st"> </span>k        <span class="co">#set value in 
 <p>Calling part of <strong>pems</strong> object that does not exist generates an error rather than a <code>NULL</code> and, similarly, putting something into a <strong>pems</strong> somewhere is does not fit exactly generates an error.</p>
 </blockquote>
 <blockquote>
-<p>For example, the call <code>pems.1[1:4, &quot;conc.hc&quot;] &lt;- 88</code> would generate an error because target is a four rows by one column (so four values), while the insert is a single value (eighty eight).</p>
+<p>For example, the call <code>pems.1[1:4, &quot;conc.hc&quot;] &lt;- 88</code> would generate an error because the target is four rows by one column (so four values), while the insert is a single value (here eighty eight).</p>
 </blockquote>
 <p>The additional argument <code>force</code> can be used to specify how mismatching targets and inserts should be handling:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pems.<span class="dv">1</span>[<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="st">&quot;conc.hc&quot;</span>, force=<span class="st">&quot;na.pad.insert&quot;</span>] &lt;-<span class="st"> </span><span class="dv">88</span>
@@ -297,7 +297,7 @@ pems.<span class="dv">1</span>[[<span class="st">&quot;new.meta&quot;</span>]]</
 <li>Instead of <code>pems[[&quot;units&quot;]]</code>, use <code>units(pems)</code></li>
 </ul>
 <blockquote>
-<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics and ?pems.element.generics) for more on <strong>pems</strong> generic functions.</p>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics and ?pems.element.generics) for more on <code>as.data.frame</code> and other generic <strong>pems</strong> functions.</p>
 </blockquote>
 <blockquote>
 <p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for more on <strong>pems</strong> units handling.</p>
@@ -308,7 +308,7 @@ pems.<span class="dv">1</span>[[<span class="st">&quot;new.meta&quot;</span>]]</
 </div>
 <div id="other-operators" class="section level1">
 <h1>Other Operators</h1>
-<p>There are numerous operators in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written where a need was identified.</p>
+<p>There are numerous operators in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written for those where a need was identified.</p>
 <blockquote>
 <p>If you think any other operators would be useful, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
 </blockquote>

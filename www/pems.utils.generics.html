@@ -13,7 +13,7 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2019-11-08" />
+<meta name="date" content="2019-11-15" />
 
 <title>R:pems.utils Generic Functions</title>
 
@@ -96,7 +96,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">R:pems.utils Generic Functions</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2019-11-08</h4>
+<h4 class="date">2019-11-15</h4>
 
 
 
@@ -167,7 +167,7 @@ units.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">u
 data.frame.<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(pems.<span class="dv">1</span>)      
 <span class="co">#do whatever you cannot do with a pems with your data.frame...</span>
 <span class="co">#then if this makes a new data.frame you want to keep</span>
-<span class="co">#(update units if any changed or pems.elements were added)</span>
+<span class="co">#(update units if any changed or extra columns added)</span>
 <span class="co">#re-build the pems</span>
 pems.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as.pems</span>(data.frame.<span class="dv">1</span>, <span class="dt">units=</span>units.<span class="dv">1</span>)</code></pre></div>
 <p><strong>dim</strong> reports the dimensions, rows then columns, of a supplied <strong>pems</strong>, for example:</p>
@@ -225,7 +225,7 @@ pems.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as
 ##   3  2005-09-08 11:46:09           2        0
 ##   4  2005-09-08 11:46:10           3        0</code></pre>
 <blockquote>
-<p>Functions that cannot handle datasets that contain missing values may use <strong>na.omit</strong> to ‘clean’ datasets, although typically not without asking the user or giving a warning that they have done so.</p>
+<p>Functions that cannot handle datasets that contain missing values may use <strong>na.omit</strong> to ‘clean’ datasets.</p>
 </blockquote>
 <p><strong>names</strong> reports the names of <strong>pems.elements</strong> in a supplied <strong>pems</strong>, for example:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(pems.<span class="dv">1</span>)</code></pre></div>
@@ -377,7 +377,7 @@ pems.<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as
 </div>
 <div id="other-generic-functions" class="section level1">
 <h1>Other Generic Functions</h1>
-<p>There are numerous generic functions in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written where a need was identified.</p>
+<p>There are numerous generic functions in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written for those where a need was identified.</p>
 <blockquote>
 <p>If you think any other generic functions would be useful, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
 </blockquote>
