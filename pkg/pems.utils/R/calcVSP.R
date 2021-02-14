@@ -12,16 +12,16 @@
 ##########################
 #calcVSP
 #calcVSP_JimenezPalacios
-#binVSP
-#binVSP_NCSU.14
-#binVSP_MOVES.24
+#refVSPBin
+#refVSPBin_NCSU.14
+#refVSPBin_MOVES.24
 ##########################
 #to do
 ##########################
 #rethink/remake calcVSP
 #   think it wants to be more like 
 #remake calcCMEM or equivalent
-#tidy binVSP
+#tidy refVSPBin
 ###########################
 #comments
 ##########################
@@ -90,6 +90,7 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
                   reply = "want speed and accel but insufficient inputs\n\t can make do with time and distance and work up", 
                   suggest = "add something I can work with to call", if.warning = NULL, 
                   fun.name = fun.name)
+  
   if(is.null(speed)){
     if(is.null(time) | is.null(distance)){
       checkIfMissing(if.missing = settings$if.missing, 
@@ -111,6 +112,13 @@ calcVSP <- function(speed = NULL, accel = NULL, slope = NULL,
       accel <- calcAccel(speed = speed, time = time, if.missing = settings$if.missing, 
                         unit.conversions= settings$unit.conversions)
     }
+  }
+  if(is.null(slope)){
+    checkIfMissing(if.missing = "warning", 
+                   reply = "slope not supplied; assuming 0", 
+                   suggest = "add slope to call and rerun if required", if.warning = NULL, 
+                   fun.name = fun.name)
+    slope <- 0
   }
   #to think about
   #calc.method could be character?
@@ -166,6 +174,7 @@ calcVSP_JimenezPalacios <- function(speed = NULL, accel = NULL, slope = NULL,
     accel <- getPEMSElement(!!enquo(accel), data, if.missing="return")
   if(!missing(slope))
     slope <- getPEMSElement(!!enquo(slope), data, if.missing="return")
+  
   #######################
   #checks
   ########################
@@ -174,13 +183,7 @@ calcVSP_JimenezPalacios <- function(speed = NULL, accel = NULL, slope = NULL,
                    reply = "Need speed and accel", 
                    suggest = "add speed and accel to see or see ?calcVSP", if.warning = NULL, 
                    fun.name = fun.name)
-  if(is.null(slope)){
-    checkIfMissing(if.missing = "warning", 
-                   reply = "slope not supplied; assuming 0", 
-                   suggest = "add slope to call and rerun if required", if.warning = NULL, 
-                   fun.name = fun.name)
-    slope <- 0
-  }
+
   #############################
   #units
   #############################
@@ -371,18 +374,19 @@ calcVSP_JimenezPalaciosCMEM <- function(speed = NULL, accel = NULL,
 
 
 ###################################
-#binVSP
+#refVSPBin
 ###################################
 
 #kr v.0.1.3 19/06/2018
+#kr v.0.2.0 13/01/2020 (rename)
 
-#notes binVSP_MOVES23 needs more work...
+#notes refVSPBin_MOVES23 needs more work...
 # issue noted in docs 
 
 
-binVSP <- function(..., bin.method="ncsu.14"){
+refVSPBin <- function(..., bin.method="ncsu.14"){
    #NSE method?
-   bin.method <- paste("binVSP_", toupper(bin.method), sep="")
+   bin.method <- paste("refVSPBin_", toupper(bin.method), sep="")
    bin.method <- try(get(bin.method))
    #error catch#tidy later
    if(class(bin.method)[1]=="try-error" || !is.function(bin.method))
@@ -393,8 +397,8 @@ binVSP <- function(..., bin.method="ncsu.14"){
 }
 
 
-binVSP_NCSU.14 <- function (vsp = NULL, data = NULL, 
-                    ..., fun.name="binVSP_NSCU.14") {
+refVSPBin_NCSU.14 <- function (vsp = NULL, data = NULL, 
+                    ..., fun.name="refVSPBin_NSCU.14") {
     #setup
     this.call <- match.call()
     settings <- calcChecks(fun.name=fun.name, ..., data = data)
@@ -416,8 +420,8 @@ binVSP_NCSU.14 <- function (vsp = NULL, data = NULL,
 }
 
 
-binVSP_MOVES.23 <- function (vsp = NULL, speed = NULL, data = NULL, 
-                    ..., fun.name="binVSP_MOVES.23") {
+refVSPBin_MOVES.23 <- function (vsp = NULL, speed = NULL, data = NULL, 
+                    ..., fun.name="refVSPBin_MOVES.23") {
 
     #setup
     this.call <- match.call()
