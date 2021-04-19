@@ -152,10 +152,26 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL,
     l.cond <- as_label(enquo(cond))
 
     x <- getPEMSElement(!!enquo(x), data, if.missing="stop")
+#factor handling
+#move to loa?
+#same for others?
+    if(is.factor(x)){
+        extra.args <- listUpdate(list(scales=list(x=list(at=c(1:length(levels(x))),
+                                                         labels=levels(x),
+                                                         rot=45))),
+                                 extra.args)
+        x <- pems.element(as.numeric(x))
+    }
 
     if(!missing(y))
         y <- getPEMSElement(!!enquo(y), data, if.missing="stop", 
                             if.null="return")
+    if(is.factor(y)){
+        extra.args <- listUpdate(list(scales=list(y=list(at=c(1:length(levels(y))),
+                                                         labels=levels(y)))),
+                                 extra.args)
+        y <- pems.element(as.numeric(y))
+    }
     
     if(!missing(z))
         z <- getPEMSElement(!!enquo(z), data, if.missing="stop",
@@ -261,13 +277,13 @@ pemsXYZCondUnitsHandler <- function(x, y = NULL, z = NULL, cond = NULL,
         sub.id <- rep(attributes(y)$sub.nm, 
                       attributes(y)$sub.id)
         if("groups" %in% extra.args$multi.y){
-            groups <- sub.id
+            groups <- ordered(sub.id)
         }
         if("zcases" %in% extra.args$multi.y){
-            extra.args$zcases <- sub.id
+            extra.args$zcases <- ordered(sub.id)
         }
         if("cond" %in% extra.args$multi.y){
-            cond <- sub.id
+            cond <- ordered(sub.id)
         }
     }
 

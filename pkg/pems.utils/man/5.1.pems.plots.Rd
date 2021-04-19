@@ -186,7 +186,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   \item{speed, accel}{
   (Various) For \code{WatsonPlot}, the \code{x} and 
   \code{y} terms, speed and acceleration, 
-  respectively, for a Watson plot. 
+  respectively. 
   }
 
   \item{ref.line}{

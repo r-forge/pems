@@ -70,7 +70,11 @@ refRow <- function(ref = NULL, n = 4, breaks = NULL,
       }
       #should we stop this if different data supplied?
       ref <- 1:nrow(ref)
-    }
+    } 
+    #method tracks ref value 
+    #if ref supplied directly, convert to vector id...
+    #maybe not tidiest fix...
+    ref <- 1:length(ref)
     
     #if n and rows are not numeric 
     if(!is.numeric(n) & !is.numeric(breaks)){

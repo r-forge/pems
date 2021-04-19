@@ -7,6 +7,8 @@
 \alias{refVSPBin}
 \alias{refVSPBin_NCSU.14}
 \alias{refVSPBin_MOVES.23}
+\alias{VSPPlot}
+\alias{VSPBinPlot}
 
 \title{
   Vehicle Specific Power (VSP) related code
@@ -41,7 +43,16 @@ refVSPBin_NCSU.14(vsp = NULL, data = NULL,
 
 refVSPBin_MOVES.23(vsp = NULL, speed = NULL, data = NULL, 
           ..., fun.name="refVSPBin_MOVES.23")
+          
+#vsp plotting
 
+VSPPlot(vsp, em = NULL, ..., data = NULL, plot.type = 1, 
+          fun.name="VSPPlot", scheme = pems.scheme)
+
+VSPBinPlot(vspbin, em = NULL, ..., data = NULL, 
+          plot.type = 1, stat = NULL, fun.name="VSPBinPlot",
+          scheme = pems.scheme)
+          
 }
 
 \arguments{
@@ -50,7 +61,9 @@ refVSPBin_MOVES.23(vsp = NULL, speed = NULL, data = NULL,
   (Typically pems.element vectors) \code{speed}, \code{accel}, 
   \code{slope}, \code{time} and \code{distance} are possible 
   inputs for VSP calculation. \code{vsp} and \code{speed} are 
-  possible inputs for VSP binning methods. 
+  possible inputs for VSP binning methods. \code{vsp}, 
+  \code{vspbin} and \code{em} are x and y inputs for 
+  associated plots.
   (See Notes about inputs and methods.)
 } 
   \item{data}{
@@ -77,6 +90,23 @@ refVSPBin_MOVES.23(vsp = NULL, speed = NULL, data = NULL,
   \item{vehicle.weight, vsp.a, vsp.b, vsp.c, vsp.g}{
   (Numerics) VSP constants. If not supplied, defaults are 
   applied. See Below.
+}
+  \item{plot.type}{
+  (Optional numeric) For \code{VSPPlot} and \code{VSPBinPlot}, 
+  the type of plot to generate. For \code{VSPPlot}, 1 a 
+  conventional scatter plot; or 2 a box-and-whisker plot. For 
+  \code{VSPBinPlot}, 1 a bar plot; or 2 a box-and-whisker 
+  plot. 
+}
+  \item{stat}{
+  (Function) For \code{VSPBinPlot}, the statistic to use when 
+  calculating bar scales for \code{plot.type} 1. By default this 
+  is mean if \code{em} is supplied or count if not. NOTE: 
+  stat is ignore when \code{plot.type} is used
+}
+  \item{scheme}{
+  (Various) For \code{speedEmPlot}, the scheme to apply to 
+  the plot, \code{loa} argument. 
 }
     
 }
@@ -118,7 +148,12 @@ refVSPBin_MOVES.23(vsp = NULL, speed = NULL, data = NULL,
   14 bin method described in Frey et al 2002. 
   
   \code{binVSP_MOVES.23} bins supplied \code{vsp} using that 
-  and \code{speed} and the 23 bin MOVES method (See Note).   
+  and \code{speed} and the 23 bin MOVES method (See Note). 
+  
+  \code{VSPPlot} generates various plots of VSP (x-axis) and 
+  emission (y-axis) data. 
+  
+  \code{VSPBinPlot} generates various plots of VSP binned data. 
  
 }
 
@@ -130,6 +165,9 @@ refVSPBin_MOVES.23(vsp = NULL, speed = NULL, data = NULL,
 
   \code{refVSPBin} generates a \code{pems.element factor} 
   vector  of VSP Mode bin assignments. 
+  
+  \code{VSPPlot} and \code{VSPBinPlot} generate plots as
+  \code{lattice} objects.
 
 }
 

@@ -515,7 +515,7 @@ pems_coldStart1 <- function(em, time, engine.on,
   #em is emissions to accum
   #time is local.time
   ##
-  # I am not sur this needs engine.on 
+  # I am not sure this needs engine.on 
   # but it is currently getting eng.on.row anyway...
   acc <- em
   acc[is.na(acc)] <- 0

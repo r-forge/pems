@@ -182,9 +182,15 @@ cpe <- function(...){
             }
         }
     }
+    
+    ######################################
+    #this might not be best way to handle 
+    #cpe() same repeat elements, cpe(a,a)
+    ######################################
+    local.names <- make.unique(names(ref))
 
     #update name because they might have modified
-    b$name <- paste(names(ref), collapse=", ")
+    b$name <- paste(local.names, collapse=", ")
     temp <- names(b)[names(b)!="name"]
     for(i in temp){
         if(i=="units"){
@@ -209,7 +215,7 @@ cpe <- function(...){
     
     if(length(refs)>1){
         b$sub.id <- refs
-        b$sub.nm <- names(ref)
+        b$sub.nm <- local.names 
     } else {
         b$sub.id <- NULL
         b$sub.nm <- NULL

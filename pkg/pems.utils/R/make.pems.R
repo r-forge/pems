@@ -90,7 +90,7 @@ pems <- function(x, units = NULL, constants = NULL,
 #################
 
                  if(is(x)[1]=="pems" && is.null(units)) return(rebuildPEMS(x))
-
+  
 ##################
 #testing 
 #allow x = vector or pems.element
@@ -152,7 +152,6 @@ pems <- function(x, units = NULL, constants = NULL,
     #restack pems so all columns are pems.elements
     for(i in names(output))
          output[["data"]][, i] <- output[, i]
-
     rebuildPEMS(output)
 }
 

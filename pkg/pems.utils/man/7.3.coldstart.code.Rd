@@ -92,7 +92,6 @@ panel.coldStartPlot2(..., loa.settings = FALSE)
   ignored by plot users. 
 }
 
-    
 }
 
 
