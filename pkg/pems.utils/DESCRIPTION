@@ -1,8 +1,8 @@
 Package: pems.utils
 Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.2.29.0
-Date: 2021-04-13
+Version: 0.2.29.1
+Date: 2021-04-20
 Authors@R: c(
     person("Karl", "Ropkins", email="karl.ropkins@gmail.com", 
             role= c("aut", "cre")),

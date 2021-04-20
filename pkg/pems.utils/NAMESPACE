@@ -35,13 +35,13 @@ import(dplyr)
 #import(plyr) #replacing with dplyr
 
 ## requested by CRAN
-
-importFrom("grDevices", "colorRampPalette", "gray")
+importFrom("grDevices", "colorRampPalette", "gray",
+           "boxplot.stats")
 importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass", "complete.cases", "approx", "lm", 
-           "predict")
+           "predict", "quantile", "update")
 importFrom(utils, read.table, read.csv, read.delim, write.table, 
            head, tail, capture.output, install.packages, 
            installed.packages)
@@ -52,7 +52,7 @@ importFrom(rlang, eval_tidy, quo_is_null, get_expr, exprs,
            quos)
 
 #I don't think I need to importFrom round because 
-#  it is primative and in base...
+#  it is primitive and in base...
 
 
 

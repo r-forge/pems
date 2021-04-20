@@ -1,5 +1,5 @@
-\name{2.3.2.referencing.pems.data}
-\alias{2.3.2.referencing.pems.data}
+\name{4.2.referencing.pems.data}
+\alias{4.2.referencing.pems.data}
 \alias{referencing.pems.data}
 \alias{refRow}
 \alias{refX}
@@ -35,7 +35,8 @@ refDrivingMode(speed = NULL, accel = NULL,
         time = NULL, data = NULL, 
         threshold.speed = 0.1, 
         threshold.accel = 0.1,
-        ..., labels = NULL, fun.name = "refDrivingMode")
+        ..., labels = NULL, 
+        fun.name = "refDrivingMode")
 
 }
 

@@ -57,7 +57,8 @@ VSPBinPlot(vspbin, em = NULL, ..., data = NULL,
 
 \arguments{
 
-  \item{speed, accel, slope, time, distance, vsp}{
+  \item{speed, accel, slope, time, distance, vsp, vspbin,
+  em}{
   (Typically pems.element vectors) \code{speed}, \code{accel}, 
   \code{slope}, \code{time} and \code{distance} are possible 
   inputs for VSP calculation. \code{vsp} and \code{speed} are 

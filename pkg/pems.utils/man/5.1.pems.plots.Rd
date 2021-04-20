@@ -1,5 +1,5 @@
-\name{3.3.pems.plots}
-\alias{3.3.pems.plots}
+\name{5.1.pems.plots}
+\alias{5.1.pems.plots}
 \alias{pems.plots}
 \alias{latticePlot}
 \alias{panel.PEMSXYPlot}
@@ -31,9 +31,9 @@
 
 pemsPlot(x, y = NULL, z = NULL, groups = NULL, 
          cond = NULL, ..., data = NULL, 
-         units = TRUE, fun.name="pemsPlot", 
-         panel = panel.pemsPlot, 
-         scheme = pems.scheme)
+         units = TRUE, multi.y = "special", 
+         fun.name="pemsPlot",
+         panel = panel.pemsPlot, scheme = pems.scheme)
 
 #associated functions
 
@@ -149,6 +149,16 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   can be removed but unit management retained using 
   \code{units.add.to.labels = FALSE}. 
   }
+  
+  \item{multi.y}{
+  (character) \code{pems.plots} accepted multiple 
+  \code{y} data-series if passed using \code{cpe}, 
+  e.g. \code{y = cpe(a,b)}. \code{multi.y} sets how 
+  these are handled, options include \code{'groups'}, 
+  \code{'cond'} and \code{'special'} (the default), 
+  which selects groups if not used in plot call else 
+  cond. 
+}
 
   \item{\dots}{
   (Optional) Other arguments, typically passed on.
@@ -295,7 +305,9 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   modification of the \code{\link{lattice}} 
   plotting framework.    
 
-  See Notes and Examples. 
+  See Notes, Examples and extra documentation: 
+  \href{http://pems.r-forge.r-project.org/pems.utils.plots.html}{pems.plots}.
+  
 }
 
 

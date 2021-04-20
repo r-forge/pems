@@ -252,7 +252,7 @@ refDrivingMode <- function(speed = NULL, accel = NULL,
                         threshold.accel = 0.1,
                         ..., 
                         labels = NULL,
-                        fun.name = "ref"){
+                        fun.name = "refDrivingMode"){
   
   #setup
   this.call <- match.call()
