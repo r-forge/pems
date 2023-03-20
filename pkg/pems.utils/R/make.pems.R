@@ -388,7 +388,10 @@ rebuildPEMS <- function(x, ...){
         class(x) <- class(x)[class(x) != "pems"]
         if (length(class(x)) == 0) 
             class(x) <- "data.frame"
-        if (length(class(x)) == 1 && class(x) == "list") 
+        #changing class to is in below seems pointless
+        ## if (length(class(x)) == 1 && class(x) == "list") 
+        #but class(x) create check issue...
+        if (length(class(x)) == 1 && is(x) == "list") 
             class(x) <- "data.frame"
 
         out <- listUpdate(list(data = x, units = bare.bones$units), 
