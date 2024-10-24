@@ -12,33 +12,46 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2021-04-19" />
+<meta name="date" content="2024-06-18" />
 
 <title>R:pems.utils Operators</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -52,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -109,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,7 +146,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,58 +340,91 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">R:pems.utils Operators</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2021-04-19</h4>
+<h4 class="date">2024-06-18</h4>
 
 
 
 <div id="background" class="section level1">
 <h1>Background</h1>
-<p>The <strong>R</strong> package <strong>pems.utils</strong> uses two main data types: <strong>pems.element</strong>s, data-series with assigned units, and <strong>pems</strong>, data sets of simultaneously logged <strong>pems.element</strong>s.</p>
-<p>This document provides an overview of their handling using the operators <strong>$</strong>, <strong>[…]</strong> and <strong>[[…]]</strong>.</p>
+<p>The <strong>R</strong> package <strong>pems.utils</strong> uses two
+main data types: <strong>pems.element</strong>s, data-series with
+assigned units, and <strong>pems</strong>, data sets of simultaneously
+logged <strong>pems.element</strong>s.</p>
+<p>This document provides an overview of their handling using the
+operators <strong>$</strong>, <strong>[…]</strong> and
+<strong>[[…]]</strong>.</p>
 <blockquote>
-<p>For a quick and more general introduction to <strong>pems.utils</strong>, see <a href="http://pems.r-forge.r-project.org/pems.utils.intro.html">[&gt;pems.utils introduction]</a></p>
+<p>For a quick and more general introduction to
+<strong>pems.utils</strong>, see <a href="http://pems.r-forge.r-project.org/pems.utils.intro.html">[&gt;pems.utils
+introduction]</a></p>
 </blockquote>
 <blockquote>
-<p>If you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+<p>If you have any suggestions how to make either
+<strong>pems.utils</strong> or this document better or you have any
+problems using either, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
 <blockquote>
-<p>Unless you have setup <strong>R</strong> to automatically load <strong>pems.utils</strong>, you will need to load it at the start of each <strong>R</strong> session e.g. using <code>library(pems.utils)</code>.</p>
+<p>Unless you have setup <strong>R</strong> to automatically load
+<strong>pems.utils</strong>, you will need to load it at the start of
+each <strong>R</strong> session e.g. using
+<code>library(pems.utils)</code>.</p>
 </blockquote>
-<p>For those already familiar with <strong>R</strong> object classes, <strong>pems</strong> behave in a similar fashion to other (row and column) data set objects like <strong>data.frame</strong>s and <strong>data.table</strong>s, and <strong>pems.element</strong>s behave in a similar fashion to other <strong>vector</strong> objects like <strong>numeric</strong>s, <strong>character</strong>s and <strong>factor</strong>s, although there are some small differences documented in the introduction and below linked to object structure and PEMS data handling.</p>
+<p>For those already familiar with <strong>R</strong> object classes,
+<strong>pems</strong> behave in a similar fashion to other (row and
+column) data set objects like <strong>data.frame</strong>s and
+<strong>data.table</strong>s, and <strong>pems.element</strong>s behave
+in a similar fashion to other <strong>vector</strong> objects like
+<strong>numeric</strong>s, <strong>character</strong>s and
+<strong>factor</strong>s, although there are some small differences
+documented in the introduction and below linked to object structure and
+PEMS data handling.</p>
 </div>
 <div id="section" class="section level1">
 <h1></h1>
 </div>
 <div id="the-operator" class="section level1">
 <h1>The $ Operator</h1>
-<p>The <strong>$</strong> operator extracts <strong>pems.element</strong>s from <strong>pems</strong> in the form:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pems<span class="sc">$</span>pems.element </span></code></pre></div>
-<p>So, for example, to get the <code>velocity</code> <strong>pems.element</strong> from the <code>pems.1</code> example <strong>pems</strong> data set in <strong>pems.utils</strong>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>velocity</span></code></pre></div>
+<p>The <strong>$</strong> operator extracts
+<strong>pems.element</strong>s from <strong>pems</strong> in the
+form:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>pems<span class="sc">$</span>pems.element </span></code></pre></div>
+<p>So, for example, to get the <code>velocity</code>
+<strong>pems.element</strong> from the <code>pems.1</code> example
+<strong>pems</strong> data set in <strong>pems.utils</strong>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>velocity</span></code></pre></div>
 <pre><code>## pems.element [n=1000]
 ##    [1]  0.1  0.1  0.3  0.3  0.2  0.4  0.3  0.7  0.1  0.2  0.2  0.2  0.1  0.2
 ##   [15]  0.1  0.3  0.2  0.3  0.2  0.4  0.1  0.2  0.2  0.1  0.1  0.1  0.3  0.2
 ##   [29]  0.1  0.1  0.2  0.3  0.4  0.1  0.3  0.4  0.1  0.4  0.2  0.2  0.1  0.2
 ##    ... not showing: 69 rows
 ##    ... &lt;numeric&gt; velocity [km/h]</code></pre>
-<p><strong>pems.element</strong>s (or other vectors) can also be added to a <strong>pems</strong> in the form:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pems<span class="sc">$</span>name <span class="ot">&lt;-</span> pems.element</span></code></pre></div>
-<p>Although the <strong>pems $</strong> operator is very similar to the <strong>data.frame $</strong> operator that many <strong>R</strong> users are likely to be more familiar with, one important difference should be noted:</p>
+<p><strong>pems.element</strong>s (or other vectors) can also be added
+to a <strong>pems</strong> in the form:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pems<span class="sc">$</span>name <span class="ot">&lt;-</span> pems.element</span></code></pre></div>
+<p>Although the <strong>pems $</strong> operator is very similar to the
+<strong>data.frame $</strong> operator that many <strong>R</strong>
+users are likely to be more familiar with, one important difference
+should be noted:</p>
 <blockquote>
-<p>When a <strong>pems.element</strong> (or other <strong>vector</strong>) is added to a <strong>pems</strong> if the dimension of the two do not match exactly, the two will be bound row-by-row and the shorter will be NA-padded without any attempt to wrap data.</p>
+<p>When a <strong>pems.element</strong> (or other
+<strong>vector</strong>) is added to a <strong>pems</strong> if the
+dimension of the two do not match exactly, the two will be bound
+row-by-row and the shorter will be NA-padded without any attempt to wrap
+data.</p>
 </blockquote>
 <p>So, for example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#add a pems.element called new to pems.1</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new      <span class="co">#&#39;1&#39; followed by row a &#39;NA&#39;s NOT row of &#39;1&#39;s</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new <span class="ot">&lt;-</span> <span class="dv">1</span> <span class="co">#add a pems.element called new to pems.1</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new      <span class="co">#&#39;1&#39; followed by row a &#39;NA&#39;s NOT row of &#39;1&#39;s</span></span></code></pre></div>
 <pre><code>## pems.element [n=1000]
 ##    [1]  1 NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
 ##   [25] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
 ##   [49] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
 ##    ... not showing: 39 rows
 ##    ... &lt;numeric&gt; new</code></pre>
-<p>If you want <strong>data.frame</strong>-like output, you need to specifically request it, for example:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(pems<span class="fl">.1</span>))</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new    </span></code></pre></div>
+<p>If you want <strong>data.frame</strong>-like output, you need to
+specifically request it, for example:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span>, <span class="fu">nrow</span>(pems<span class="fl">.1</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>pems<span class="fl">.1</span><span class="sc">$</span>new    </span></code></pre></div>
 <pre><code>## pems.element [n=1000]
 ##    [1] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 ##   [38] 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
@@ -203,7 +435,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><em>Why do we do this?</em></p>
 </blockquote>
 <blockquote>
-<p>PEMS and other mobile data sources are typically contiguous data-series, each record following the one before in time order. Also, if two datasets are logged separately, they are rarely exactly the same length. So, if we want to add a vector to an existing dataset (or align two datasets), we rarely want <strong>R</strong> to try to wrap the shorter data and repeat any records alongside later records in longer datasets.</p>
+<p>PEMS and other mobile data sources are typically contiguous
+data-series, each record following the one before in time order. Also,
+if two datasets are logged separately, they are rarely exactly the same
+length. So, if we want to add a vector to an existing dataset (or align
+two datasets), we rarely want <strong>R</strong> to try to wrap the
+shorter data and repeat any records alongside later records in longer
+datasets.</p>
 </blockquote>
 </div>
 <div id="section-1" class="section level1">
@@ -211,19 +449,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="the-operator-1" class="section level1">
 <h1>The […] Operator</h1>
-<p>The <strong>[…]</strong> operator gets and sets data by indices within <strong>pems.element</strong>s in a similar fashion to other <strong>vector</strong>s:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pems.element[i]       <span class="co">#gets value at position i from pems.element</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pems.element[i<span class="sc">:</span>j]     <span class="co">#gets values from i to j from pems.element</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>pems.element[i] <span class="ot">&lt;-</span> k  <span class="co">#set value at i in pems.element to k </span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
-<p>The <strong>[…]</strong> operator gets and sets data by indices within <strong>pems</strong> in a similar fashion to <strong>data.frame</strong>s:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pems[i]               <span class="co">#gets column i of pems</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>pems[<span class="st">&quot;name&quot;</span>]          <span class="co">#gets column called name of pems</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>pems[i,j]             <span class="co">#gets value in row i and column j of pems</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>pems[i,j] <span class="ot">&lt;-</span> k        <span class="co">#set value in row i and column j of pems to k </span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
-<p>For example, to get the <code>conc.co</code> and <code>local.time</code> columns of <code>pems.1</code> (in that order):</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="fu">c</span>(<span class="st">&quot;conc.co&quot;</span>, <span class="st">&quot;local.time&quot;</span>)]      <span class="co">#by name</span></span></code></pre></div>
+<p>The <strong>[…]</strong> operator gets and sets data by indices
+within <strong>pems.element</strong>s in a similar fashion to other
+<strong>vector</strong>s:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>pems.element[i]       <span class="co">#gets value at position i from pems.element</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>pems.element[i<span class="sc">:</span>j]     <span class="co">#gets values from i to j from pems.element</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>pems.element[i] <span class="ot">&lt;-</span> k  <span class="co">#set value at i in pems.element to k </span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
+<p>The <strong>[…]</strong> operator gets and sets data by indices
+within <strong>pems</strong> in a similar fashion to
+<strong>data.frame</strong>s:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>pems[i]               <span class="co">#gets column i of pems</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>pems[<span class="st">&quot;name&quot;</span>]          <span class="co">#gets column called name of pems</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>pems[i,j]             <span class="co">#gets value in row i and column j of pems</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>pems[i,j] <span class="ot">&lt;-</span> k        <span class="co">#set value in row i and column j of pems to k </span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
+<p>For example, to get the <code>conc.co</code> and
+<code>local.time</code> columns of <code>pems.1</code> (in that
+order):</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="fu">c</span>(<span class="st">&quot;conc.co&quot;</span>, <span class="st">&quot;local.time&quot;</span>)]      <span class="co">#by name</span></span></code></pre></div>
 <pre><code>## pems (1000x2)
 ##      conc.co  local.time
 ##       [vol%]         [s]
@@ -234,7 +478,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   5        0           4
 ##   6        0           5
 ##  ... not showing: 994 rows</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)]                          <span class="co">#by column number</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="fu">c</span>(<span class="dv">3</span>,<span class="dv">2</span>)]                          <span class="co">#by column number</span></span></code></pre></div>
 <pre><code>## pems (1000x2)
 ##      conc.co  local.time
 ##       [vol%]         [s]
@@ -245,16 +489,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   5        0           4
 ##   6        0           5
 ##  ... not showing: 994 rows</code></pre>
-<p>Again, handling is slightly different to that with a <strong>data.frame</strong>.</p>
+<p>Again, handling is slightly different to that with a
+<strong>data.frame</strong>.</p>
 <blockquote>
-<p>Calling part of <strong>pems</strong> object that does not exist generates an error rather than a <code>NULL</code> and, similarly, putting something into a <strong>pems</strong> somewhere is does not fit exactly generates an error.</p>
+<p>Calling part of <strong>pems</strong> object that does not exist
+generates an error rather than a <code>NULL</code> and, similarly,
+putting something into a <strong>pems</strong> somewhere is does not fit
+exactly generates an error.</p>
 </blockquote>
 <blockquote>
-<p>For example, the call <code>pems.1[1:4, &quot;conc.hc&quot;] &lt;- 88</code> would generate an error because the target is four rows by one column (so four values), while the insert is a single value (here eighty eight).</p>
+<p>For example, the call <code>pems.1[1:4, &quot;conc.hc&quot;] &lt;- 88</code>
+would generate an error because the target is four rows by one column
+(so four values), while the insert is a single value (here eighty
+eight).</p>
 </blockquote>
-<p>The additional argument <code>force</code> can be used to specify how mismatching targets and inserts should be handling:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;conc.hc&quot;</span>, force<span class="ot">=</span><span class="st">&quot;na.pad.insert&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">88</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span></span></code></pre></div>
+<p>The additional argument <code>force</code> can be used to specify how
+mismatching targets and inserts should be handling:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;conc.hc&quot;</span>, force<span class="ot">=</span><span class="st">&quot;na.pad.insert&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">88</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>pems<span class="fl">.1</span></span></code></pre></div>
 <pre><code>## pems (1000x26)
 ##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
@@ -270,8 +522,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e; new[NA]</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;conc.hc&quot;</span>, force<span class="ot">=</span><span class="st">&quot;fill.insert&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">88</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="st">&quot;conc.hc&quot;</span>, force<span class="ot">=</span><span class="st">&quot;fill.insert&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">88</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>pems<span class="fl">.1</span></span></code></pre></div>
 <pre><code>## pems (1000x26)
 ##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
@@ -291,7 +543,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><em>Why do we do this?</em></p>
 </blockquote>
 <blockquote>
-<p>NULLs do not always stop code and wrap-fits are not always noticed or wanted, and any of these can lead to later problems that are then less easily resolved. So, the preference is that anyone requesting data that does not exist or putting it somewhere it does not fit exactly, should specify correct handling at the time.</p>
+<p>NULLs do not always stop code and wrap-fits are not always noticed or
+wanted, and any of these can lead to later problems that are then less
+easily resolved. So, the preference is that anyone requesting data that
+does not exist or putting it somewhere it does not fit exactly, should
+specify correct handling at the time.</p>
 </blockquote>
 </div>
 <div id="section-2" class="section level1">
@@ -299,23 +555,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="the-operator-2" class="section level1">
 <h1>The [[…]] Operator</h1>
-<p>The <strong>[[…]]</strong> operator accesses the <strong>pems</strong> structure and any meta data associated with the <strong>pems</strong>.</p>
+<p>The <strong>[[…]]</strong> operator accesses the
+<strong>pems</strong> structure and any meta data associated with the
+<strong>pems</strong>.</p>
 <p>Structural components include:</p>
 <ul>
-<li><strong>data</strong>, the data set held in the <strong>pems</strong>;</li>
-<li><strong>units</strong>, the units assigned to the <strong>pems.element</strong>s in the <strong>pems</strong>; and</li>
-<li><strong>constants</strong>, any constants assigned for use with data in the <strong>pems</strong>.</li>
+<li><strong>data</strong>, the data set held in the
+<strong>pems</strong>;</li>
+<li><strong>units</strong>, the units assigned to the
+<strong>pems.element</strong>s in the <strong>pems</strong>; and</li>
+<li><strong>constants</strong>, any constants assigned for use with data
+in the <strong>pems</strong>.</li>
 </ul>
-<p>Meta data entries are additional information that has been added to the <strong>pems</strong> file, for example, instrumentation, driver, vehicle or routine details.</p>
+<p>Meta data entries are additional information that has been added to
+the <strong>pems</strong> file, for example, instrumentation, driver,
+vehicle or routine details.</p>
 <blockquote>
-<p>Meta data components are not strictly defined, so users are free to use or not use this option at their own discretion.</p>
+<p>Meta data components are not strictly defined, so users are free to
+use or not use this option at their own discretion.</p>
 </blockquote>
-<p>Both types of <strong>pems</strong> components can be accessed in the form:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pems[[n]]          <span class="co">#get pems component by indices </span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pems[[<span class="st">&quot;name&quot;</span>]]     <span class="co">#get pems component by name</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
-<p>So, for example, exactly the full set of <code>unit</code> assignments of <strong>pems.element</strong>s in <code>pems.1</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;units&quot;</span>]]</span></code></pre></div>
+<p>Both types of <strong>pems</strong> components can be accessed in the
+form:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>pems[[n]]          <span class="co">#get pems component by indices </span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>pems[[<span class="st">&quot;name&quot;</span>]]     <span class="co">#get pems component by name</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="co">#etc</span></span></code></pre></div>
+<p>So, for example, exactly the full set of <code>unit</code>
+assignments of <strong>pems.element</strong>s in
+<code>pems.1</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;units&quot;</span>]]</span></code></pre></div>
 <pre><code>##        time.stamp local.time conc.co conc.co2 conc.hc conc.nox afr
 ## 1 Y-M-D H:M:S GMT          s    vol%     vol%   ppmC6      ppm    
 ##   exh.flow.rate exh.temp exh.press amb.temp amb.press amb.humidity velocity
@@ -325,27 +592,38 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   satellite n.s w.e new
 ## 1                    NA</code></pre>
 <p>And new components can be added or accessed:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;new.meta&quot;</span>]] <span class="ot">&lt;-</span> <span class="st">&quot;new.record&quot;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;new.meta&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;new.meta&quot;</span>]] <span class="ot">&lt;-</span> <span class="st">&quot;new.record&quot;</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;new.meta&quot;</span>]]</span></code></pre></div>
 <pre><code>## [1] &quot;new.record&quot;</code></pre>
 <p>Added meta data can also be extracted using:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;extra.pems.tags&quot;</span>]]</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>pems<span class="fl">.1</span>[[<span class="st">&quot;extra.pems.tags&quot;</span>]]</span></code></pre></div>
 <pre><code>## $pems
 ## [1] &quot;Horiba OBS&quot;
 ## 
 ## $new.meta
 ## [1] &quot;new.record&quot;</code></pre>
-<p>Although the <strong>[[…]]</strong> operation provides direct access to the inner workings of <strong>pems</strong> objects and is a useful shortcut for those developing new code, other options are arguably more convenient and therefore recommended for routine practices, for example:</p>
+<p>Although the <strong>[[…]]</strong> operation provides direct access
+to the inner workings of <strong>pems</strong> objects and is a useful
+shortcut for those developing new code, other options are arguably more
+convenient and therefore recommended for routine practices, for
+example:</p>
 <ul>
-<li>Instead of <code>pems[[&quot;data&quot;]]</code>, use <code>as.data.frame(pems)</code><br />
+<li>Instead of <code>pems[[&quot;data&quot;]]</code>, use
+<code>as.data.frame(pems)</code><br />
 </li>
-<li>Instead of <code>pems[[&quot;units&quot;]]</code>, use <code>units(pems)</code></li>
+<li>Instead of <code>pems[[&quot;units&quot;]]</code>, use
+<code>units(pems)</code></li>
 </ul>
 <blockquote>
-<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils generics]</a> or R help documentation (?pems.generics and ?pems.element.generics) for more on <code>as.data.frame</code> and other generic <strong>pems</strong> functions.</p>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.generics.html">[&gt;pems.utils
+generics]</a> or R help documentation (?pems.generics and
+?pems.element.generics) for more on <code>as.data.frame</code> and other
+generic <strong>pems</strong> functions.</p>
 </blockquote>
 <blockquote>
-<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for more on <strong>pems</strong> units handling.</p>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils
+units]</a> or R help documentation (?pems.units) for more on
+<strong>pems</strong> units handling.</p>
 </blockquote>
 </div>
 <div id="section-3" class="section level1">
@@ -353,12 +631,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="other-operators" class="section level1">
 <h1>Other Operators</h1>
-<p>There are numerous operators in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written for those where a need was identified.</p>
+<p>There are numerous operators in <strong>R</strong>, and
+<strong>pems</strong> and <strong>pems.element</strong> versions are
+only written for those where a need was identified.</p>
 <blockquote>
-<p>If you think any other operators would be useful, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
+<p>If you think any other operators would be useful, please let me know.
+<a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
 </blockquote>
 <blockquote>
-<p>Likewise, if you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+<p>Likewise, if you have any suggestions how to make either
+<strong>pems.utils</strong> or this document better or you have any
+problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
 </div>
 

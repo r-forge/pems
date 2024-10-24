@@ -12,33 +12,46 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2021-04-19" />
+<meta name="date" content="2024-06-18" />
 
 <title>R:pems.utils Generic Functions</title>
 
-<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
 
 <style type="text/css">
-  code{white-space: pre-wrap;}
-  span.smallcaps{font-variant: small-caps;}
-  span.underline{text-decoration: underline;}
-  div.column{display: inline-block; vertical-align: top; width: 50%;}
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-  ul.task-list{list-style: none;}
-    </style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
 
 
 <style type="text/css">
-  code {
-    white-space: pre;
-  }
-  .sourceCode {
-    overflow: visible;
-  }
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -52,55 +65,54 @@ pre > code.sourceCode { white-space: pre-wrap; }
 pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
-  { counter-reset: source-line 0; }
+{ counter-reset: source-line 0; }
 pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
+{ position: relative; left: -4em; counter-increment: source-line; }
 pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
 div.sourceCode
-  {   }
+{ }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
 </style>
 <script>
 // apply pandoc div.sourceCode style to pre.sourceCode instead
@@ -109,13 +121,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -127,7 +146,187 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 
-<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
 
 
 
@@ -141,32 +340,60 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <h1 class="title toc-ignore">R:pems.utils Generic Functions</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2021-04-19</h4>
+<h4 class="date">2024-06-18</h4>
 
 
 
 <div id="background" class="section level1">
 <h1>Background</h1>
-<p>The <strong>R</strong> package <strong>pems.utils</strong> uses two main data types: <strong>pems.element</strong>s, data-series with assigned units, and <strong>pems</strong>, data sets of simultaneously logged <strong>pems.element</strong>s.</p>
-<p>This document provides an overview to their generic handling in <strong>R</strong>.</p>
+<p>The <strong>R</strong> package <strong>pems.utils</strong> uses two
+main data types: <strong>pems.element</strong>s, data-series with
+assigned units, and <strong>pems</strong>, data sets of simultaneously
+logged <strong>pems.element</strong>s.</p>
+<p>This document provides an overview to their generic handling in
+<strong>R</strong>.</p>
 <blockquote>
-<p>For a quick and more general introduction to <strong>pems.utils</strong>, see <a href="http://pems.r-forge.r-project.org/pems.utils.intro.html">[&gt;pems.utils introduction]</a></p>
+<p>For a quick and more general introduction to
+<strong>pems.utils</strong>, see <a href="http://pems.r-forge.r-project.org/pems.utils.intro.html">[&gt;pems.utils
+introduction]</a></p>
 </blockquote>
 <blockquote>
-<p>If you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+<p>If you have any suggestions how to make either
+<strong>pems.utils</strong> or this document better or you have any
+problems using either, please let me know <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
 <blockquote>
-<p>Unless you have setup <strong>R</strong> to automatically load <strong>pems.utils</strong>, you will need to load it e.g. using <code>library(pems.utils)</code> to use the functions described here.</p>
+<p>Unless you have setup <strong>R</strong> to automatically load
+<strong>pems.utils</strong>, you will need to load it e.g. using
+<code>library(pems.utils)</code> to use the functions described
+here.</p>
 </blockquote>
-<p>Generic functions are a special category of <strong>R</strong> functions that identify the object type being supplied and, where available, automatically apply object-specific methods to handle these potentially very different objects appropriately.</p>
-<p>This means that many functions that <strong>R</strong> users are already familiar with can be used with specialist object classes like <strong>pems</strong> and <strong>pems.element</strong>s.</p>
-<p>For those already familiar with <strong>R</strong> object classes, when used with generic functions, <strong>pems</strong> behave in a similar fashion to other (row and column) data set objects like <strong>data.frame</strong>s and <strong>data.table</strong>s, and <strong>pems.element</strong>s behave in a similar fashion to other <strong>vector</strong> objects like <strong>numeric</strong>s, <strong>character</strong>s and <strong>factor</strong>s.</p>
+<p>Generic functions are a special category of <strong>R</strong>
+functions that identify the object type being supplied and, where
+available, automatically apply object-specific methods to handle these
+potentially very different objects appropriately.</p>
+<p>This means that many functions that <strong>R</strong> users are
+already familiar with can be used with specialist object classes like
+<strong>pems</strong> and <strong>pems.element</strong>s.</p>
+<p>For those already familiar with <strong>R</strong> object classes,
+when used with generic functions, <strong>pems</strong> behave in a
+similar fashion to other (row and column) data set objects like
+<strong>data.frame</strong>s and <strong>data.table</strong>s, and
+<strong>pems.element</strong>s behave in a similar fashion to other
+<strong>vector</strong> objects like <strong>numeric</strong>s,
+<strong>character</strong>s and <strong>factor</strong>s.</p>
 <blockquote>
-<p>See Chambers (2008)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for further discussion of generic functions in <strong>R</strong>.</p>
+<p>See Chambers (2008)<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> for further discussion of generic functions
+in <strong>R</strong>.</p>
 </blockquote>
-<p><strong>print</strong> is perhaps the most heavily used generic, and useful as an example of how they work.</p>
-<p>When an object is evaluated and not caught, it is printed. This means when, for example, you enter <code>pems.1</code>, the name of the example <strong>pems</strong> data set provided with <strong>pems.utils</strong>, you are actually seeing the output of <code>print(pems.1)</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.1</span> </span></code></pre></div>
+<p><strong>print</strong> is perhaps the most heavily used generic, and
+useful as an example of how they work.</p>
+<p>When an object is evaluated and not caught, it is printed. This means
+when, for example, you enter <code>pems.1</code>, the name of the
+example <strong>pems</strong> data set provided with
+<strong>pems.utils</strong>, you are actually seeing the output of
+<code>print(pems.1)</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>pems<span class="fl">.1</span> </span></code></pre></div>
 <pre><code>## pems (1000x25)
 ##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
@@ -183,47 +410,79 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
 <blockquote>
-<p>Here, <code>print</code> identifies <code>pems.1</code> as a <strong>pems</strong> and passes this to a hidden function called <code>print.pems</code> that actually handles how the object is shown to the user.</p>
+<p>Here, <code>print</code> identifies <code>pems.1</code> as a
+<strong>pems</strong> and passes this to a hidden function called
+<code>print.pems</code> that actually handles how the object is shown to
+the user.</p>
 </blockquote>
 <blockquote>
-<p>While this might seem a little involved, it is all handled silently by <strong>R</strong> and means that the user gets object-specific responses without having to check the object class and then running a dedicated <code>print.class</code> function themselves.</p>
+<p>While this might seem a little involved, it is all handled silently
+by <strong>R</strong> and means that the user gets object-specific
+responses without having to check the object class and then running a
+dedicated <code>print.class</code> function themselves.</p>
 </blockquote>
 <blockquote>
-<p>It also allows package developers to more completely align the use of their and other packages.</p>
+<p>It also allows package developers to more completely align the use of
+their and other packages.</p>
 </blockquote>
 </div>
 <div id="pems.utils-generic-functions" class="section level1">
 <h1>pems.utils Generic Functions</h1>
-<p><strong>as.data.frame</strong> converts a supplied <strong>pems</strong> or <strong>pems.element</strong> into a <strong>data.frame</strong>, for example:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data.frame<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>as.data.frame</strong> converts a supplied
+<strong>pems</strong> or <strong>pems.element</strong> into a
+<strong>data.frame</strong>, for example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>data.frame<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <blockquote>
-<p>As part of this process <strong>as.data.frame</strong> discards <strong>pems.utils</strong> information like units that are not tracked by <strong>data.frame</strong>s.</p>
+<p>As part of this process <strong>as.data.frame</strong> discards
+<strong>pems.utils</strong> information like units that are not tracked
+by <strong>data.frame</strong>s.</p>
 </blockquote>
 <blockquote>
-<p>While this might seem a disadvantage it does mean that functions that do not like such extra object structure have the option to convert it to a <strong>data.frame</strong> and work with that. The linear model function <strong>lm</strong>, for example, uses <strong>as.data.frame</strong> to allow it to work with many other classes of objects.</p>
+<p>While this might seem a disadvantage it does mean that functions that
+do not like such extra object structure have the option to convert it to
+a <strong>data.frame</strong> and work with that. The linear model
+function <strong>lm</strong>, for example, uses
+<strong>as.data.frame</strong> to allow it to work with many other
+classes of objects.</p>
 </blockquote>
-<p><strong>as.pems</strong> converts data set classes like <strong>data.frame</strong>s into <strong>pems</strong>, for example:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">as.pems</span>(data.frame<span class="fl">.1</span>)</span></code></pre></div>
-<p><strong>as.pems.element</strong> works similarly to convert vector classes to <strong>pems.element</strong>s.</p>
-<p>Both <strong>as.pems</strong> and <strong>as.pems.element</strong> will accepted extra arguments to associate <strong>pems.utils</strong> specific structure like units. So, the <strong>as…</strong> functions can be used in combination to work with functions that do not ‘like’ <strong>pems.utils</strong> classes, for example:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get units</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>units<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">units</span>(pems<span class="fl">.1</span>)                </span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#make pems into data.frame</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>data.frame<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pems<span class="fl">.1</span>)      </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">#do whatever you cannot do with a pems with your data.frame...</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">#then if this makes a new data.frame you want to keep</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#(update units if any changed or extra columns added)</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">#re-build the pems</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>pems<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">as.pems</span>(data.frame<span class="fl">.1</span>, <span class="at">units=</span>units<span class="fl">.1</span>)</span></code></pre></div>
-<p><strong>dim</strong> reports the dimensions, rows then columns, of a supplied <strong>pems</strong>, for example:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>as.pems</strong> converts data set classes like
+<strong>data.frame</strong>s into <strong>pems</strong>, for
+example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pems<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">as.pems</span>(data.frame<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>as.pems.element</strong> works similarly to convert vector
+classes to <strong>pems.element</strong>s.</p>
+<p>Both <strong>as.pems</strong> and <strong>as.pems.element</strong>
+will accepted extra arguments to associate <strong>pems.utils</strong>
+specific structure like units. So, the <strong>as…</strong> functions
+can be used in combination to work with functions that do not ‘like’
+<strong>pems.utils</strong> classes, for example:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#get units</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>units<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">units</span>(pems<span class="fl">.1</span>)                </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#make pems into data.frame</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>data.frame<span class="fl">.1</span> <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pems<span class="fl">.1</span>)      </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#do whatever you cannot do with a pems with your data.frame...</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#then if this makes a new data.frame you want to keep</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#(update units if any changed or extra columns added)</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#re-build the pems</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>pems<span class="fl">.2</span> <span class="ot">&lt;-</span> <span class="fu">as.pems</span>(data.frame<span class="fl">.1</span>, <span class="at">units=</span>units<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>dim</strong> reports the dimensions, rows then columns, of a
+supplied <strong>pems</strong>, for example:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">dim</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## [1] 1000   25</code></pre>
-<p>Related functions <strong>ncol</strong> and <strong>nrow</strong> report the numbers of columns and rows in a <strong>pems</strong>, respectively.</p>
+<p>Related functions <strong>ncol</strong> and <strong>nrow</strong>
+report the numbers of columns and rows in a <strong>pems</strong>,
+respectively.</p>
 <blockquote>
-<p>Similar to other vector classes, <code>dim(pems.element)</code>, <code>ncol(pems.element)</code> and <code>nrow(pems.element)</code> all return <code>NULL</code>.</p>
+<p>Similar to other vector classes, <code>dim(pems.element)</code>,
+<code>ncol(pems.element)</code> and <code>nrow(pems.element)</code> all
+return <code>NULL</code>.</p>
 </blockquote>
-<p><strong>head</strong> shows the top rows of a supplied <strong>pems</strong> or the start of a supplied <strong>pems.element</strong>. The extra argument <em>n</em> changes the number of <strong>pems</strong> rows or <strong>pems.element</strong> values shown, for example:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>head</strong> shows the top rows of a supplied
+<strong>pems</strong> or the start of a supplied
+<strong>pems.element</strong>. The extra argument <em>n</em> changes the
+number of <strong>pems</strong> rows or <strong>pems.element</strong>
+values shown, for example:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">head</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## pems (6x25)
 ##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
@@ -239,7 +498,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pems<span class="fl">.1</span>, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">head</span>(pems<span class="fl">.1</span>, <span class="at">n=</span><span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## pems (3x25)
 ##               time.stamp  local.time  conc.co  conc.co2  conc.hc  conc.nox
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]    [vol%]  [ppmC6]     [ppm]
@@ -252,9 +511,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
-<p>Related function <strong>tail</strong> work similarly but shows the end of a supplied <strong>pems</strong> or <strong>pems.element</strong>.</p>
-<p><strong>na.omit</strong> removes any rows of a supplied <strong>pems</strong> that contain <code>NA</code>s, for example:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]; a[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span>; a</span></code></pre></div>
+<p>Related function <strong>tail</strong> work similarly but shows the
+end of a supplied <strong>pems</strong> or
+<strong>pems.element</strong>.</p>
+<p><strong>na.omit</strong> removes any rows of a supplied
+<strong>pems</strong> that contain <code>NA</code>s, for example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>a <span class="ot">&lt;-</span> pems<span class="fl">.1</span>[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]; a[<span class="dv">2</span>,<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span>; a</span></code></pre></div>
 <pre><code>## pems (4x3)
 ##               time.stamp  local.time  conc.co
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]
@@ -262,7 +524,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   2  2005-09-08 11:46:08          NA        0
 ##   3  2005-09-08 11:46:09           2        0
 ##   4  2005-09-08 11:46:10           3        0</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">na.omit</span>(a)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">na.omit</span>(a)</span></code></pre></div>
 <pre><code>## pems (3x3)
 ##               time.stamp  local.time  conc.co
 ##        [Y-M-D H:M:S GMT]         [s]   [vol%]
@@ -270,10 +532,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   3  2005-09-08 11:46:09           2        0
 ##   4  2005-09-08 11:46:10           3        0</code></pre>
 <blockquote>
-<p>Functions that cannot handle datasets that contain missing values may use <strong>na.omit</strong> to ‘clean’ datasets.</p>
+<p>Functions that cannot handle datasets that contain missing values may
+use <strong>na.omit</strong> to ‘clean’ datasets.</p>
 </blockquote>
-<p><strong>names</strong> reports the names of <strong>pems.elements</strong> in a supplied <strong>pems</strong>, for example:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>names</strong> reports the names of
+<strong>pems.elements</strong> in a supplied <strong>pems</strong>, for
+example:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##  [1] &quot;time.stamp&quot;    &quot;local.time&quot;    &quot;conc.co&quot;       &quot;conc.co2&quot;     
 ##  [5] &quot;conc.hc&quot;       &quot;conc.nox&quot;      &quot;afr&quot;           &quot;exh.flow.rate&quot;
 ##  [9] &quot;exh.temp&quot;      &quot;exh.press&quot;     &quot;amb.temp&quot;      &quot;amb.press&quot;    
@@ -281,9 +546,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [17] &quot;option2&quot;       &quot;option.3&quot;      &quot;latitude&quot;      &quot;longitude&quot;    
 ## [21] &quot;altitude&quot;      &quot;gps.velocity&quot;  &quot;satellite&quot;     &quot;n.s&quot;          
 ## [25] &quot;w.e&quot;</code></pre>
-<p>It can also be used to change the names of the <strong>pems.elements</strong> in a supplied <strong>pems</strong>, for example:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)[<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CO&quot;</span>, <span class="st">&quot;CO2&quot;</span>, <span class="st">&quot;HC&quot;</span>, <span class="st">&quot;NOX&quot;</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p>It can also be used to change the names of the
+<strong>pems.elements</strong> in a supplied <strong>pems</strong>, for
+example:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)[<span class="dv">3</span><span class="sc">:</span><span class="dv">6</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;CO&quot;</span>, <span class="st">&quot;CO2&quot;</span>, <span class="st">&quot;HC&quot;</span>, <span class="st">&quot;NOX&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">names</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##  [1] &quot;time.stamp&quot;    &quot;local.time&quot;    &quot;CO&quot;            &quot;CO2&quot;          
 ##  [5] &quot;HC&quot;            &quot;NOX&quot;           &quot;afr&quot;           &quot;exh.flow.rate&quot;
 ##  [9] &quot;exh.temp&quot;      &quot;exh.press&quot;     &quot;amb.temp&quot;      &quot;amb.press&quot;    
@@ -292,29 +559,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ## [21] &quot;altitude&quot;      &quot;gps.velocity&quot;  &quot;satellite&quot;     &quot;n.s&quot;          
 ## [25] &quot;w.e&quot;</code></pre>
 <blockquote>
-<p>Similar with other vector classes, <code>names(pems.element)</code> returns <code>NULL</code>.</p>
+<p>Similar with other vector classes, <code>names(pems.element)</code>
+returns <code>NULL</code>.</p>
 </blockquote>
-<p><strong>plot</strong> generates a <code>scatterplot matrix</code> for a supplied <strong>pems</strong>. By default, the matrix is limited to three <strong>pems.element</strong>s, but plotted cases can be changed with the extra arguments n (number of plot cases), id (names of columns to use) and ignore (names of columns to ignore). It also accepts common <code>plot</code> arguments (col, pch, cex, etc) to modify the appearance of the plot, for example:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span>, <span class="at">id=</span><span class="fu">c</span>(<span class="st">&quot;velocity&quot;</span>, <span class="st">&quot;revolution&quot;</span>, <span class="st">&quot;exh.flow.rate&quot;</span>), </span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex=</span><span class="fl">0.3</span>)</span></code></pre></div>
+<p><strong>plot</strong> generates a <code>scatterplot matrix</code> for
+a supplied <strong>pems</strong>. By default, the matrix is limited to
+three <strong>pems.element</strong>s, but plotted cases can be changed
+with the extra arguments n (number of plot cases), id (names of columns
+to use) and ignore (names of columns to ignore). It also accepts common
+<code>plot</code> arguments (col, pch, cex, etc) to modify the
+appearance of the plot, for example:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span>, <span class="at">id=</span><span class="fu">c</span>(<span class="st">&quot;velocity&quot;</span>, <span class="st">&quot;revolution&quot;</span>, <span class="st">&quot;exh.flow.rate&quot;</span>), </span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>     <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex=</span><span class="fl">0.3</span>)</span></code></pre></div>
 <p><img src="data:image/png;base64,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" width="45%" /><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAJACAMAAABSRCkEAAAA2FBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZpAAZrY6AAA6ADo6AGY6OgA6Ojo6OmY6OpA6ZmY6ZrY6kLY6kNtmAABmADpmAGZmOgBmOjpmOpBmZgBmZjpmZmZmkJBmkLZmkNtmtttmtv+QOgCQOjqQOmaQZjqQZmaQkDqQkGaQkLaQtpCQttuQ27aQ29uQ2/+2ZgC2Zjq2kDq2tma2tra229u22/+2/7a2/9u2///bkDrbkGbbtmbbtpDb25Db27bb2//b////AAD/tmb/25D/27b/29v//7b//9v///9tHBXvAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO2dC3vltnGGqbXXUuo0dSRnk/Ri79pp6zhd2U3s+DhOu5RcCf//H5V33GaAwY0EuPM9tvaQxJBD4CUwA/LwdILFSlB3tAOstsUAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSxACxksQAsZLEALGSdGqAHrrutb326Tc/rJvUvzTdW3Yh1ifUmQF6+vTt4z/8YK29e/HDskn9S9vlw/XIX6z1GXVmgB5/9e75i7fGyucvvx96oHmT+pe81wGgBOvT6cwADd2FuLeHl3EImzepf6k7vQwDVrz1+cQABSOg2zFA5xUyujylDWHicstDmNSZAULi2xGghCB66G84iJY6M0CF0vhbTuMVnRogVnkxQKwkMUCsJDFArCQxQKwkMUCsJDFArCQxQKwknRwg9+l5Tr7o5rPo5KfJAJXWyU+TASqtk58mA1RaJz9NBqi0Tn6aDFBpnfw0GaA4PXSjrggPysWfZled2Lt46W37/GZ6xOnxV+9KAhRtWUgdulCDGvJueeZu+yfEMv6Yx6uhJqrbO9kDEZ7VZYB2UkPeDXq8Gce1wjFQtGUhHdJEfd/TCkZ5R915suBQiGQZf8xoy0JigOJlxkB3t5GW8cc8Xg0NEnV7N0bP//GC+FUlBmgnNeTdlH493dG+rcQA7aSGvFvz9/uO0A0xQDupIe9oE0CwZfwxj9dRTUSLdGO92yeOPgIDBmgRA7S3ZSGVBiitKcne7Za6q2KARGmA+p485QMqAKDEI8WIARInAWg8BgN0jEoCNLRoeYC2vmf/UYwBEkUB6vvkgYUI0NIFiZ0pYoBEcYDwFiU1NR2g3gJIPUAZrhggURIgT++TAyAZ+wCoMkC7qBRA+vAV24BEgHolikZHsvwQMUCiOEBLq8nGC4uJSEOYkAD1yjLgUcCRg72r3rKQMgOk9DlwCJ0XIOUoSyjkiLsYoBIqBJDRrmuQ4m7hcO96TIojfmdjxQCJYkOYMjtTEiCFICF3rhxC6/BcYXaMGCBRCCDHBJAVFDlFAciIsHrlg0ErpVcKET8TLQoDBLRUSYCUz2qfZKWC2QBqyrKQSgIEd0IhzUcCyEGI5kLuDogBGpUfoC3ocQ9iJNEB0vbqngZigHKqBEA9AlB4y5GCaNq+ZTkGKKdKDGFrLIIBBG2L9c6ZZiG+mR+zzJNXb1lI2QHy9wh9RoD03YR1eRpAMRAxQCIDQHaj+ebu0LtVtohDWIZ4nQGKVHaAsJsV67RiUAxC8E6dfgb9scp6i0V5V71lIWUdwlx9ywaQs4cyRIqBdCTMdEyPkRig3MoAkJYg+0awEHwoj3NsOR8QyYT2d6FigERmgIQ7BJKNTVUAQPqu5Z2MgmKARP4sDB0ktN4in3d9L/s9LUXfRkxPppYgBkhEA4QmzHIUs4YTuZXcM9C82w6ok6vfkVsPqv5NFAMkSgKkb1WHmmwAKYG5XNpW6AfSD1oEoF1e8xttWUiZhjD3rK6kJrDhqACpx1lXlQ2gAYf4Nb9E70KbRe15wixJ3mm5udkXIe7kkeEQv+Y3BCAZaAAb7VVLnxDKUBBA8xG8+0SLKNERzU2kB+LX/FIEAoSOGmtMQmyZQO+UnB2YF8dsrI2pAPFrflO9s6td6XiigiCCd2rfBqTtAQARrAzv+JHWjAAppKgrNYBye7ftVx3ElKhazcGCjktDHYiBLl330h9DM0CrtCwZiZTVzoG6N6J35tSAPuNjfHIeFAnd3LIBerjmLCxIxiVuACTbk/ael2CAxLp/OXgZfYd7esGcXgyUDdDllrOwFBnNsLVn5AAWABC05DmiKwoixkD64tPdy79/NvzzO+6BCCJOsWzdT2j+BTjkzsKE7AVdLqpW+OoogMY07Ort4y84C6MIYsXK7dXYpBRAElCr7e1QOGWayONdkBggQDZAvRph2MNbHu+0LN7aQgYoGe/qLQspawykSJ//iclxLIcg79TRywyHteP60FFHQaoYIHEcQDQFAATlUwEAeYv5vAsSA0SRDElKArT+G30Mc1d0MUAiO0DG9R8zMKAOYd55po2pBw/3lQESpQBSbjEk9Q6kIcwZniMHzxJNM0AiF0Dg7LOcRCznnTwO4Au8pA6qaeMeAySiAUKv+rV5Fm6oACFlaGm8hNWHhFkiLXRigET0A2W+dgpIwFxhNgkgoR7LdTxoGylRQ8QAieQnEpWpQ/UWQt9j9+aR3Rmf6N71GKy94hq6f+JUESIGSCTfyrAB2jqCPuj+F9x7eLzTybGiZ81T11n4XQPFAImM98KMGRlCQOLeH8W77ViKvSs8dnVGoa6BDlHFAOEAbYthAMGieUcESB2vkj2bHOJHWmMACphX2QkgYjLliaHD1VgP9PwG/0Hyh+52+PvzV4kOhQJkZ+96sfIAyWmnkN1m6onOBtDjzXWiQ4Hemc2mRdRY0wQ1GREg0nyzMshlGcBOBdCkAwBS/9HWe28VbImTszGpMRDlS6hmlOSXb1xmgEQcQOg0NLyM7GMZ9DIBRD1uQDlkirN+gC5TQLMGNj+96roPPhcbQH/7eFke1nxz0119tha9jAnB7ePN/L2kh2UnQQ7FAQTdHXA2EjQTmeQdDBA2xT37F4YbWLpWgFYG7scvyV7mTPGTBaDnN/PyWGL5PIIiAXp+M3+19p7yDVvTodjzUoNSeROVUDwrQOBaZPY5PuwmOeRTYcv77rVYOHroPvzLkF69GtZMAF26q6+HXulmxObSffjd9EUALYieux7ycBYBEFr56nR0ppkWdME8cMgIRur8CKoWoIfuWox8vN46kqe76wmgtX8Z4Vo+TwOeAtDT3dg7TcbBDsUBBESn7raht5zfOzlgBvMAdU5BO6gWoGWwUkasccwaV8x0zCXWz6PUNP6y9lbhDpG8kyGOeSVTp35yA9SjaVigC4FTjdUCNPUqEw5PdytAY++jAnT1FgNo/IeekMUAhN29XCaACHsgOkfPwqC7Yq5D011oEqBxhJoGIbUnofZA4zbyCJaWhWnNQXggJ1g+7+TYtbpABCi/d3VZ3l/9acbjXpKAxEATNtpM9EP3OXkES8vCjOs51wyvFB0gaLG0KgboofvlPI/z0F19PrDzbXeNZGE/vxkRWwD6aOqSnu4+uKFNApkOxZ+XT0ZX4W/luQAlBoI+BjiFr/Hur2KAhuB5mcf5Zg2B0Hmg8eMC0DwpNHRbxEkg06E9AfI0T2mA4MEuDaCaXvN72V50Nc48X33yDp2JHjctkz8/3kz5/7BEeUsW4FDIeblvX7oqv5dvQvCJ6p3z3i046RA+0NkWhkPnec3vPfE2xqhQgJRkJwkg2mx0GEBIFo7MWkHrPG67vDvRa35/uiGH0PEAQfEqXv3uwSIVoDWND8/RTQfCLJEeqPHX/N4vt8eIih3CcICg7ik2M3J6pzS73s/slYeZDp3jNb/fLjfoiYoEyGwjo/mKPLKFAmRGxLsBxM9ER08kOgCCDfyFIBG9KzCFSdmbnYVd/fGmo8QPDFCYSgNEvw1HVzhAz1+8fbx5fYYsLERhAAW2UfLTxx7v4nafDTQ7C3v+8ocTZGFBSgbInfkmRiYUgDJMQKtbAnYHZ2H8ml+SSI9lad/kKwCQDNjz9CrgnvDdW1nY+Ibfh9azsECFA7ROJJPuRWyfygC07V8+zQG64HfSXYYGEF3vLUBLZcL1uU0DGX1CQjtSvFv5lB+NLcBxoqccce+qtyykqBiIApDaSr5mSgZIfbeLoxvSyqTPdTJAIhkgsNp7RSIyV5ptqN6Z1GoBGhLI616hADrEAIkogJDGUUut96awNIw6qgUAtPVEiwegj+4ETHpOEwMkorKwoGnBWIAAhzwAhewX3w8a4QFigETsTHTeSV9cRO/2c0gTAyQiAHKl8HIcCHHBUToMICy2T+6WkA0MkIh5HsjRHErkE9Bo6QDJgwP79nrj85UBcikcIOe6Hn7UjCbbiNwDYYfUJxRCrd0mDNComBhokjKVAsyoRFEUCVBsBKRZ4Qu4KQMkEh7nsObizImUHJGtxzs1ZycdjIgJ0XEGSERnYa77BAKc6bXKZPBOm7wJBsixieYnAyTisjBokALiIHhTEEXkISxwx8AEp7M3RbzjR1qjAEKSZX3619zkWE71Th1RgXAMNlEQceeVVO+C9D4DZNRpr/5eMgyQsK/ojADJqQNgx9gQixQJFAMkcgCkBiAaSHDx3N6thwS/SWQD5KI7VAyQiAPIAsToYCLi0TTvoCgaiYoYoMyKA8hOuDR0SM+7ZvTOzsOkV0CII73M6F31loUUDtCKxzZ2uAHaqwcSDNAhih/CgHgHKR7nmeUQnoXBT2Hkj5oNMUAiQwyEl9o+BTsFOwR4F5HBM0B5FZmFeaPTPE/okADCHHCUxVeFiAES0TdTbYq8YXNMa0V55xm6rDnoaDFAIjKINj+YG8GGKQ0QdcwkpfYkMUAiDSB0a7ZHTGMAogbTAQUQMUAi4XkgTOiEb4xivAsHKFYMkIh5IhEPMVJnfWzR54H0GXG0XBavMIdqekvrbmKA4mU4dJ63tIYoBiC8GVwtVDSIDnioLJ8Mh07zltYg5QNI6QLAhKgcQH0PA0TplFKE9ECNv6U1UFFZGNgo0PzKPjdTMah3Bugkb2kNVDhA8IMTzhXRonjXR3wVLY/4kVaR5XkgFKD0JiUCBD8RBPqUU5zGi0iA9EW0cfYBSDkcAaCcIDFAIs9MdLnBI8Q77xiG32WJlJmF3W2/rBRoGX/M4xWehdUIEPg8kF0og0eqTIeePqX+ytb7DRCyUIKjEICKJlygLIceqD+z9R4DJNSGqgagLWPfFSKOgUQEQLvmy4FBdPpD2EFigETyvbDCOJHTeCHTeO+TbdnEAIlYgPpeaTerRDbnYgBan0fCBtqMYoBEbBCtjBTWbYu9AdI9Ax5oY4BKKikLM7aYKKUrAiDchexQMUAiLohGt5gfkkVP4wnbGKASSgSo8FARMA+EhmI7TXNWb1lIaVlYXyLwwRwKAahwcO91qELLQooASFsyPxwTROOPmJRMxhggkQqQvkX/N4fI3vUYwUpqn88tgkP1WRaS1USemUF85rBE0IEDZE5nGjNB2/p11qHEHDUDJGCAjHrWG8Rsp61x1rU556ZB74znn3tNuiOyaIlOyGxM/lpPMECydbZPWe9tEADqYQn9nyJRvtGY/LUewhCmXfuu4DWPkCHMdMHCyjupmMc7/Zlo/loPexcmpAfir/XUo4a8E/y1HvYuUJyFiaaaqG7v9rKsTuxdvOIxiLZksQQDxEoUA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEt9M3UvteBeGwQGWhdTQAxN1e1e9ZSE11ER1e1e9ZSE11ER1e1evJf4tmxxqqIl83hX6ejUuBkgwQClqBKCyOhFAu4sBEk01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3elbZMfgKgkBpqorq9q9GSOCGvFwucxW+oiTzelX1XGnQsBkgwQHFqBKA9dB6A9hcDJJpqorq9q94SVVpf3VATHeUdWsHnASiBoSqaCBXZu5IRz9kBEknVxwDFqx2AClbPSQDCtVfdVW1Z8DeLGCBiGUAtAFT2gWjxHgBEke8HipANLQIUXwjRaQAqN1Q1DZBLWX6giwEKlTxQ4wDl+V2l0wBUVuBXhpoHKMdeqmkiUNV4B1Z24wDlQaiaJgJ1rHe++mWAxNFN5BMDlM+ykBigeDFAoqkmqtu76i0LqaEmqtu73JbIT0CnV0LKbQ3AoqEmCvQucno5oGBJgLCfgE5sIu3RDcfvcyPr5gVt1RkAsmdUt98iR/cM1x1gcBBA2E9A5wSIdKMMqJj3BCCBNj6xnsK8CxK9BzJ/App8TOw+BXX+2f+kPfBgeKMAGcJqCK5Se4GMXdEYCPkJ6AwABdqjZicGCO6k4aqz19YBUHZLTb33OdZ1K96Znx4gfyVtBuYHaKPHuyDtkYU5rwMSQP0s92HOAhB4hYDr4EsJGbycFVh3FhYQACLlVn62+oF0AoDUtserZ7vygurVWd0NZmGjHGmYWUqmFmjFnQIgeG5MT6yAMqn3EqvOwnD5AZLdjqyqEwMkNIA0UMCRfru2wEQjgKqKs7C0a2OtOYnN6QHqt+ZXMXAEMGhWEYDRrrlU2OtdqPmDy7pf/l9XIX6hCzWI6p11gSy9jAEDbfQXTvJoDqVblsrC6LZapnZygODzswJr1zyhf3du74K0RxZmyduZKCXVK89dvnWAtjwTEXme0CzjnwFpJQszwfGdV78GPypAp+2BTIDMsw3tyLdr72CAwrMwNHhzZuF22X4DyN47oNYBEkZv6wfIUTNb1Gh2a3D11ZWFOaN/IkBK59PreTyq5gHamr03Lh1nFi8U5vS/YId9AECZLakdEAbQeXugLWXVzlzgAClmpLgA31Q4C7v64033whjBcgDkZAkbw04LkMKMevVsGz0iXJjHAPT8xdvHm9cJWRjstiflUAEi7vIEAAn1ll9IxIhX5fFp/JB+PX/5Q0IWBkfTzg5ZBgEwZqcESMhZr+3CsUNprahlqW0jzxXtkoU9/S7HPBBlQqfX8HHmGrhD7QNkrdcXHB1zT6llh3dBomRhvxgSsIcsM9HIiKQX1m4GeXNXxKEmAdoCaGffoVYnSIszCyZ4F6SSlva5OYcuabT+RyiOOdQoQMo9P8LMBQKQgFeQvQtSYYDC76TKoR+dSFL2jjrUJEBG2qmdIDSqhdYt0buKLA0MKLnoelWhFSRr16jS5gFSgz91GmjbqBc2jfWFMLhqBciQf3BW6s4BkAoZ4lBrACnhjzGIz1sJw5keBTUMkBXO6YuuujCuPlcYadfpSQCal9QkfuuM3FAYSXw9WViopR8guGNR+h28wmSia21tGqD1rK3rRwbKxkqxbVw+ngIgd+q5XU9gCf0CBEqtOQqyuXWAtPBHiO1cZYm13EYRCJCx23DvgrQzQKSRHBu/1ADpdAAZIbTQOlugoBroOIOCcO+CtI+l1btixZQL0LbW67g8QM9vjDvIP38lxnvLtzE788ZA+tWh9cbCAGn7TI+xQ7yrxdKOhbCOZduEDl3rBxyfHQB6vLkWOwBkTAdpYKlll4/Lv9Ax6VjVDpCyxgmQO/1y87MXQJEixUBCQ0TWiQ8ghJSWAeqNZ6D6DRNls1yQPRBCmSzX98gkR9sAaWlUr1SUCpLGEGC5LCZ6V4WlnnYBAGl1pEaMztN3FaACdHnx/avuxXdC/PSq6z74fFyzjErz6PS3j5fVE0D3013kkZ3L+GTv7TqEbaWGEv/1h6778GuX3x7v1ktjW7KGfx0gs4QBUDhBVQGkoKKlEwKcrBBmVdh9snU5EhxyAvT7rnv5bgai6z4Z8Xg5PasywvL8Zl49rHEApJQS9x38xbkA72Tfui3oZ2+EOmo1yMvTKByiowHSTkcHSD01vP3VsU3foTABIjnkBGhu64fuw78MidWr7vXIwPBn5mjYOvQlP90MmBgAqUG0UmowHj4PRF3jh6R4Z108ynhlVEtvAqTVcoyOA8jsMKwzMMJB6AThfkfdLrAA3HYIWtC1DFgzGeLp7nqE4nra8HoAYV49woQDpJYaALoV6y4SvNuiOwggPabUAiG1YmL5OQyg3tf2sozBjrqk1ZRuqezBSxAdoLG7WQchOVhNf57u5tFsXMABUkupJVK8W8/QCI+3S9Qev+2AoEGA7D5oFtATaevVRXP8kibK2OXvgsIAerpbARpTrbFXmhCQaFy9pQA0bM0CkBUgb3G1dhXZ+40JmT3e7WiJe49FKzYj+nsTzIja82yH6RC8oGvtgdQcfRyLpvVH9UBbDyP/1bqdHpm7aBEg5fUurpjYQgUoI4AcVIsBFIDwPa1+oQu6ZoCWwHnV/dWfJijsGGgqdhkjHCwGygOQ5MUIgxaAtEtNyb30YMDpA9G7HS2RmFjPm7a1VjF4ixVEYoaAQ/CCrgWgh+7q8wGYb+fg96H75Rxbm1nYZYyRhsXrkZGP3kFZWJ4YSGjDlB0V6heSBEjfgdMHondHW4LxMQ4bthMjIwl0yA+Q+EaGQFNMPXcq5jzQ/GaAf5qHMHgeKAtAsquR/TccE8IZB7qOpKoAEvA0DjikbemZ3Q1pTwWXAGiaTL765N269uU7uVrORIvHV93VZzMeP44dETATnQegNQuD+2aFKhygaB07hNmnZHRCQl3SPqAALZYhlUQF6Bh5vVMjIHAAU7qlrPBgDu1hqc9daD3sJjO1MjeCizG5ReMACbUizW5IC69lblbGux0t4WvFGsHxkzV6Jx2gwDpqGqCtL9/iIAMgoQJkd86JPB07hNnS+lryucExY5BD8EINIgGED1LoOA/zlOTdjpaO05qFAQSs682pMiWdJzsEL9Qgknc9OjrBgeS6lDyeHQXQJLf36FUDrIKr4r0DyLuv7DF0dUPYJk99wBFUgkPwQg2KAMjR68Br4lUJQDYunkmLrFMaJwFIXRKuhTMAZAjqgeHc3ijgqwtSXTUPkHEjDBc+dRarSgAaBQPkEAO0KgCgTE55HNrB0pz5s2cnso3dXrPmAdryCKMfd0yo5ULpuBioNECU2UjFIXihBtF6IBpAAZUS492OlnIsdsxx6csuwcl9iEPwQg2iD2GO3CRr0uF3qLwlASChbgwCKLSamgdIgDmY2iHlJ8ftUHFLnR309IDJIEJn/P4BpMCyAzQUh/a19MxbQGWVu7HJ9XQCgNBRDCud6pXXoRyWcb9YSD25fMP6OQAKqYo2AHL9YmHY/I2eqGXvmk8AUK8/xAt33CXGtJIAuX6x0JdP6uO5CVDmijgFQGroY9dQzGNS4d5ltqT9YqHrrKA7PNAMEVyMrOYBWh/mwJOSNrOw2N+NR852voigjfaTnK4pAksnAMieRMQKZtbhWRjMA7oMf6TuiOJQiwAJbQxbV4ClMjnldyiHpSML800BaeNQrz96aSbyyToDQHIc2xbp87AJqicL67XOpV+iPhn2SKSslak6BUBmHDSvMz9k1/FZmIxt5ESYMSsGhof6AwxADdEr7QwA9arkypKOuR3KYOnKwlY+evlHnj5cE1bMo84kMkAGQPkGeLeOysJ0WoSyRmiVIdD5w4zd8wkA0vmxK28f70pb6q930XubqYB51cB1wDPRtmyA1vV7epfb0pmFLdjIPwKZY2aAsAVV1ghW3C+PQxksU+6FGSpbLW0DpMxq0C7ArKohCyOIAYIWZim3CMHqaRcgdxYWfeD8ahugVXvlXbqOysKq0jkAOka7ZmHJloXUUBPV7V31loXUUBPV7V31loXUUBPV7V1my/WV7i+cD5RVoIaaqG7vcls+fQr+kFHdlcDeBansQPTw8h2wtu5KYO+CxDGQaKqJ6vZuR0ueSCSL7t3pJhIdlgwQWQxQPstCOgtAR4gBEk01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3eVW9ZSA01Ud3e5baMe83v/mqoier2LrOl+6vNFT3P0VATLXUHvBTxmO8VFgXI+mqz/naO6CNnV4sA6V+F117pInXuF0zVQ1BjAAkQIOg9rY0D5HvBVPShc6s1gDwvRNxVnIWJFgGqRwyQaKqJ6vauestCaqiJ6vauestCaqiJ6vZuL8vqxN7FKx6DaEsWSzBArEQxQKwkMUCsJDFArCQxQCxAyCM8gBggli3sER5ADBDLFvbrBIAYIJYt7BEeQAwQCxDyCA8gBoiVJAaIBWiPLOy4G3+Y2Lt46W27SxZWXd/V0AMTdXu3UxZWdyWwd0FCeqCiWVjdlcDeBcl0aI8sLMhyj+8a1NRE9vnW5J0tOBQiWcYfM6QwA1STd7aAGOjSdeBvpLgt4495vBpqorq9mwB6uOYsrCo15N0E0OW2pSwsywh3eBM5z+Jw75wyAbp7+ffPhn9+10oPxAAdLMuhx5urt4+/qCcL20MNNVHd3lVvWUgNNVHd3olpHui6pRgoixpqorq9m2eiH178wABVpIa8W7qep998zwDVo4a8G3qgL8bw+em3fC+sHjXknRhjoPFu6jCKBVvGH/NwNdREdXtXveWi3PfHjmki6lkwQPksFzFA9ahJgKTyoHR0E7nP4mjv3GKAxPFNxADtYlnuyaD9mijmHBigTJYMkLlQg1oAqPhDiRU0keMcK/DOoZMAlMZYBU00nQB8FhV451ALAK1yUNIGQD4vGaCyltAviTT1QJn+60yC6D0DFG/prOD2AFLUM0CHA5RPhwBELsoA5bMspIaaqG7vqrcspIaaqD7vav9mKiw5AuQY5fZsIttf3xlUDlBTlpsYoFrUGEBUXMKw2rGJIn7pkwHKZ8kAMUBJlgEKaaidmyiQIQYo3jIuwFl+A5tusE8TzW6Fd0IMULzlUNURDFUFkB7uA7/t7hUDlGQZm2XVBxC87BcDlG5Z+JbGMU3ED9XvZ8kAgQs1qA2AggiqaJCwXOFHWg+ypD38MBdQ/0Y4lB2gxZPlM+lENDFAGSypAMXd4ijbRCs5vbIQYs8A5bOc5Mrt44KlHZoIcoyY0LcF0C4/thJuYgxO4aMU3aECTQT1i9NZnA+gWn9sBSSmdYCIagog/rEV9i5MSA/U3gum1jtN6jJVu/RAikNnDqKr+7GVVZTvVNUMUP+eAFSXpUJFwpNAXtMyTaTHyPFfamsLoLqysA0g+jVbH/niIasAAA3aSURBVEDg4c8KUN1ZWJnSu0wkWh/pagqgJrIw4i0NunZrIodj+KamAGoiCwu+jmv83gP9OaGmAKogC9tqcp1xTp8v3Begfn30MMknxKH6AKrui4UFAApyaCeA6KocIH2xrp+8jHweus7vPVgXwykfKKvrJy8jHiOrD6DVl/cGoLZ+8lJIZuKHjMIAJQ5mbQHU2k9eim22Me5ZMtuhggBV+7RSgiyHavjJS7iiXdWv3QkLDr2zNRH82Nj233sBUA2WfoCQlvLug+BQboCEwpCnHCwGKMZSCz3xzUR5bsgWaKKpu0H7HAaouKXzTqQsRDziTgBpfUwf8zVmSE0B9HQ3zyse/4NzlMdX83RPRQASYCh2/pup4ulTQvwMWsYfExUaNbgHOAp7uEPZALKecbNnqUhAtQWQeKDMQoOW8cfEhNbvenHrQxPyANf+AAGTmnoGEJTXB3t3b93K/PlV1330ijCsgPr5K8fGo2MgdxU6Ey8CQMQhI/c1vgTQiiMY3BSlA/T8ZohKPnoTCdDjzbVja8MACWiQwO2JDmUZJFaAEiY3EYeiAHq6e/F2oOiUAGGiV3hoKgYoGSBs1/TLw6EcAA1xCQNkr+2DXmC2K0By4MIPmwOgn4bo5oPPxfgw+xi8DoPV6xGgH2+6D79ey1ymvPqvM0B/+3g2eH4zYXbproXKyOXF96+6F9+Jn/8wlOv+8bvF+lY9FO5dkIpZOrCAAMIiUiPqcDVWCkDAjiU221SQ8daHbBOJl3nW5ZPh4/3YyhMP91f/rD0VqAA0RUPd9LzOZUBtXB65exg/z2Vf/H7cOj9XOO1jBUg5lMOh2PPKaUmff9MDZQQgswF9DuUByPiszIvOAAUg5PDuofvwL1OO9Xocp67ePkwTePfd1dcjGrdrMTmEXcZN4qebYdvU6wygjJzdb6PbZebuvvv1wNXPd+M+5u5JPRTuUIgyW1pzPsldv5BXu8ciRxCN9THITGIegJZo5+nuWkxNfDc179QXDYvXa7ENoGXcGph4+e75zbDy4eo/B5Np+6yLxG5dmgHSDoU6FKJyACErCFugklUBpHlGFO7dOiAtj5DedzMzc1srse8G0ErK1BuNxe5ffD8Q8SCpuaw9zPP//Pnff9ttABmHQhwK0i6WeDtgcSu+C6JDSWl8Dz+XRHYWEu7deuNpufX0sIQ9FICGIgM2z2+ux45ISdsWgJ7/sOx4Bcg4FOJQkGoFKKArAx0qBVDM6GU7ZPRAamuObTz3RLQeaBiNHm9uh7D5r29kr7IANIRR//LVn//3ovRAyCRAbQDFDVxqu+EAoXvIB5BynCVFtHHKB9DQzq/VhV/P0Q8OkBoDjaHzf08d0b/eyLhnBmgBbQ7ElxjIjJ5Bh6LPK9xSj5QJtUsFSFttRLDIPvLEQNsRYYAQC7+cWdjVOKXz7Rj7jBnYmIm5AFKzsMHi6uNh1ZKILVoBGouNd9AmgD56px8KdyhEGQDqewugYLkmE61XqiDtmQmgXn1r3fZEmcM72p5d3n2zxSVPUwY2TScqAM1ESYCUeaAph7/epoKWotsQtuh6/q7prXoo3LsgZbB0zxfSKpg2G629JBV3yFrwHVrzwZy69ABEldO7cWL56pNxPJq6hmnQcQAkZ6LXwqulDtDzNwM1H/zb36eh7scJNHko3bvDvpnq7dxjah6ZdfHsKxNA9nGsyS2aP1m820lH9UDWlZl8oap7wRIyh0PwAvF46jJyXgxQXsuIZDtAgbFrPoDsQxcewg7XcTFQVmJM7QWQvfP8VwYDBFkGBJdFSZuUdQjDN0aKAYIs8fgWuIRLE5QMkB3g5PpOj+kQAyRUgKzkV2AAeS5t94SAs4hIaKJt9lC5HPpeAgQeM+NMdAU6HiBY6hZ9zhE0w3ZXECBtznlbtz1AJjafvVeIxz8GCLL0vwEOD0bx7sbVXiUAAtcZjyFC5KO22bzbTYdlYcAMMjUCxVDa+oOtc1AHP0dMkjML20av5YPlAwS5UwwQaOkHiNB1OEaDpQVJg1iWJlKHrq3bsYLsXoObJAYIsvTmKDIGhSJtkpSuAARWcwhegHeLr1a7HiFMjoS61uVQgnd7qyqA8C7JARE0jFnBiJvYLAAJ2fX0ilQDMyhigOItfQkuAS9wtXbXnTiChTcRCK2VKspQSCvYm6+b8ogBgix99UesXyBXcz2c6HAIXiAd1gMp8CQJA5Rs6Ywj6ZVrsaKMdcZeHDG53URBMRdaWBuyjFGYHkgzQJClUn92LWLrUeERlR5GIbuNAciYfbaOLAcvRwdFGqjbAmiv3wvzBbdBnTyyE/2ad+wxpom0yMaKcpYZINwvx35zeLefDIf2/b0wPcTUZF3TIWOKtntlqTfjWdMha4F6GOPzFjyDCJFjtHl7UwDt9nthgUCkA9TrD70nAuRxZ5tFsJjVDE8I0G6/FxacKW0iGEA3DAyALIfgBZcTuCPKFKgyjPVuI1RNAbTb74VtgQMpjtS3UgJcaHQEoqC4a7x3s2COWxIgfS2RpbYA2svSjjzFtoRF1donHLx+62mQRN5aFQcQvs2InrcOUTM7KUC7ZmGTzNZA6tWZAWtMoftDu43gJpKRVG+uWzsnLc00Iq+wcawpgHbLwswOxSNHKrMuyAxaaETpYXRxgOShhISn15bOBZD+xcJDsjBSWEwsokzA2F0bNvREAISQY7gjiTH7ogBVDpC+uH8WJhx0uFI1V0usrQUfx7aMB8gcFY1DyEUtIQvjqCmAdszCgCpE0peIVG0rYcSycBgUE0SDMGoBkFzesBHnB2gvy96EY+vj1ZIOnLCgesGkV5+ZkM2WJwbqew0So8dR/FQBAo5Ow6gpgHb71WY1M9HaQ5PWIEpeIyQUcifm7gyAlMOYx4rqgSCAkB5vjaPfD4D2+dVmdRCQMa/WJmALwUGGHpTYWdBaxLACT8V/XnZXpnY66l+lJN7/mTs3P7cG0D6/2qy0uFa/svswcdrMJVB2e2w7sQESSpO6TqWD92wexNivukEbn+WywpJz5+bntgDa61eb5ahlDD46UFpLKKWEFqsKZWeyS1u3yH+srg46FRggvV03UJQVQqK+8aIBrQ1zAYNZUwDt9qvNW28DjzdagXXFutoOjdYG2vZooiUtlDEGPpVO2AX0KEcDSD2uVUTFSEFMwAAhFDUG0E6WelewVrU9FiiLSqll5bZR/7td91vzifUoakMip6INsIB6S3IDcGKyH1L+gWFhgAIsjdpXeiEhNIAUanSAhCwBhUxby+mRNng7AwII9d6kR/Yw6if9SlDwhj3wVRe8UIMOBEgYyZUxMGkAbbb6Fa+0jVoCi4PswsCpdKoNKA3P3gJIdVnDSb0KvAdxeleRjgVIk3phyuDILLY1xtbVCGVw2DZp/YDcv7kOOJVwgHRW4HjJulx8B3F6V5GOA2hd0joP7ZMJUA8WXbasV7dQcFLWKivsZrObyNO0ygGsmEj1U12tHTpkDGOAIEsbIKhL0pfMpjdGNqMjUP8KnSLnqdAAUj6ooBos6Z80spz793hXk44HaJUfIHPBBEjnZYs7tp4soAeiSWFfjd2sTkmJi4Cj+8QA5bPcpABkjlDbuqWgnieBzZcKkLnOHNP0TfT9p3m3j6oECK1kvTUsgIQN0FbUwU9gE7kR6E2CfLvzigEKtsSCZfNyBi30RT3CUsYa1KEUgAyORa8uxIoBSrG0Ix9/MWUWxjZJB8ghhZttBQNUkeWogOZAOhxLuZsIGkfjxQDlsxyVq10UlWkiBqikZQEM4mU3UY7gN5faAmi/LxbW00Jhd+N3V1MA7fjFwnpaiAFK0HFfLKynhRigBCE90A5fLKynhRigBJkO7fh6l3rEAMWLszAR+ETi7mKAIMuaWoh7oAQdB1A9LcQAJYgBEjyRmCIewgQDlCIGSIBNVJF/DFA+y0JqqInq9q56y0JqqInq9q56y0JqqInq9q56y0JqqInq9m4vy+rE3sUrHoNoS8wc2iOtWF7LdoR6j5/WPiYUMUDHiwHy7pEBcokB8u6RAXKJAfLukQFyiQHy7pEBcokB8u6RAXLpfQaI9b6LAWIliQFiJYkBYiWJAWIliQFiJYkBYiWJAWIlKQmgh657ra2YXudgrTV1PxWgFHvxg6/YZXyY5da/s3oFuK6eOenMpnoPsXp+03XXEQeylQLQ06dv9fc3PN0N7lhrTT1cjyfsLfb8xVvoGLaG7YRStQpwXT1z0plN9R5kdbke38ARfCBAKQA9/urd7MKi5y+/H64Ecy2kASBvsfl0CHu7f006ZqUCXFfPnHJmS70HWonLbbAJoBSAxt9lvde6vbErtddaugydpbfYwwc3Qy/r39v4Gi3CMWsV4Lp65rQzm+o90Gr8Yd3gA9k6BCCaw//3TlwIxe5vwVZoRZDrypnTAQq0GoasiAPZyjmEzSdC7T4zFZvq7lxD2Kj1zGlntr6Ljm61/R5q2IFsZQ2ipxOhBNED66RiF3+x6UWQ5wqi1TOnndna85Ot5q3hB7J1UBp/m63YWAnROWgNgtP47cyD0niy1f08+xF8IFs8kchKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RKEgPEShIDxEoSA8RK0v8DlxTvwvMfwtIAAAAASUVORK5CYII=" width="45%" /></p>
 <blockquote>
-<p>Note: this output is selected to be consistent with <code>plot(data.frame)</code> handling.</p>
+<p>Note: this output is selected to be consistent with
+<code>plot(data.frame)</code> handling.</p>
 </blockquote>
-<p><strong>plot</strong> generates a conventional <code>plot</code> of a supplied <strong>pems.element</strong>. It accepts common <code>plot</code> arguments (col, pch, cex, etc) and automatically adds units (if set) to axes labels, for example:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span><span class="sc">$</span>velocity)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span><span class="sc">$</span>local.time, pems<span class="fl">.1</span><span class="sc">$</span>velocity, <span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><strong>plot</strong> generates a conventional <code>plot</code> of a
+supplied <strong>pems.element</strong>. It accepts common
+<code>plot</code> arguments (col, pch, cex, etc) and automatically adds
+units (if set) to axes labels, for example:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span><span class="sc">$</span>velocity)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">plot</span>(pems<span class="fl">.1</span><span class="sc">$</span>local.time, pems<span class="fl">.1</span><span class="sc">$</span>velocity, <span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="data:image/png;base64,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vXMklMcWfB4Cvc0+tFq13M5rUCfQl6kFq+b00/Z+djeq7ecEBNLtwsbTFTQ7hrsI7S5s9B4+PQnVnC4eykN1YapO9HRUmaZr+jptZPJTU+hY9J/VoCp0NguKQk/gRCuG8csxL8ph/GiBNIWOR2K96YbxY63qCn07fhivOJB46/93MpWEv2gPJL7OjNQUOvtAikLfjj+QeO8kdFzoqbe5CVtk6ggfpzI0hb7Nky6aQl/UhU5uTiiPKRiTqYAIIBAgAggEiAACASKAQIAIIBAgAggEiAACASKAQIAIIBAgAggEiAACASKAQIAIIBAgAggEiAACASKAQIAIIBAgAggEiAACASKAQIAIIBAgAggEiAACASKAQIAIIBAgAggEiAAClRDsNKC359oVAAKVAAJlAQKVAAJlAQKV8MmX96d/PI07xd/2PvnvaZeZ234rt6283p9+FIVcFyBQCXcC3TbK//z3ttHTm5v+ctvx6baV1Ot9i6FHBQhUwp1AP8aNM+9bzb1MN+57NL398c+/P3SPBgKVcCfQz/vuh8u2cKMbdOfTi1PZBPK0AIFK8Aj0uhBo3uB1GM9AeWCAQCWkLdANH8//oXeWwxkBApXgEWjaRHm6ccfr1/97fuQgDAQqwiPQdOjJFIWN3vRPzeNkTggQqASfQNtxoE/ijPuUP7IbDQIBIoBAgAggECACCASIAAIBIoBAgAggECACCASIAAIBIoBAgAggECACCASIAAIBIoBAgAggECACCASIAAIBIoBAgAggECACCASIAAIBIoBAgAggECACCASI8P/VTYlz4SBYQwAAAABJRU5ErkJggg==" width="45%" /><img src="data:image/png;base64,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" width="45%" /></p>
 <blockquote>
-<p>Although the generic <code>plot</code> function is enabled for both <strong>pems</strong> and <strong>pems.element</strong>s, the package was written to support other plotting options in <strong>R</strong>.</p>
+<p>Although the generic <code>plot</code> function is enabled for both
+<strong>pems</strong> and <strong>pems.element</strong>s, the package
+was written to support other plotting options in <strong>R</strong>.</p>
 </blockquote>
 <blockquote>
-<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.plots.html">[&gt;pems.utils plots]</a> or R help documentation (?pems.units) for more about plotting <strong>pems</strong> and <strong>pems.elements</strong>.</p>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.plots.html">[&gt;pems.utils
+plots]</a> or R help documentation (?pems.units) for more about plotting
+<strong>pems</strong> and <strong>pems.elements</strong>.</p>
 </blockquote>
-<p><strong>print</strong> (described in above introductory example) generates a print report of a supplied <strong>pems</strong> or <strong>pems.element</strong>. Both are foreshorten to produce a screen-friendly summary report using a similar strategies to <strong>tibbles</strong>. <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html" target="_blank">[&gt;for more about tibbles]</a></p>
-<p>Additional arguments can also be used to modify outputs, for example:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>print</strong> (described in above introductory example)
+generates a print report of a supplied <strong>pems</strong> or
+<strong>pems.element</strong>. Both are foreshorten to produce a
+screen-friendly summary report using a similar strategies to
+<strong>tibbles</strong>. <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html" target="_blank">[&gt;for more about tibbles]</a></p>
+<p>Additional arguments can also be used to modify outputs, for
+example:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">print</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>## pems (1000x25)
 ##               time.stamp  local.time      CO     CO2       HC     NOX     afr
 ##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]        
@@ -330,7 +617,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(pems<span class="fl">.1</span>, <span class="at">rows=</span><span class="dv">7</span>, <span class="at">cols=</span><span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">print</span>(pems<span class="fl">.1</span>, <span class="at">rows=</span><span class="dv">7</span>, <span class="at">cols=</span><span class="dv">4</span>)</span></code></pre></div>
 <pre><code>## pems (1000x25)
 ##               time.stamp  local.time      CO     CO2
 ##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]
@@ -347,8 +634,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       amb.humidity[%]; velocity[km/h]; revolution[rpm]; option.1[V];
 ##       option2[V]; option.3[V]; latitude[d.degLat]; longitude[d.degLon];
 ##       altitude[m]; gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
-<p><strong>subset</strong> extracts a subset from a supplied <strong>pems</strong> selected using a sub-sampling (or filtering) argument supplied in the same call, for example:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(pems<span class="fl">.1</span>, local.time <span class="sc">&lt;</span> <span class="dv">4</span>) </span></code></pre></div>
+<p><strong>subset</strong> extracts a subset from a supplied
+<strong>pems</strong> selected using a sub-sampling (or filtering)
+argument supplied in the same call, for example:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">subset</span>(pems<span class="fl">.1</span>, local.time <span class="sc">&lt;</span> <span class="dv">4</span>) </span></code></pre></div>
 <pre><code>## pems (4x25)
 ##               time.stamp  local.time      CO     CO2       HC     NOX     afr
 ##        [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]        
@@ -362,7 +651,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">subset</span>(pems<span class="fl">.1</span>, CO<span class="sc">==</span><span class="fu">max</span>(CO, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">subset</span>(pems<span class="fl">.1</span>, CO<span class="sc">==</span><span class="fu">max</span>(CO, <span class="at">na.rm=</span><span class="cn">TRUE</span>))</span></code></pre></div>
 <pre><code>## pems (1x25)
 ##                time.stamp  local.time      CO     CO2       HC     NOX     afr
 ##         [Y-M-D H:M:S GMT]         [s]  [vol%]  [vol%]  [ppmC6]   [ppm]        
@@ -374,28 +663,32 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
 ##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
 <blockquote>
-<p>As with other vectors, <code>subset</code> is not intended for use with <strong>pems.element</strong>s.</p>
+<p>As with other vectors, <code>subset</code> is not intended for use
+with <strong>pems.element</strong>s.</p>
 </blockquote>
-<p><strong>summary</strong> generates a conventional <strong>R</strong> data summary for a supplied <strong>pems</strong> or <strong>pems.element</strong>, for example:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(pems<span class="fl">.1</span><span class="sc">$</span>velocity)</span></code></pre></div>
+<p><strong>summary</strong> generates a conventional <strong>R</strong>
+data summary for a supplied <strong>pems</strong> or
+<strong>pems.element</strong>, for example:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">summary</span>(pems<span class="fl">.1</span><span class="sc">$</span>velocity)</span></code></pre></div>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    0.00    0.20   15.55   22.27   46.23   69.70</code></pre>
-<p><strong>units</strong> gets or sets the units of a supplied <strong>pems</strong> or <strong>pems.element</strong>, for example:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<p><strong>units</strong> gets or sets the units of a supplied
+<strong>pems</strong> or <strong>pems.element</strong>, for example:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##        time.stamp local.time   CO  CO2    HC NOX afr exh.flow.rate exh.temp
 ## 1 Y-M-D H:M:S GMT          s vol% vol% ppmC6 ppm             L/min     degC
 ##   exh.press amb.temp amb.press amb.humidity velocity revolution option.1
 ## 1       kPa     degC       kPa            %     km/h        rpm        V
 ##   option2 option.3 latitude longitude altitude gps.velocity satellite n.s w.e
 ## 1       V        V d.degLat  d.degLon        m         km/h</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span></code></pre></div>
 <pre><code>##        time.stamp local.time
 ## 1 Y-M-D H:M:S GMT          s</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="st">&quot;afr&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="st">&quot;afr&quot;</span>]</span></code></pre></div>
 <pre><code>##   afr
 ## 1</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="st">&quot;afr&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;ratio&quot;</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)[<span class="st">&quot;afr&quot;</span>] <span class="ot">&lt;-</span> <span class="st">&quot;ratio&quot;</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="fu">units</span>(pems<span class="fl">.1</span>)</span></code></pre></div>
 <pre><code>##        time.stamp local.time   CO  CO2    HC NOX   afr exh.flow.rate exh.temp
 ## 1 Y-M-D H:M:S GMT          s vol% vol% ppmC6 ppm ratio         L/min     degC
 ##   exh.press amb.temp amb.press amb.humidity velocity revolution option.1
@@ -403,12 +696,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   option2 option.3 latitude longitude altitude gps.velocity satellite n.s w.e
 ## 1       V        V d.degLat  d.degLon        m         km/h</code></pre>
 <blockquote>
-<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils units]</a> or R help documentation (?pems.units) for more on <strong>pems</strong> units handling.</p>
+<p>See also <a href="http://pems.r-forge.r-project.org/pems.utils.units.html">[&gt;pems.utils
+units]</a> or R help documentation (?pems.units) for more on
+<strong>pems</strong> units handling.</p>
 </blockquote>
-<p><strong>with</strong> associates a supplied <strong>pems</strong>, so the user can work with contained <strong>pems.element</strong>s directly, for example:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rather than</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co">#diff(pems.1$velocity)/diff(pems.1$local.time)</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(pems<span class="fl">.1</span>, <span class="fu">diff</span>(velocity)<span class="sc">/</span><span class="fu">diff</span>(local.time))</span></code></pre></div>
+<p><strong>with</strong> associates a supplied <strong>pems</strong>, so
+the user can work with contained <strong>pems.element</strong>s
+directly, for example:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co">#rather than</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="co">#diff(pems.1$velocity)/diff(pems.1$local.time)</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="fu">with</span>(pems<span class="fl">.1</span>, <span class="fu">diff</span>(velocity)<span class="sc">/</span><span class="fu">diff</span>(local.time))</span></code></pre></div>
 <pre><code>## pems.element [n=999]
 ##   [1]   0.0   0.2   0.0  -0.1   0.2  -0.1   0.4  -0.6   0.1   0.0   0.0  -0.1
 ##  [13]   0.1  -0.1   0.2  -0.1   0.1  -0.1   0.2  -0.3   0.1   0.0  -0.1   0.0
@@ -416,23 +713,30 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 ##   ... not showing: 81 rows
 ##   ... &lt;numeric&gt;</code></pre>
 <blockquote>
-<p>As with other vectors, <code>with</code> is not intended for use with <strong>pems.element</strong>s.</p>
+<p>As with other vectors, <code>with</code> is not intended for use with
+<strong>pems.element</strong>s.</p>
 </blockquote>
 </div>
 <div id="other-generic-functions" class="section level1">
 <h1>Other Generic Functions</h1>
-<p>There are numerous generic functions in <strong>R</strong>, and <strong>pems</strong> and <strong>pems.element</strong> versions are only written for those where a need was identified.</p>
+<p>There are numerous generic functions in <strong>R</strong>, and
+<strong>pems</strong> and <strong>pems.element</strong> versions are
+only written for those where a need was identified.</p>
 <blockquote>
-<p>If you think any other generic functions would be useful, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
+<p>If you think any other generic functions would be useful, please let
+me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a></p>
 </blockquote>
 <blockquote>
-<p>Similarly, if you have any suggestions how to make either <strong>pems.utils</strong> or this document better or you have any problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
+<p>Similarly, if you have any suggestions how to make either
+<strong>pems.utils</strong> or this document better or you have any
+problems using either, please let me know. <a href="mailto:karl.ropkins@gmail.com">[&gt;email me]</a>.</p>
 </blockquote>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr />
 <ol>
-<li id="fn1"><p>Chambers, J., 2008. Software for data analysis: programming with R. Springer Science &amp; Business Media.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Chambers, J., 2008. Software for data analysis:
+programming with R. Springer Science &amp; Business Media.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
