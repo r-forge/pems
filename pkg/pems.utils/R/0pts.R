@@ -12,7 +12,7 @@
 
 globalVariables(c("pems.scheme", "ref.unit.conversions", "ref.chem", "ref.diesel", "ref.petrol",
                   "panel.surfaceSmooth", "data", "exh.flow.rate", "exh.press", "exh.temp", 
-                  "local.time", "pems_speedEm2", "add", "grp",
+                  "local.time", "pems_speedEm2", "add", "grp", "..id..",
                   "temp"))
 
 #might move following into function

@@ -86,7 +86,7 @@ VSPBinPlot(vspbin, em = NULL, ..., data = NULL,
 }
   \item{this.call}{
   (Optional) Initial call, should generally be ignored. See 
-  code{\link{common.calculations}} for further details.
+  \code{\link{common.calculations}} for further details.
 }
   \item{vehicle.weight, vsp.a, vsp.b, vsp.c, vsp.g}{
   (Numerics) VSP constants. If not supplied, defaults are 

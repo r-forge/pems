@@ -209,7 +209,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   }
 
   \item{omit.stopped}{
-  (Logical or character) For {WatsonPlot}, how to 
+  (Logical or character) For \code{WatsonPlot}, how to 
   handle idling data: \code{FALSE} include 
   in plot; \code{TRUE} or \code{'points'} removes 
   idle points before plotting; \code{'cell'} or 
@@ -218,7 +218,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   } 
 
   \item{plot.type}{
-  (numeric) For {WatsonPlot}, pre-set plot types: 
+  (numeric) For \code{WatsonPlot}, pre-set plot types: 
   \code{1} scatter plot; \code{2} bin plot; 
   \code{3} contour plot of binned data; \code{4} 
   smoothed surface of binned data. 

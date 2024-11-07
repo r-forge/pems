@@ -1,10 +1,12 @@
-Changes in pems.utils 0.2.30 [2023-03-20]
+Changes in pems.utils 0.2.30 [2024-11-07]
 ========================================
 
 *       requested change to citation and description 
         documentation 
-
-
+*       regularize update; added method 2 (data binning) 
+        and improved factor and character time-series 
+        handling 
+        
 
 Changes in pems.utils 0.2.29 [2021-04-13]
 ========================================
