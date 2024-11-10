@@ -17,9 +17,9 @@ bibentry(bibtype="Manual",
 
 bibentry(bibtype="proceedings",
          title = "The R package pems.utils: open-source processing, Visualization and Analysis Tools for Portable Emissions Measurement Systems data.",
-         author = personList(as.person("Karl Ropkins"),
-                             as.person("Stephen Hanley"),
-                             as.person("Said Munir")),
+         author = c(as.person("Karl Ropkins"),
+                    as.person("Stephen Hanley"),
+                    as.person("Said Munir")),
          year = "2012",
          note = "22nd CRC Real World Emissions Workshop. San Diego, US, 25-28 March, 2012.",
 
