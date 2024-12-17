@@ -1,8 +1,8 @@
 Package: pems.utils
 Type: Package
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.2.30.2
-Date: 2024-11-10
+Version: 0.3.0.3
+Date: 2024-12-17
 Authors@R: c(
     person("Karl", "Ropkins", email="karl.ropkins@gmail.com", 
             role= c("aut", "cre")),
@@ -18,17 +18,16 @@ Description: Utility functions for the handling, analysis and visualisation
     'pems' data class that manages many of the quality control, unit handling 
     and data archiving issues that can hinder efforts to standardise 'PEMS' 
     research.
-Depends: R (>= 2.10.0), 
-    lattice, 
-    loa
-Imports: methods, 
+Depends: R (>= 2.10.0) 
+Imports: lattice,
+    loa (>= 0.3.0),
+    methods, 
     utils, 
     grid, 
-    RColorBrewer, 
-    latticeExtra, 
     baseline, 
     ggplot2, 
     rlang, 
+    tibble,
     dplyr, 
     Rcpp (>= 0.12.19) 
 LinkingTo: Rcpp  

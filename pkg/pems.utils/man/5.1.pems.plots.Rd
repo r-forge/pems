@@ -32,8 +32,7 @@
 pemsPlot(x, y = NULL, z = NULL, groups = NULL, 
          cond = NULL, ..., data = NULL, 
          units = TRUE, multi.y = "special", 
-         fun.name="pemsPlot",
-         panel = panel.pemsPlot, scheme = pems.scheme)
+         fun.name="pemsPlot")
 
 #associated functions
 
@@ -53,38 +52,37 @@ panel.routePath(..., loa.settings = FALSE)
 
 WatsonPlot(speed, accel = NULL, z = NULL, ..., 
          data = NULL, cond = NULL, units = TRUE, 
-         plot.type = 2, fun.name="WatsonPlot",
-         scheme = pems.scheme)
+         plot.type = 2, fun.name="WatsonPlot")
 
 #associated functions
 
 preprocess.WatsonPlot(lattice.like = lattice.like, ...)
 
 panel.WatsonBinPlot(..., ref.line = TRUE, 
-         process.panel = panel.binPlot, 
-         plot.panel = panel.binPlot, 
+         process.panel = NULL, 
+         plot.panel = NULL, 
          omit.stopped = FALSE, process = TRUE, 
          plot = TRUE, loa.settings = FALSE)
 
 panel.WatsonContourPlot(..., 
-         plot.panel=panel.kernelDensity, process = TRUE, 
+         plot.panel=loa::panel.kernelDensity, process = TRUE, 
          plot = TRUE, loa.settings = FALSE)
 
 panel.WatsonSmoothContourPlot(..., 
-         plot.panel=panel.surfaceSmooth,           
+         plot.panel=loa::panel.surfaceSmooth,           
          process = TRUE, plot = TRUE, 
          loa.settings = FALSE)
  
 #old plots
 
-latticePlot(x = NULL, data = NULL, plot = xyplot, 
+latticePlot(x = NULL, data = NULL, plot = lattice::xyplot, 
          panel = NULL,  ..., greyscale = FALSE, 
          fun.name = "latticePlot")
 
 panel.PEMSXYPlot(..., grid=NULL)
 
 XYZPlot(x = NULL, ..., data = NULL, statistic = NULL, 
-         x.res = 10, y.res = 20, plot = levelplot,
+         x.res = 10, y.res = 20, plot = lattice::levelplot,
         fun.name = "XYZPlot")
 
 }
@@ -161,7 +159,10 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 }
 
   \item{\dots}{
-  (Optional) Other arguments, typically passed on.
+  (Optional) Other arguments, typically passed on. This 
+  includes, \code{scheme} which sets the default 
+  coloring scheme for the plot. See Note 
+  below.
   }
 
   \item{fun.name}{
@@ -180,12 +181,6 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   \code{plot.panel} and \code{process.panel}.  
   }
 
-  \item{scheme}{
-  (\code{character} or \code{list}) The default 
-  coloring scheme for the plot. See Note 
-  below.
-  }
-  
   \item{lattice.like, plot, process, loa.settings}{
   (Various) Plot management elements. These can 
   typically be ignored by most users, but 
@@ -501,7 +496,7 @@ a <- calcAccel(velocity, local.time, data = pems.1, output="pems")
 
 XYZPlot(~accel*velocity, data=a)
 
-XYZPlot(~accel*velocity, data=a, plot = wireframe, shade=TRUE)
+XYZPlot(~accel*velocity, data=a, plot = lattice::wireframe, shade=TRUE)
 
 
 ###########

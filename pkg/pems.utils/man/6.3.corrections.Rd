@@ -101,8 +101,8 @@ calcPack2(input, ..., settings = NULL, data = NULL)
   With the exception of \code{calcPack2}, all the above functions generate 
   input corrections. 
 
-   \code{correctBaseline} returns the supplied data time-series (\code{x}) after applying the 
-   requested baseline correction (see below).
+   \code{correctBaseline} returns the supplied data time-series (\code{x}) 
+   after applying the requested baseline correction (see below).
 
 }
 

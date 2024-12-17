@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.2.30.2\cr 
-Date: \tab 2024-11-10\cr
+Version: \tab 0.3.0.3\cr 
+Date: \tab 2024-12-17\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }

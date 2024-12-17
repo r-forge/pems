@@ -86,8 +86,8 @@ regularize <- function (data, Hz=1, method=1, ...)
       new.x <- (0:(length(new.x)*Hz))/Hz 
       cols <- names(temp)
       temp$..id.. <- cut(temp$local.time, new.x-(0.5/Hz))
-      temp <- summarize(group_by(temp, ..id..),
-                        across(all_of(cols), function(x) {
+      temp <- dplyr::summarize(group_by(temp, ..id..),
+                               dplyr::across(dplyr::all_of(cols), function(x) {
                                        if(is.numeric(x)) 
                                          mean(x, na.rm=TRUE) else 
                                          x[1]}))

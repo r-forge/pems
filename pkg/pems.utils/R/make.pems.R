@@ -117,7 +117,8 @@ pems <- function(x, units = NULL, constants = NULL,
         }
         #after we know units is data.frame 
         units <- if(ncol(units)<ncol(x))
-                    cbind(units, as.data.frame(t(rep(NA, ncol(x)-ncol(units))), stringsAsFactors = FALSE)) else
+                    cbind(units, as.data.frame(t(rep(NA, ncol(x)-ncol(units))), 
+                                               stringsAsFactors = FALSE)) else
                           units[1:ncol(x)] 
         names(units) <- c(names(x), names(units), rep(NA, ncol(x)))[1:ncol(x)]
     }
@@ -394,7 +395,7 @@ rebuildPEMS <- function(x, ...){
         if (length(class(x)) == 1 && is(x) == "list") 
             class(x) <- "data.frame"
 
-        out <- listUpdate(list(data = x, units = bare.bones$units), 
+        out <- loa::listUpdate(list(data = x, units = bare.bones$units), 
             bare.bones$pems.tags)
 
         #handling if grouped_df

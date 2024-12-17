@@ -126,7 +126,7 @@ print.pems.element <- function (x, ..., n = NULL, rows = NULL, width = NULL){
          if(!is.na(attributes(x)$units) && attributes(x)$units != "")
              out.3 <- paste(out.3, " [", attributes(x)$units, "]", sep="")
 
-    out.1 <- capture.output(print(ans, ...))
+    out.1 <- utils::capture.output(print(ans, ...))
     
 #testing this to strip old factor labels
     if("levels" %in% names(attributes(ans)))

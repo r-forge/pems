@@ -83,7 +83,7 @@ import2PEMS <- function(file.name = file.choose(), ...,
 #june updates
 # like to tidy some of this...
 ##################
-  args <- listUpdate(list(file = file, file.reader = file.reader, 
+  args <- loa::listUpdate(list(file = file, file.reader = file.reader, 
                           as.is = TRUE, names=1),
                      list(...))
   if("names" %in% names(args) & !"header" %in% names(args)){
@@ -166,7 +166,7 @@ import2PEMS <- function(file.name = file.choose(), ...,
   
   #if required tidy pems list
   #think about this...
-  temp <- tidyPEMSList(listUpdate(list(x=data, units=units), args))
+  temp <- tidyPEMSList(loa::listUpdate(list(x=data, units=units), args))
                   
   #output
   if(output=="data") return(temp$x)
@@ -204,8 +204,8 @@ import2PEMS.old <- function(file.name = file.choose(), names = NULL, units = NUL
     if(is.character(units) && length(units)==1){
         temp <- file.reader(file, header=FALSE, as.is=TRUE, nrow=4) #currently assuming into is in first 4 rows
         if(units=="get.from.header"){
-            extra.args <- do.call(listLoad, listUpdate(extra.args, list(load="units")))
-            temp <- do.call(getUnitsFromNames, listUpdate(list(names=as.character(temp[1,]), output="all"), extra.args$units))
+            extra.args <- do.call(loa::listLoad, loa::listUpdate(extra.args, list(load="units")))
+            temp <- do.call(getUnitsFromNames, loa::listUpdate(list(names=as.character(temp[1,]), output="all"), extra.args$units))
             units <- temp$units
             if(is.null(names)) names <- temp$names
         } else if(units=="get.from.row.2"){
@@ -284,7 +284,7 @@ import2PEMS.old <- function(file.name = file.choose(), names = NULL, units = NUL
 #sensible unit handler
 ##################
 
-    output <- do.call(pems, listUpdate(list(x = data, units = units, constants = constants, 
+    output <- do.call(pems, loa::listUpdate(list(x = data, units = units, constants = constants, 
                        history = history), extra.args)) 
     
     #reset history?

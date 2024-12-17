@@ -82,12 +82,12 @@ align <- function(data1, data2, n=0, ...){
    data1 <- rebuildPEMS(makePEMS(data1), "new")
    data2 <- rebuildPEMS(makePEMS(data2), "new")
 
-   att <- listUpdate(attributes(data1)$pems.tags,
+   att <- loa::listUpdate(attributes(data1)$pems.tags,
                      attributes(data1)$pems.tags, 
                      ignore.b="history")
    #att <- attributes(data1)
 #print(names(att))
-   #att <- listUpdate(att, attributes(data2))
+   #att <- loa::listUpdate(att, attributes(data2))
 #print(names(att$pems.tags))
 #print(names(data1[["constants"]])) 
 
@@ -103,7 +103,7 @@ align <- function(data1, data2, n=0, ...){
    data2$align.temp.ref <- (1:nrow(data2)) + n
 
    #merge data 
-   new.data <- full_join(pemsData(data1), pemsData(data2), by="align.temp.ref")
+   new.data <- dplyr::full_join(pemsData(data1), pemsData(data2), by="align.temp.ref")
    new.data <- new.data[order(new.data$align.temp.ref),]
    row.names(new.data) <- 1:nrow(new.data)
 
@@ -123,7 +123,7 @@ align <- function(data1, data2, n=0, ...){
    #class(data2) <- class(data2)[class(data2)!="pems"]
 #print(data1)
    out <- pems(x=new.data, units=new.units)
-   attributes(out)$pems.tags <- listUpdate(att, attributes(out)$pems.tags)
+   attributes(out)$pems.tags <- loa::listUpdate(att, attributes(out)$pems.tags)
 #   data1 <- listUpdate(data2, data1, ignore=c("data", "units"))
 #   data1 <- listUpdate(list(data=new.data, units=new.units), data1)
 
@@ -298,7 +298,7 @@ cAlign.old <- function(form, data1=NULL, data2 = NULL, ...){
 
 #default lag.max to 30 for old case...
 
-    ans <- do.call(ccf, listUpdate(list(x=x, y=y, na.action=na.pass, plot=FALSE), 
+    ans <- do.call(stats::ccf, loa::listUpdate(list(x=x, y=y, na.action=na.pass, plot=FALSE), 
                                    extra.args))
     ans$lag <- ans$lag + extra.args$lag.start
 
@@ -680,22 +680,22 @@ stackPEMS <- stack <- function(..., key=key, ordered=TRUE){
     d2[, key, force=c("na.pad.target", "fill.insert")] <- refs[i]
      
     #compare names 
-    ref <- intersect(names(d1), names(d2))
+    ref <- dplyr::intersect(names(d1), names(d2))
     for(i in ref){
       test <- units(d1[i])==units(d2[i])
       if(!is.na(test) && !test){
         d2[i] <- convertUnits(d2[i], to=units(d1[i]))
       }
     }
-    d1[["data"]] <- bind_rows(fortify(d1), fortify(d2))
+    d1[["data"]] <- dplyr::bind_rows(fortify(d1), fortify(d2))
 
     ##################################
     #fix for names with spaces in    
-    #temp <- as.data.frame(listUpdate(as.list(units(d1)), 
+    #temp <- as.data.frame(loa::listUpdate(as.list(units(d1)), 
     #                                 as.list(units(d2))),
     #                      stringsAsFactors=FALSE)
     ##################################
-    temp <- listUpdate(as.list(units(d1)), 
+    temp <- loa::listUpdate(as.list(units(d1)), 
                        as.list(units(d2)))
     test <- names(temp)
     temp <- as.data.frame(temp, stringsAsFactors=FALSE)
@@ -707,7 +707,7 @@ stackPEMS <- stack <- function(..., key=key, ordered=TRUE){
     d1[["units"]] <- temp[names(d1[["data"]])]  
     att.1 <- attributes(d1)$pems.tags
     att.2 <- attributes(d2)$pems.tags
-    attributes(d1)$pems.tags <- listUpdate(att.1, att.2)
+    attributes(d1)$pems.tags <- loa::listUpdate(att.1, att.2)
   }
   d1[key] <- factor(d1[key], levels=refs, ordered=ordered)
   #make the vectors pems.elements
