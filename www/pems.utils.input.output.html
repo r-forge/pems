@@ -12,7 +12,7 @@
 
 <meta name="author" content="Karl Ropkins" />
 
-<meta name="date" content="2024-12-17" />
+<meta name="date" content="2024-12-18" />
 
 <title>R:pems.utils Data Input/Output</title>
 
@@ -340,7 +340,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 <h1 class="title toc-ignore">R:pems.utils Data Input/Output</h1>
 <h4 class="author">Karl Ropkins</h4>
-<h4 class="date">2024-12-17</h4>
+<h4 class="date">2024-12-18</h4>
 
 
 
@@ -602,11 +602,11 @@ reset this, for example:
 ##   5  2005-09-08 11:46:11           4        0         0        0    20.142
 ##   6  2005-09-08 11:46:12           5        0         0        0    20.142
 ##  ... not showing: 994 rows; 19 cols (elements) 
-##  ... other cols: afr; exh.flow.rate[L/min]; exh.temp[degC]; exh.press[kPa];
-##       amb.temp[degC]; amb.press[kPa]; amb.humidity[%]; velocity[km/h];
-##       revolution[rpm]; option.1[V]; option2[V]; option.3[V];
+##  ... other cols: afr[NA]; exh.flow.rate[L/min]; exh.temp[degC];
+##       exh.press[kPa]; amb.temp[degC]; amb.press[kPa]; amb.humidity[%];
+##       velocity[km/h]; revolution[rpm]; option.1[V]; option2[V]; option.3[V];
 ##       latitude[d.degLat]; longitude[d.degLon]; altitude[m];
-##       gps.velocity[km/h]; satellite; n.s; w.e</code></pre>
+##       gps.velocity[km/h]; satellite[NA]; n.s; w.e</code></pre>
 <p>More complex file structures may require more work, but assuming the
 data can be read into <strong>R</strong>, it should always be possible
 to build your own import function by reading in the different data
