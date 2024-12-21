@@ -459,14 +459,11 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 plot(pems.1)
 plot(pems.1$velocity)
 
-#lattice 
+#with lattice 
+require(lattice)
 xyplot(velocity~local.time, data = pems.1, type = "l")
 
-#in ggplot2
-
-#Note: Suggests only so you need to load this...
-#Note: this uses fortify.pems behind scenes...
-
+#with ggplot2
 require(ggplot2)
 qplot(time.stamp, velocity, data=pems.1)
 ggplot(pems.1, aes(x = time.stamp, y = velocity)) + geom_line() 

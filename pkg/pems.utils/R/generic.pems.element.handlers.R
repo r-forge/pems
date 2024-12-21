@@ -348,7 +348,7 @@ units.pems.element <- function(x) attr(x, "units")
 
 `units<-.pems.element` <- function(x, value) { 
 
-    #could add padding to provent bad inserts being tried
+    #could add padding to prevent bad inserts being tried
 
     attr(x, "units") <- value 
     x

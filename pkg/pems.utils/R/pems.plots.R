@@ -738,12 +738,12 @@ panel.WatsonBinPlot <- function(..., ref.line = TRUE,
   # fix in panel.binplot in loa as on 0.3.0.2...
   # not in CRAN version...
   if(is.null(process.panel)){
-    ##process.panel <- loa::panel.binPlot
-    process.panel <- panel.pemsBinPlot 
+    process.panel <- loa::panel.binPlot
+    ##process.panel <- panel.pemsBinPlot 
   }
   if(is.null(plot.panel)){
-    ##plot.panel <- loa::panel.binPlot
-    plot.panel <- panel.pemsBinPlot 
+    plot.panel <- loa::panel.binPlot
+    ##plot.panel <- panel.pemsBinPlot 
   }
   extra.args <- list(...)
   
@@ -1311,7 +1311,7 @@ XYZPlot <- function(x = NULL, ..., data = NULL, statistic = NULL,
 #this should replace panel.binplot in loa on next update!!!
 #set default settings for panel, key and scheme... 
 
-panel.pemsBinPlot <- 
+old_panel.pemsBinPlot <- 
   function (x = NULL, y = NULL, z = NULL, breaks = 20, x.breaks = breaks, 
           y.breaks = breaks, x1 = NULL, x2 = NULL, y1 = NULL, y2 = NULL, 
           statistic = mean, pad.grid = FALSE, ..., plot = TRUE, process = TRUE, 
