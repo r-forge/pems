@@ -8,9 +8,9 @@
 
 #testing 
 
-cAlign_ylagxCOR <- function(x, y) {
-  .Call('C_ylagxCOR', PACKAGE = 'pems.utils', x, y)
-}
+#cAlign_ylagxCOR <- function(x, y) {
+#  .Call('C_ylagxCOR', PACKAGE = 'pems.utils', x, y)
+#}
 
 
 #description
@@ -442,14 +442,28 @@ cAlign <- function(form, data1=NULL, data2 = NULL, ...){
   } else {
     reversed=FALSE
   }
+  
   #set min.overlap if not in call
   if(!"min.overlap" %in% names(extra.args))
     extra.args$min.overlap <- min(c(floor(min(length(x), 
                                               length(y))*0.2), 2000))
   pad <- length(x) - extra.args$min.overlap
   y <- c(rep(NA, pad), y, rep(NA, pad))
+  ans <- sapply(1:(length(y)-pad), function (j){
+    .test <- y[j:(length(x)+j-1)]
+    .tt <- !is.na(x) & !is.na(.test)
+    if(length(.tt[.tt]) < 10){
+      NA
+    } else {
+    suppressWarnings(cor(x, .test, use= "pairwise.complete.obs"))
+    }
+  })
+  
+  #return(ans)
   #use C_ylagxCOR to solve this
-  ans <- .Call("_pems_utils_C_ylagxCOR", x, y)
+#return (list(x=x, y=y))
+  
+  #ans <- .Call("_pems_utils_C_ylagxCOR", x, y)
   index <- (1:length(ans)) - length(x) + extra.args$min.overlap - 1
   if(!reversed) index <- -index
   ans2 <- index[which(ans==max(ans, na.rm=TRUE))[1]]   #[1] in case tie!!

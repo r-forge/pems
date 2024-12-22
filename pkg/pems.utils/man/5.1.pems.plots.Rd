@@ -273,13 +273,13 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
   Early plots, e.g. \code{latticePlot}, only allowed 
   plot arguments using the 
-  \code{\link{lattice}} formula format. While this is 
+  \code{\link[lattice]{lattice}} formula format. While this is 
   flexible and very powerful system, some users 
   preferred the more conventional \code{plot(x,y,..)} 
   call format. 
   So, newer plots, e.g. \code{pemsPlot}, allow both 
   conventional plot and 
-  \code{\link{lattice}}-style formula calls. 
+  \code{\link[lattice]{lattice}}-style formula calls. 
 
   \code{pemsXYZCondUnitsHandler} handles the pems 
   information associated with the plots. This 
@@ -288,16 +288,16 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   use elsewhere for similar purposes. 
   \code{edit(pemsPlot)} to see it.  
 
-  Newer plots use a combination of \code{\link{lattice}} 
-  and \code{\link{loa}} functions to provide a range of 
+  Newer plots use a combination of \code{\link[lattice]{lattice}} 
+  and \code{\link[loa]{loa}} functions to provide a range of 
   additional plotting options, such as integrated panel 
-  and key management. See \code{\link{loa}} 
+  and key management. See \code{\link[loa]{loa}} 
   documentation for further details.   
 
   \code{preprocess...} and \code{panel...} functions 
   handle pre-plot and in-plot elements 
-  of plot generation. These use the \code{\link{loa}} 
-  modification of the \code{\link{lattice}} 
+  of plot generation. These use the \code{\link[loa]{loa}} 
+  modification of the \code{\link[lattice]{lattice}} 
   plotting framework.    
 
   See Notes, Examples and extra documentation: 
@@ -342,11 +342,11 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   Lattice. R package version 0.6-18. 
   http://CRAN.R-project.org/package=latticeExtra
 
-  \code{\link{lattice}} is one of number of really 
+  \code{\link[lattice]{lattice}} is one of number of really 
   nice graphical tools in \code{R}. Others, like 
   \code{ggplot2} and \code{iplot}, help you to very 
   quickly explore your data. But, for me the trellis 
-  framework of \code{\link{lattice}} 
+  framework of \code{\link[lattice]{lattice}} 
   has always felt the most flexible.
 }
 
@@ -359,7 +359,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   General: 
 
   Like most other plot functions in \code{R}, 
-  \code{\link{lattice}} functions use a number 
+  \code{\link[lattice]{lattice}} functions use a number 
   of common parameter terms. For example, \code{xlab} 
   and \code{ylab} reset the x and y labels of a graph; 
   \code{xlim} and \code{ylim} to set the x- and 
@@ -400,7 +400,7 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
   This option allows the plot to pass on share the 
   results of in-panel calculations with other panels 
   and keys. The handling mechanism is part of the 
-  \code{\link{loa}} package. 
+  \code{\link[loa]{loa}} package. 
 
   The reason for \code{latticePlot}, etc: 
 
@@ -443,8 +443,8 @@ XYZPlot(x = NULL, ..., data = NULL, statistic = NULL,
 
 
 \seealso{
-  See \code{\link{lattice}}, \code{latticeExtra}, 
-  \code{\link{loa}}.
+  See \code{\link[lattice]{lattice}}, \code{latticeExtra}, 
+  \code{\link[loa]{loa}}.
 }
 \examples{
 

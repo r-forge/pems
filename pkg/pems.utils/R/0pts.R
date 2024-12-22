@@ -41,7 +41,7 @@ setup <- function(){
          }
 
 # c handling
-.onUnload <- function (libpath) {
-  library.dynam.unload("pems.utils", libpath)
-}
+#.onUnload <- function (libpath) {
+#  library.dynam.unload("pems.utils", libpath)
+#}
 

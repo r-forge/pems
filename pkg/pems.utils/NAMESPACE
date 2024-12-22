@@ -3,8 +3,13 @@
 #############################
 
 ## c handling
-useDynLib("pems.utils", .registration=TRUE)
+#useDynLib(pems.utils, .registration=TRUE)
+#useDynLib(pems.utls)
+#importFrom(Rcpp, evalCpp)
+#importFrom(Rcpp, sourceCpp)
 
+#testing
+#export(C_ylagxCOR)
 
 ## imports
 
@@ -19,7 +24,7 @@ importFrom("graphics", "abline", "arrows", "plot")
 importFrom("methods", "is")
 importFrom("stats", "aggregate", "as.formula", "ccf", "model.frame",
            "na.omit", "na.pass", "complete.cases", "approx", "lm", 
-           "predict", "quantile", "update")
+           "predict", "quantile", "update", "cor")
 importFrom(utils, read.table, read.csv, read.delim, write.table, 
            head, tail, capture.output, install.packages, 
            installed.packages)
@@ -212,8 +217,7 @@ export(tAlign)
 export(stackPEMS)
 #export(bindPEMS)  #gone ~2017/12 0.2.18.01
 
-#testing
-export(C_ylagxCOR) 
+ 
 
 #export
 export(exportPEMS)
@@ -426,7 +430,4 @@ export(checkUnits)
 export(checkOutput)
 export(checkIfMissing)
 
-
-## C code setup 
-importFrom(Rcpp, sourceCpp)
 
