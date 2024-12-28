@@ -808,49 +808,44 @@ panel.WatsonBinPlot <- function(..., ref.line = TRUE,
 #don't know if I can do test
 #maybe drop cases outside rather than add in max/min???
 
-panel.WatsonContourPlot <- function(..., plot.panel=loa::panel.kernelDensity,          
-         process = TRUE, plot = TRUE, loa.settings = FALSE){
-
-    extra.args <- loa::listUpdate(list(...), list(plot.panel=plot.panel, 
-                                             process=process, plot=plot, 
-                                             loa.settings=loa.settings))
-
-    if(loa.settings){
-        temp <- loa::loaHandler(panel.WatsonBinPlot)
-        temp$default.settings <- loa::listUpdate(temp$default.settings, 
-                                            list(key.fun=loa::draw.loaColorRegionsKey, 
-                                                 alpha.regions = 0.5))
-        return(temp)
+panel.WatsonContourPlot.old <- function(..., plot.panel = NULL, process = TRUE, 
+                                        plot = TRUE, loa.settings = FALSE){
+  if(is.null(plot.panel)){
+    plot.panel <- loa::panel.kernelDensity
+  }
+  extra.args <- loa::listUpdate(list(...), list(plot.panel=plot.panel, 
+                                                process=process, plot=plot, 
+                                                loa.settings=loa.settings))
+  
+  if(loa.settings){
+    temp <- loa::loaHandler(panel.WatsonBinPlot)
+    temp$default.settings <- loa::listUpdate(temp$default.settings, 
+                                             list(key.fun=loa::draw.loaColorRegionsKey, 
+                                                  alpha.regions = 0.5))
+    return(temp)
+  }
+  
+  if(plot & !process){
+    
+    if(!"at" %in% names(extra.args)){
+      temp <- pretty(extra.args$zlim, 10)
+      temp <- unique(temp)
+      extra.args$at <- temp
     }
-
-    if(plot & !process){
-
-        if(!"at" %in% names(extra.args)){
-            temp <- pretty(extra.args$zlim, 10)
-######################
-#test
-######################
-#might come back to bite me
-#
-#            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
-#            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
-######################
-            temp <- unique(temp)
-            extra.args$at <- temp
-        }
-
-    #contout cols
+    
     if(!"col" %in% names(extra.args))
-        extra.args$col <- loa::getPlotArgs()$col
+      extra.args$col <- loa::getPlotArgs()$col
     
     #other tweaks
     if(!"labels" %in% names(extra.args))
-        extra.args$labels <- TRUE
-   
-    }
-                     
-    do.call(panel.WatsonBinPlot, extra.args)
+      extra.args$labels <- TRUE
+    
+  }
+  
+  do.call(panel.WatsonBinPlot, extra.args)
 }
+
+
 
 
 
@@ -871,87 +866,148 @@ panel.WatsonContourPlot <- function(..., plot.panel=loa::panel.kernelDensity,
 
 #lim.borders
 
-panel.WatsonSmoothContourPlot <- function(..., plot.panel=loa::panel.surfaceSmooth,          
-         process = TRUE, plot = TRUE, loa.settings = FALSE){
+#a <- calcAccel(velocity, local.time, data = pems.1, output="pems")
+#WatsonPlot(velocity, accel, data=a, plot.type=3)
+#WatsonPlot(velocity, accel, data=a, plot.type=3, zlim=c(0, 250))
+#WatsonPlot(velocity, accel, data=a, plot.type=3, zlim=c(0, 250), at=c(0,1,2,5,10,20, 50, 100,200, 500))
+#WatsonPlot(velocity, accel, data=a, plot.type=3, zlim=c(0, 250), at=c(0, 50, 100, 150, 200, 250))
+#WatsonPlot(velocity, accel, data=a, plot.type=3, plot.panel=loa::panel.surfaceSmooth) 
+#WatsonPlot(velocity, accel, data=a, plot.type=3, zlim=c(0,250), at=c(1:5, ((1:5)*10), ((1:5)*100)))
+#WatsonPlot(velocity, accel, data=a, plot.type=4, zlim=c(0,250), at=pretty(c(0, 250), 10), span=0.1, col.regions=rev(loa::colRegionsHandler(z=1:10, col.regions="Spectral")), contour=F)
 
-    extra.args <- loa::listUpdate(list(...), list(plot.panel=plot.panel, 
-                                             process=process, plot=plot, 
-                                             loa.settings=loa.settings))
 
-    if(loa.settings){
-        temp <- loa::loaHandler(panel.WatsonBinPlot)
-        temp$default.settings <- loa::listUpdate(temp$default.settings, 
-                                            list(key.raster = TRUE,  
-                                                 contour = TRUE, regions = TRUE,
-                                                 alpha.regions = 0.5))
-        return(temp)
+panel.WatsonContourPlot <- function(..., plot.panel = NULL, process = TRUE, 
+                                    plot = TRUE, loa.settings = FALSE){
+  
+  #currently don't have a proper contour plot
+  #    current work-around solution is a smooth surface with very 
+  #           little smoothing or extrapolation...
+  if(is.null(plot.panel)){
+    plot.panel <- loa::panel.surfaceSmooth
+  }
+  extra.args <- loa::listUpdate(list(...), list(plot.panel=plot.panel, 
+                                                process=process, plot=plot, 
+                                                loa.settings=loa.settings))
+  
+  if(loa.settings){
+    temp <- loa::loaHandler(panel.WatsonBinPlot)
+    temp$default.settings <- loa::listUpdate(temp$default.settings, 
+                                             list(key.raster = TRUE,
+                                                  span=0.1, too.far=0.05,
+                                                  contour = TRUE, regions = TRUE, 
+                                                  alpha.regions = 0.5))
+    return(temp)
+  }
+  
+  if(process){
+    if(!"z" %in% names(extra.args)){
+      extra.args$z <- rep(1, length(extra.args$x))
+      if(!"statistic" %in% names(extra.args))
+        extra.args$statistic <- function(x) length(na.omit(x))
+    } else {
+      if(!"statistic" %in% names(extra.args))
+        extra.args$statistic <- function(x) mean(na.omit(x))
     }
-
-    if(process){
-        if(!"z" %in% names(extra.args)){
-            extra.args$z <- rep(1, length(extra.args$x))
-            if(!"statistic" %in% names(extra.args))
-                extra.args$statistic <- function(x) length(na.omit(x))
-        } else {
-            if(!"statistic" %in% names(extra.args))
-                extra.args$statistic <- function(x) mean(na.omit(x))
-        }
-        ans <- do.call(loa::panel.binPlot, 
-                       loa::listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
-
-        extra.args <- loa::listUpdate(extra.args, ans)
-
-######################
-#stop surface smooth using x/ylims 
-#might move this to panel.surfaceSmooth
-#or refine the modelling
-#currently just nas between x/ys and borders
-#        extra.args <- listUpdate(extra.args, list(x.breaks=200, y.breaks=200))
-
-        extra.args <- loa::listUpdate(extra.args, 
-                                      list(x.breaks=200, y.breaks=200), 
-                                      ignore=c("xlim", "ylim"))
-
-        ans <- do.call(loa::panel.surfaceSmooth, extra.args)
-
-        if(!plot) return(ans)
+    ans <- do.call(loa::panel.binPlot, 
+                   loa::listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
+    
+    extra.args <- loa::listUpdate(extra.args, ans)
+    
+    if(!"zlim" %in% names(extra.args)){
+      extra.args$zlim <- range(pretty(ans$z))
     }
-
-
-    if(plot & !process){
-
-#currently does contours and regions
-#want it to just do at
-
-#        if(!"at" %in% names(extra.args)){
-#            temp <- pretty(extra.args$zlim, 10)
-######################
-#test
-######################
-#might come back to bite me
-#
-#            temp[temp<min(extra.args$zlim)] <- min(extra.args$zlim)
-#            temp[temp>max(extra.args$zlim)] <- max(extra.args$zlim)
-######################
-#            temp <- unique(temp)
-#            extra.args$at <- temp
-#        }
-
+    extra.args <- loa::listUpdate(extra.args, 
+                                  list(x.breaks=250, y.breaks=250),
+                                  ignore=c("xlim", "ylim"))
+    
+    ans <- suppressWarnings(do.call(loa::panel.surfaceSmooth, extra.args))
+    ans$z[ans$z<extra.args$zlim[1] | ans$z>extra.args$zlim[2]] <- NA
+    
+    if(!plot) return(ans)
+  }
+  
+  
+  if(plot & !process){
+    
     #contout cols
     if(!"col" %in% names(extra.args))
-        extra.args$col <- loa::getPlotArgs()$col
+      extra.args$col <- loa::getPlotArgs()$col
     
     #other tweaks
-#    if(!"labels" %in% names(extra.args))
-#        extra.args$labels <- TRUE
-                     
+    #    if(!"labels" %in% names(extra.args))
+    #        extra.args$labels <- TRUE
+    
+    #suppressWarnings(do.call(panel.WatsonBinPlot, extra.args))
     do.call(panel.WatsonBinPlot, extra.args)
-    }
+    
+  }
 }
 
 
 
 
+panel.WatsonSmoothContourPlot <- function(..., plot.panel = NULL, process = TRUE, 
+                                          plot = TRUE, loa.settings = FALSE){
+  if(is.null(plot.panel)){
+    plot.panel <- loa::panel.surfaceSmooth
+  }
+  extra.args <- loa::listUpdate(list(...), list(plot.panel=plot.panel, 
+                                                process=process, plot=plot, 
+                                                loa.settings=loa.settings))
+  
+  if(loa.settings){
+    temp <- loa::loaHandler(panel.WatsonBinPlot)
+    temp$default.settings <- loa::listUpdate(temp$default.settings, 
+                                             list(key.raster = TRUE,  
+                                                  contour = TRUE, regions = TRUE, 
+                                                  alpha.regions = 0.5))
+    return(temp)
+  }
+  
+  if(process){
+    if(!"z" %in% names(extra.args)){
+      extra.args$z <- rep(1, length(extra.args$x))
+      if(!"statistic" %in% names(extra.args))
+        extra.args$statistic <- function(x) length(na.omit(x))
+    } else {
+      if(!"statistic" %in% names(extra.args))
+        extra.args$statistic <- function(x) mean(na.omit(x))
+    }
+    ans <- do.call(loa::panel.binPlot, 
+                   loa::listUpdate(extra.args, list(plot=FALSE, process=TRUE)))
+    
+    extra.args <- loa::listUpdate(extra.args, ans)
+    
+    ######################
+    #stop surface smooth using x/ylims 
+    #might move this to panel.surfaceSmooth
+    #or refine the modelling
+    #currently just nas between x/ys and borders
+    #        extra.args <- listUpdate(extra.args, list(x.breaks=200, y.breaks=200))
+    
+    extra.args <- loa::listUpdate(extra.args, 
+                                  list(x.breaks=250, y.breaks=250), 
+                                  ignore=c("xlim", "ylim"))
+    
+    ans <- suppressWarnings(do.call(loa::panel.surfaceSmooth, extra.args))
+    
+    if(!plot) return(ans)
+  }
+  
+  
+  if(plot & !process){
+    
+    if(!"col" %in% names(extra.args))
+      extra.args$col <- loa::getPlotArgs()$col
+    
+    #other tweaks
+    #    if(!"labels" %in% names(extra.args))
+    #        extra.args$labels <- TRUE
+    
+    #suppressWarnings(do.call(panel.WatsonBinPlot, extra.args))
+    do.call(panel.WatsonBinPlot, extra.args)
+  }
+}
 
 
 

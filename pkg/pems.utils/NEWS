@@ -1,10 +1,11 @@
-Changes in pems.utils 0.3.0 [2024-12-22]
+Changes in pems.utils 0.3.0 [2024-12-28]
 ========================================
 
 *       restructured package for more stable pkg::function  
         use, reduced number of imports 
-*       improve import handling of files with large headers  
-*       importing add... functions from loa 
+*       better import handling of files with large headers  
+*       new WatsonPlot(..., plot.type=3) panel 
+*       better units(pems) handling  
 *       removing C++ code (hopefully temporarily) 
         
 

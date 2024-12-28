@@ -28,6 +28,7 @@
 ###############################
 #to do
 #############
+
 #############
 #export [<-.pems.element
 #############
@@ -46,10 +47,10 @@
 #print.pems could have earlier classes
 #so don't dump attributes when
 #pems.utils not installed
-################
+#####################
 #cat or message???
-################
-#
+####################
+# pems.element attribute must be name not names 
 
 
 
@@ -349,10 +350,10 @@ units.pems.element <- function(x) attr(x, "units")
 `units<-.pems.element` <- function(x, value) { 
 
     #could add padding to prevent bad inserts being tried
-
     attr(x, "units") <- value 
     x
 }
+
 
 
 ####################

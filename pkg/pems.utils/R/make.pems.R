@@ -15,16 +15,19 @@
 ##########################
 #pems (nee makePEMS)
 #is.pems (nee isPEMS)
+#as.pems 
 #pems.element (nee makePEMSElement)
+
+
+#to do
+##########################
+#make rebuildPEMS better 
 
 
 #to think about
 ##########################
 #as.pems...
 
-
-#to do
-##########################
 
 
 
@@ -324,11 +327,14 @@ as.pems.data.frame <- function(x,...) pems(x,...)
 
 rebuildPEMS <- function(x, ...){ 
 
-#need to think about a robust version check 
+# need to think about a robust version check 
 #    or people could be turning olds into olds...
 #    which will do weird things...
 
-#need to tidy this when it catches all bad stuff... 
+# need to tidy this when it catches all bad stuff... 
+  
+# check units and names track in/out pems[[1]] ??
+# this could also be in test.pems
 
     #get arg2 in form rebuildPEMS(pems, new) ..."new", etc...
     #might drop this...
@@ -347,9 +353,9 @@ rebuildPEMS <- function(x, ...){
     if (m.var == "new") {
 
         #quick if new checks
-        if (!is.null(test) && test >= 3) 
+        if (!is.null(test) && test >= 3){
             return(x)
-
+        }
         #assume old rebuild old as new
         class(x) <- "broken"
         out <- x$data

@@ -59,19 +59,17 @@ WatsonPlot(speed, accel = NULL, z = NULL, ...,
 preprocess.WatsonPlot(lattice.like = lattice.like, ...)
 
 panel.WatsonBinPlot(..., ref.line = TRUE, 
-         process.panel = NULL, 
-         plot.panel = NULL, 
+         process.panel = NULL, plot.panel = NULL, 
          omit.stopped = FALSE, process = TRUE, 
          plot = TRUE, loa.settings = FALSE)
 
 panel.WatsonContourPlot(..., 
-         plot.panel=loa::panel.kernelDensity, process = TRUE, 
+         plot.panel=NULL, process = TRUE, 
          plot = TRUE, loa.settings = FALSE)
 
 panel.WatsonSmoothContourPlot(..., 
-         plot.panel=loa::panel.surfaceSmooth,           
-         process = TRUE, plot = TRUE, 
-         loa.settings = FALSE)
+         plot.panel=NULL, process = TRUE, 
+         plot = TRUE, loa.settings = FALSE)
  
 #old plots
 
