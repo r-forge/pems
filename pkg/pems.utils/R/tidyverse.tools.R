@@ -343,75 +343,75 @@ select_.pems <- function (.data, ..., warn=TRUE){
 #pems.utils
 
 
-rename.pems <- function (.data, ...){
+##rename.pems <- function (.data, ...){
 
 #rename should change names but not dimensions
 #select(pems, speed=velocity)
 
-   .data <- rebuildPEMS(.data, "new")
+##   .data <- rebuildPEMS(.data, "new")
 
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
 ################################
-    vars <- dplyr::rename_vars(names(.data), !!! quos(...))
+##    vars <- dplyr::rename_vars(names(.data), !!! quos(...))
 #this is select.pems above
 #with select_vars replaced with rename_vars in above
 ################################   
-    .data <- dplyr::select(.data, vars)
-    bare.bones$units <- dplyr::select(bare.bones$units, vars)
-    names(.data) <- names(vars)
-    for(i in names(vars))
-          attributes(.data[,i])$name <- i 
-    names(bare.bones$units) <- names(vars)
-    attributes(.data)$units <- bare.bones$units
-    attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    if("grouped_df" %in% class(.data))
-          class(.data) <- unique("grouped_df", class(.data))
-   .data
+##    .data <- dplyr::select(.data, vars)
+##    bare.bones$units <- dplyr::select(bare.bones$units, vars)
+##    names(.data) <- names(vars)
+##    for(i in names(vars))
+##          attributes(.data[,i])$name <- i 
+##    names(bare.bones$units) <- names(vars)
+##    attributes(.data)$units <- bare.bones$units
+##    attributes(.data)$pems.tags <- bare.bones$pems.tags
+##    class(.data) <- if(length(class(.data))==1) 
+##          "pems" else
+##              unique(c("pems", class(.data)))
+##    if("grouped_df" %in% class(.data))
+##          class(.data) <- unique("grouped_df", class(.data))
+##   .data
 
-}
+##}
 
 #as rename.pems with warning
 
 
-rename_.pems <- function (.data, ..., warn = TRUE){
+##rename_.pems <- function (.data, ..., warn = TRUE){
 
-   if(warn)
-        warning(paste("In rename_.pems: dplyr underscores deprecated;", 
-        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
+##   if(warn)
+##        warning(paste("In rename_.pems: dplyr underscores deprecated;", 
+##        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
 
-   .data <- rebuildPEMS(.data, "new")
+##   .data <- rebuildPEMS(.data, "new")
 
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
-    vars <- dplyr::rename_vars(names(.data), !!! quos(...))
-    .data <- dplyr::select(.data, vars)
-    bare.bones$units <- dplyr::select(bare.bones$units, vars)
-    names(.data) <- names(vars)
-    for(i in names(vars))
-          attributes(.data[,i])$name <- i 
-    names(bare.bones$units) <- names(vars)
-    attributes(.data)$units <- bare.bones$units
-    attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    if("grouped_df" %in% class(.data))
-          class(.data) <- unique("grouped_df", class(.data))
-   .data
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
+##    vars <- dplyr::rename_vars(names(.data), !!! quos(...))
+##    .data <- dplyr::select(.data, vars)
+##    bare.bones$units <- dplyr::select(bare.bones$units, vars)
+##    names(.data) <- names(vars)
+##    for(i in names(vars))
+##          attributes(.data[,i])$name <- i 
+##    names(bare.bones$units) <- names(vars)
+##    attributes(.data)$units <- bare.bones$units
+##    attributes(.data)$pems.tags <- bare.bones$pems.tags
+##    class(.data) <- if(length(class(.data))==1) 
+##          "pems" else
+##              unique(c("pems", class(.data)))
+##    if("grouped_df" %in% class(.data))
+##          class(.data) <- unique("grouped_df", class(.data))
+##   .data
 
-}
+##}
 
 
 #write code in form... 
@@ -827,7 +827,7 @@ mutate_.pems <- function(.data, ..., units=NULL, warn=TRUE) {
 
 
 
-summarise.pems <- function(.data, ...) {
+##summarise.pems <- function(.data, ...) {
 
 #summarise changes everything
 #suggest this drops whatever
@@ -838,20 +838,20 @@ summarise.pems <- function(.data, ...) {
 
 #new structure
 
-    .data <- rebuildPEMS(.data, "new")
+##    .data <- rebuildPEMS(.data, "new")
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
     ######################
 
 #    .data <- as.data.frame(summarise(tibble::as_tibble(.data), ...))
-    .data <- dplyr::summarise(.data, ...) 
+##    .data <- dplyr::summarise(.data, ...) 
    
     #######################
     #rebuild
@@ -863,13 +863,13 @@ summarise.pems <- function(.data, ...) {
     #######################
     ##rebuildPEMS(.data, "old")
 
-    .data
+##    .data
 
-}
+##}
 
 #like above but warning
 
-summarise_.pems <- function(.data, ..., warn=TRUE) {
+##summarise_.pems <- function(.data, ..., warn=TRUE) {
 
 #summarise changes everything
 #suggest this drops whatever
@@ -878,27 +878,27 @@ summarise_.pems <- function(.data, ..., warn=TRUE) {
 ##  as.data.frame(summarise(tibble::as_tibble(.data), ...)) 
 ##}
 
-    if(warn)
-        warning(paste("In summarise_.pems: dplyr underscores deprecated;", 
-        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
+##    if(warn)
+##        warning(paste("In summarise_.pems: dplyr underscores deprecated;", 
+##        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
 
 
 #new structure
 
-    .data <- rebuildPEMS(.data, "new")
+##    .data <- rebuildPEMS(.data, "new")
 
     ####################
     #break
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("class", "units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
     ######################
 
 #    .data <- as.data.frame(summarise(tibble::as_tibble(.data), ...))
-    .data <- dplyr::summarise(.data, ...)     
+##    .data <- dplyr::summarise(.data, ...)     
 
     #######################
     #rebuild
@@ -912,9 +912,9 @@ summarise_.pems <- function(.data, ..., warn=TRUE) {
 
     ##output 
     #whatever summarise gives us...
-    .data
+##    .data
 
-}
+##}
 
 
 

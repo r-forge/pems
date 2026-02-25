@@ -1475,4 +1475,6 @@ old_panel.pemsBinPlot <-
       extra.args$border <- FALSE
     lattice::lrect(x1, y1, x2, y2, col = col, border = extra.args$border)
   }
-}
+  }
+
+

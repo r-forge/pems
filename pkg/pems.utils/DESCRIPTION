@@ -1,7 +1,7 @@
 Package: pems.utils
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.3.0.8
-Date: 2025-06-20
+Version: 0.3.1.0
+Date: 2026-02-25
 Description: Utility functions for the handling, analysis and visualisation of data from portable emissions
             measurement systems ('PEMS') and other similar mobile activity monitoring devices. The package
             includes a dedicated 'pems' data class that manages many of the quality control, unit handling and
@@ -13,9 +13,9 @@ Author: Karl Ropkins [aut, cre], Adrian Felipe Ortega Calle [ctb]
 Maintainer: Karl Ropkins <karl.ropkins@gmail.com>
 URL: http://pems.r-forge.r-project.org/
 Depends: R (>= 2.10.0)
-Imports: lattice, loa (>= 0.3.1), methods, utils, grid, baseline, ggplot2, rlang, tibble, dplyr
+Imports: lattice, loa (>= 0.3.1), methods, utils, grid, baseline, ggplot2, rlang, tibble, dplyr (>= 1.1.0)
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: yes
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8

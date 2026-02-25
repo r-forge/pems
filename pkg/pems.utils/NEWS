@@ -1,3 +1,9 @@
+Changes in pems.utils 0.3.1 [2026-02-25]
+========================================
+
+*       patching for dplyr summarise and rename issues (hopefully temporarily)
+
+
 Changes in pems.utils 0.3.0 [2025-06-20]
 ========================================
 

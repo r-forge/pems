@@ -249,10 +249,13 @@ export(select)
 S3method(select, pems)
 S3method(select_, pems)
 
-importFrom(dplyr, rename)
-export(rename)
-S3method(rename, pems)
-S3method(rename_, pems)
+#########################
+# going...
+#######################
+#importFrom(dplyr, rename)
+#export(rename)
+#S3method(rename, pems)
+#S3method(rename_, pems)
 
 importFrom(dplyr, filter)
 export(filter)
@@ -274,10 +277,13 @@ export(mutate)
 S3method(mutate, pems)
 S3method(mutate_, pems)
 
-importFrom(dplyr, summarise)
-export(summarise)
-S3method(summarise, pems)
-S3method(summarise_, pems)
+#######################
+# going ....
+#######################
+#importFrom(dplyr, summarise)
+#export(summarise)
+#S3method(summarise, pems)
+#S3method(summarise_, pems)
 
 importFrom(dplyr, pull)
 export(pull)

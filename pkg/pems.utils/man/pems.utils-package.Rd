@@ -15,8 +15,8 @@
 \tabular{ll}{
 Package: \tab pems.utils\cr
 Type: \tab Package\cr
-Version: \tab 0.3.0.7\cr 
-Date: \tab 2024-12-28\cr
+Version: \tab 0.3.1.0\cr 
+Date: \tab 2026-02-25\cr
 License: \tab GPL (>= 2)\cr
 LazyLoad: \tab yes\cr
 }
@@ -78,9 +78,6 @@ follows:
 
 8.2. Emissions calculations: \code{\link{calcEm}}, etc.
 
-9. Other Code 
-
-9.1. Tidyverse related code... \code{\link{pems.tidyverse}}
 
 }
 \author{

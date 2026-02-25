@@ -86,11 +86,21 @@ regularize <- function (data, Hz=1, method=1, ...)
       new.x <- (0:(length(new.x)*Hz))/Hz 
       cols <- names(temp)
       temp$..id.. <- cut(temp$local.time, new.x-(0.5/Hz))
-      temp <- dplyr::summarize(group_by(temp, ..id..),
-                               dplyr::across(dplyr::all_of(cols), function(x) {
-                                       if(is.numeric(x)) 
-                                         mean(x, na.rm=TRUE) else 
-                                         x[1]}))
+      ##################################
+      # dplyr change 
+      #    from summarise/summarize to reframe 
+      #temp <- dplyr::summarize(group_by(temp, ..id..),
+      #                         dplyr::across(dplyr::all_of(cols), function(x) {
+      #                                 if(is.numeric(x)) 
+      #                                   mean(x, na.rm=TRUE) else 
+      #                                   x[1]}))
+      temp <- dplyr::reframe(temp,
+                             dplyr::across(dplyr::all_of(cols), function(x) {
+                                     if(is.numeric(x)) 
+                                       mean(x, na.rm=TRUE) else 
+                                       x[1]}),
+                             .by=..id..)
+      ###########################
       temp <- as.data.frame(temp)
       ref <- as.numeric(gsub("[[]|[(]|\\,.*","", 
                              as.character(temp$..id..)

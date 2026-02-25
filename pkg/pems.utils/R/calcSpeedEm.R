@@ -123,10 +123,19 @@ pems_speedEm1 <- function(speed, em, time, min.speed = 5,
   d$temp <- d$temp/d$dist
   if(!is.null(bin.size)){
     d$grp <- rep(1:nrow(d), each=ceiling(bin.size))[1:nrow(d)]
-    d <- dplyr::summarise(dplyr::group_by(d, grp),
+    ##################################
+    # dplyr change 
+    #    from summarise/summarize to reframe 
+    #d <- dplyr::summarise(dplyr::group_by(d, grp),
+    #                 dist=sum(dist, na.rm=TRUE),
+    #                 temp=mean(temp, na.rm=TRUE),
+    #                 speed=mean(speed, na.rm=TRUE))
+    d <- dplyr::reframe(d,
                      dist=sum(dist, na.rm=TRUE),
                      temp=mean(temp, na.rm=TRUE),
-                     speed=mean(speed, na.rm=TRUE))
+                     speed=mean(speed, na.rm=TRUE),
+                     .by=grp)
+    ###################################
     d <- d[is.finite(rowSums(d)),]
     d <- na.omit(d)
     d <- d[,names(d)!="grp"]
