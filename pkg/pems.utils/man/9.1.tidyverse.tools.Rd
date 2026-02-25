@@ -3,9 +3,6 @@
 \alias{pems.tidyverse}
 \alias{fortify.pems}
 \alias{fortify}
-\alias{select_.pems}
-\alias{select.pems}
-\alias{select}
 \alias{filter_.pems}
 \alias{filter.pems}
 \alias{filter}
@@ -61,7 +58,6 @@ Various codes and methods.
 
 #dplyr (1) standard methods
 
-\method{select}{pems}(.data, ...)
 \method{filter}{pems}(.data, ...)
 \method{arrange}{pems}(.data, ...)
 \method{slice}{pems}(.data, ...)
@@ -75,7 +71,6 @@ Various codes and methods.
 
 #dplyr (2) related underscore methods
 
-\method{select_}{pems}(.data, ..., warn=TRUE)
 \method{filter_}{pems}(.data, ..., warn=TRUE)
 \method{arrange_}{pems}(.data, ..., warn=TRUE)
 \method{slice_}{pems}(.data, ..., warn=TRUE)
@@ -175,13 +170,6 @@ Various codes and methods.
 
 \value{
 
-  \code{select} returns the requested part of the 
-  supplied pems object, e.g.:
-  \code{select(pems.1, velocity)} returns the velocity 
-  element of pems.1 as a single column pems.object, 
-  consistent with the data.frame handling of 
-  \code{select.data.frame}.
-
   \code{filter} returns the supplied pems object after 
   the requested filter operation has been applied, 
   e.g.: \code{filter(pems.1, velocity>0.5)} returns 
@@ -267,7 +255,7 @@ Various codes and methods.
 }
 
 \section{Warning}{
-  Currently removing \code{rename} and \code{summarise} while 
+  Currently removing \code{select}, \code{rename} and \code{summarise} while 
   deciding how to respond to changes to \code{tidyverse} code... 
 }
 

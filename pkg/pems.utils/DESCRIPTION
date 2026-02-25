@@ -1,6 +1,6 @@
 Package: pems.utils
 Title: Portable Emissions (and Other Mobile) Measurement System Utilities
-Version: 0.3.1.1
+Version: 0.3.1.2
 Date: 2026-02-25
 Description: Utility functions for the handling, analysis and visualisation of data from portable emissions
             measurement systems ('PEMS') and other similar mobile activity monitoring devices. The package

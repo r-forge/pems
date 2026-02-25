@@ -214,7 +214,7 @@ fortify.pems <- function (model, data, ...) {
 #pems.utils
 
 
-select.pems <- function (.data, ...){
+##select.pems <- function (.data, ...){
 
 ############################################
 #this is overkill because I am currently running two versions of the pems object
@@ -233,78 +233,78 @@ select.pems <- function (.data, ...){
 #select(pems, speed=velocity)
 
     #for new build only
-    .data <- rebuildPEMS(.data, "new")
+##    .data <- rebuildPEMS(.data, "new")
 
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
 
-    vars <- dplyr::select_vars(names(.data), !!! quos(...))
-    .data <- dplyr::select(.data, vars)
-    bare.bones$units <- dplyr::select(bare.bones$units, vars)
+##    vars <- dplyr::select_vars(names(.data), !!! quos(...))
+##    .data <- dplyr::select(.data, vars)
+##    bare.bones$units <- dplyr::select(bare.bones$units, vars)
 
     #rename
-    names(.data) <- names(vars)
-    for(i in names(vars))
-          attributes(.data[,i])$name <- i 
-    names(bare.bones$units) <- names(vars)
+##    names(.data) <- names(vars)
+##    for(i in names(vars))
+##          attributes(.data[,i])$name <- i 
+##    names(bare.bones$units) <- names(vars)
 
-    attributes(.data)$units <- bare.bones$units
-    attributes(.data)$pems.tags <- bare.bones$pems.tags
+##    attributes(.data)$units <- bare.bones$units
+##    attributes(.data)$pems.tags <- bare.bones$pems.tags
 
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    if("grouped_df" %in% class(.data))
-          class(.data) <- unique("grouped_df", class(.data))
+##    class(.data) <- if(length(class(.data))==1) 
+##          "pems" else
+##              unique(c("pems", class(.data)))
+##    if("grouped_df" %in% class(.data))
+##          class(.data) <- unique("grouped_df", class(.data))
 
 #  return as is (new pems)
-   .data
+##   .data
 
-}
+##}
 
 
-select_.pems <- function (.data, ..., warn=TRUE){
+##select_.pems <- function (.data, ..., warn=TRUE){
 
-   if(warn)
-        warning(paste("In select_.pems: dplyr underscores deprecated;", 
-        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
+##   if(warn)
+##        warning(paste("In select_.pems: dplyr underscores deprecated;", 
+##        "see rlang `quo()` documentation", sep=" "), call. = FALSE)
    #########################
    #this is from select.pems
    #wrapping *_.data.frame needs 
    #  too much that is not exported
    #########################
 
-   .data <- rebuildPEMS(.data, "new")
+##   .data <- rebuildPEMS(.data, "new")
 
 #this is select.pems above
 
-    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
-    attributes(.data)$units <- NULL
-    attributes(.data)$pems.tags <- NULL
-    class(.data) <- if(length(class(.data))==1) 
-          "data.frame" else
-               class(.data)[class(.data) != "pems"] 
-    vars <- dplyr::select_vars(names(.data), !!! quos(...))
-    .data <- dplyr::select(.data, vars)
-    bare.bones$units <- dplyr::select(bare.bones$units, vars)
-    names(.data) <- names(vars)
-    for(i in names(vars))
-          attributes(.data[,i])$name <- i 
-    names(bare.bones$units) <- names(vars)
-    attributes(.data)$units <- bare.bones$units
-    attributes(.data)$pems.tags <- bare.bones$pems.tags
-    class(.data) <- if(length(class(.data))==1) 
-          "pems" else
-              unique(c("pems", class(.data)))
-    if("grouped_df" %in% class(.data))
-          class(.data) <- unique("grouped_df", class(.data))
-   .data
+##    bare.bones <- attributes(.data)[names(attributes(.data)) %in% c("units", "pems.tags")]
+##    attributes(.data)$units <- NULL
+##    attributes(.data)$pems.tags <- NULL
+##    class(.data) <- if(length(class(.data))==1) 
+##          "data.frame" else
+##               class(.data)[class(.data) != "pems"] 
+##    vars <- dplyr::select_vars(names(.data), !!! quos(...))
+##    .data <- dplyr::select(.data, vars)
+##    bare.bones$units <- dplyr::select(bare.bones$units, vars)
+##    names(.data) <- names(vars)
+##    for(i in names(vars))
+##          attributes(.data[,i])$name <- i 
+##    names(bare.bones$units) <- names(vars)
+##    attributes(.data)$units <- bare.bones$units
+##    attributes(.data)$pems.tags <- bare.bones$pems.tags
+##    class(.data) <- if(length(class(.data))==1) 
+##          "pems" else
+##              unique(c("pems", class(.data)))
+##    if("grouped_df" %in% class(.data))
+##          class(.data) <- unique("grouped_df", class(.data))
+##   .data
 
-}
+##}
 
 
 #testing this

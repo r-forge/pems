@@ -244,10 +244,13 @@ importFrom(rlang, caller_env, have_name, exprs_auto_name)
 #not sure why I need to do this
 #but it make the methods work without
 
-importFrom(dplyr, select)
-export(select)
-S3method(select, pems)
-S3method(select_, pems)
+########################
+# going ...
+########################
+#importFrom(dplyr, select)
+#export(select)
+#S3method(select, pems)
+#S3method(select_, pems)
 
 #########################
 # going...
